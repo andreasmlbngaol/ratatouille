@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ratatouille/features/auth/presentation/pages/sign_in_screen.dart';
+import 'package:ratatouille/features/auth/presentation/pages/sign_up_screen.dart';
 import 'package:ratatouille/features/auth/presentation/pages/splash_screen.dart';
 
+
 final router = GoRouter(
-    initialLocation: "/sign_in",
+    initialLocation: "/sign_up",
 
     routes: [
 
@@ -25,15 +27,15 @@ final router = GoRouter(
               onNavigateToSignUp: () => navController.go("/sign_up")
           )
       ),
-      //
-      // route(
-      //     path: "/sign_up",
-      //     child: (navController, _) => SignUpScreen(
-      //         onNavigateToHome: () => navController.go("/home"),
-      //         onNavigateToVerification: () => navController.go("/email_verification"), // Ini nanti diganti sama route untuk email verification
-      //         onNavigateToSignIn: () => navController.go("/sign_in")
-      //     )
-      // ),
+
+      route(
+          path: "/sign_up",
+          child: (navController, _) => SignUpScreen(
+              onNavigateToHome: () => navController.go("/home"),
+              onNavigateToVerification: () => navController.go("/email_verification"), // Ini nanti diganti sama route untuk email verification
+              onNavigateToSignIn: () => navController.go("/sign_in")
+          )
+      ),
 
       // route(
       //     path: "/email_verification",
