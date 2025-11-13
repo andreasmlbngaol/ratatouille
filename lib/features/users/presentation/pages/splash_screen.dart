@@ -16,7 +16,7 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // final viewModel = ref.read(splashProvider.notifier);
 
-    /// Ini dijalankan pas UI nya siap di render. Jadi render selesai, baru cek apakah user sudah login atau belum
+    /// Ini dijalankan pas UI nya siap di render. Jadi render selesai, baru cek apakah users sudah login atau belum
     // launchedEffect(() {
     //   viewModel.checkAuthUser(
     //       onAuthenticated: onNavigateToHome,

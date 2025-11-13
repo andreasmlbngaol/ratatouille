@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ratatouille/features/auth/presentation/widgets/ratatouille_subtitle.dart';
-import 'package:ratatouille/features/auth/presentation/widgets/ratatouille_title.dart';
-import 'package:ratatouille/features/auth/presentation/widgets/rounded_bold_outline.dart';
+import 'package:ratatouille/features/users/presentation/widgets/ratatouille_subtitle.dart';
+import 'package:ratatouille/features/users/presentation/widgets/ratatouille_title.dart';
+import 'package:ratatouille/features/users/presentation/widgets/rounded_bold_outline.dart';
 
 class SignUpScreen extends StatelessWidget {
   final VoidCallback onNavigateToHome;

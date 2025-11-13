@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:ratatouille/features/auth/presentation/widgets/stacked_text.dart';
+import 'package:ratatouille/features/users/presentation/widgets/stacked_text.dart';
 
 class RatatouilleTitle extends StatelessWidget {
   const RatatouilleTitle({super.key});

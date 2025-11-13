@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ratatouille/features/auth/presentation/pages/sign_in_screen.dart';
-import 'package:ratatouille/features/auth/presentation/pages/sign_up_screen.dart';
-import 'package:ratatouille/features/auth/presentation/pages/splash_screen.dart';
+import 'package:ratatouille/features/users/presentation/pages/sign_in_screen.dart';
+import 'package:ratatouille/features/users/presentation/pages/sign_up_screen.dart';
+import 'package:ratatouille/features/users/presentation/pages/splash_screen.dart';
 
 
 final router = GoRouter(

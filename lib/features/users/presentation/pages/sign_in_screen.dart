@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ratatouille/features/auth/presentation/widgets/ratatouille_subtitle.dart';
-import 'package:ratatouille/features/auth/presentation/widgets/ratatouille_title.dart';
-import 'package:ratatouille/features/auth/presentation/widgets/rounded_bold_outline.dart';
+import 'package:ratatouille/features/users/presentation/widgets/ratatouille_subtitle.dart';
+import 'package:ratatouille/features/users/presentation/widgets/ratatouille_title.dart';
+import 'package:ratatouille/features/users/presentation/widgets/rounded_bold_outline.dart';
 
 class SignInScreen extends StatelessWidget {
   final VoidCallback onNavigateToHome;
