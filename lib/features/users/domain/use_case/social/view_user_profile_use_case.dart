@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:ratatouille/domain/model/failure.dart';
+import 'package:ratatouille/core/domain/model/failure.dart';
 import 'package:ratatouille/features/users/domain/model/social/user_detail.dart';
 import 'package:ratatouille/features/users/domain/repository/users_repository.dart';
 

@@ -19,13 +19,13 @@ dependencies:
   firebase_core: ^4.0.0
   firebase_auth: ^6.0.1
   google_sign_in: ^6.3.0 # Jangan di upgrade Okeh
-  freezed_annotation: ^3.1.0 # Data class-like
+#  freezed_annotation: ^3.1.0 # Data class-like
   go_router: ^16.2.0 # Main Router
   fluttertoast: ^8.2.12 # Toast
   json_annotation: ^4.9.0 # Untuk anotasi JsonKey
   #  connectivity_plus: ^7.0.0 # Cek koneksi internet 1 (bisa false positive)
   internet_connection_checker: ^3.0.1  # Cek koneksi internet
-  flutter_riverpod: ^2.5.1
+#  flutter_riverpod: ^2.5.1
   skeletonizer: ^2.1.0+1
   cached_network_image: ^3.4.1
   image_picker: ^1.2.0
@@ -42,10 +42,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  build_runner: ^2.10.2 # Untuk generate freezed
-  freezed: ^3.2.3
-  json_serializable: ^6.11.1 # Serialized data class freezed ke JSON
   flutter_launcher_icons: ^0.14.4
+  build_runner: ^2.4.13
+  hive_generator: ^2.0.1
+  json_serializable: ^6.8.0
 
 
 flutter:

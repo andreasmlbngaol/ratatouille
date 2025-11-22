@@ -1,7 +1,7 @@
 import 'package:ratatouille/features/users/domain/model/auth/user.dart';
 
 class UserDetail {
-  final User user;
+  final RatatouilleUser user;
   final bool isMe;
   final bool isFollowing;
   final int followerCount;

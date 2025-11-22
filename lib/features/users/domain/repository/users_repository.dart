@@ -1,23 +1,24 @@
 import 'package:dartz/dartz.dart';
-import 'package:ratatouille/domain/model/failure.dart';
 import 'package:ratatouille/features/users/domain/model/auth/user.dart';
 import 'package:ratatouille/features/users/domain/model/social/user_detail.dart';
 
-abstract class UsersRepository {
-  Future<Either<Failure, User>> getCachedUser();
+import '../../../../core/domain/model/failure.dart';
 
-  Future<Either<Failure, User>> getOrCreateUser();
-  Future<Either<Failure, User>> updateProfile({
+abstract class UsersRepository {
+  Future<Either<Failure, RatatouilleUser>> getCachedUser();
+
+  Future<Either<Failure, RatatouilleUser>> getOrCreateUser();
+  Future<Either<Failure, RatatouilleUser>> updateProfile({
     String? name,
     String? bio
 });
 
-  Future<Either<Failure, User>> uploadProfilePicture(
+  Future<Either<Failure, RatatouilleUser>> uploadProfilePicture(
       List<int> imageBytes,
       String fileName
   );
 
-  Future<Either<Failure, User>> uploadCoverPicture(
+  Future<Either<Failure, RatatouilleUser>> uploadCoverPicture(
       List<int> imageBytes,
       String fileName
   );

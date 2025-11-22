@@ -5,7 +5,7 @@ import 'package:ratatouille/features/users/domain/model/auth/user.dart';
 part 'user_model.g.dart';
 
 @HiveType(typeId: 0)
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class UserModel {
   @HiveField(0)
   final String id;
@@ -48,8 +48,8 @@ class UserModel {
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
   // Convert to domain entity
-  User toDomain() {
-    return User(
+  RatatouilleUser toDomain() {
+    return RatatouilleUser(
       id: id,
       email: email,
       name: name,
@@ -62,7 +62,7 @@ class UserModel {
   }
 
   // Convert from domain entity
-  factory UserModel.fromDomain(User user) {
+  factory UserModel.fromDomain(RatatouilleUser user) {
     return UserModel(
       id: user.id,
       email: user.email,

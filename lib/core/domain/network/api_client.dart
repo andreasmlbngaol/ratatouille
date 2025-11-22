@@ -1,4 +1,4 @@
-import 'package:ratatouille/domain/network/multipart_file_data.dart';
+import 'multipart_file_data.dart';
 
 abstract class ApiClient {
   Future<Map<String, dynamic>> get(String endpoint);

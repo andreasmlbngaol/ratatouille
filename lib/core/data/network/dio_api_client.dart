@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:ratatouille/domain/network/api_client.dart';
-import 'package:ratatouille/domain/network/api_exception.dart';
-import 'package:ratatouille/domain/network/multipart_file_data.dart';
-import 'package:ratatouille/domain/network/token_provider.dart';
+import 'package:flutter/foundation.dart';
+import '../../domain/network/api_client.dart';
+import '../../domain/network/api_exception.dart';
+import '../../domain/network/multipart_file_data.dart';
+import '../../domain/network/token_provider.dart';
 
 class DioApiClient implements ApiClient {
   final Dio dio;
@@ -24,6 +25,7 @@ class DioApiClient implements ApiClient {
               final token = await tokenProvider.getIdToken();
               if (token != null) {
                 options.headers["Authorization"] = "Bearer $token";
+                debugPrint("Token: $token");
               }
               options.headers["Content-Type"] = "application/json";
               return handler.next(options);

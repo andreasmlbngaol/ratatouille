@@ -1,12 +1,12 @@
 import 'package:dartz/dartz.dart';
-import 'package:ratatouille/domain/model/failure.dart';
+import 'package:ratatouille/core/domain/model/failure.dart';
 import 'package:ratatouille/features/users/domain/model/social/user_detail.dart';
 import 'package:ratatouille/features/users/domain/repository/users_repository.dart';
 
-class ManageUserFollowUseCae {
+class ManageUserFollowUseCase {
   final UsersRepository repository;
 
-  ManageUserFollowUseCae(this.repository);
+  ManageUserFollowUseCase(this.repository);
 
   Future<Either<Failure, UserDetail>> follow(String userId) async {
     if(userId.isEmpty) {

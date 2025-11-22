@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:ratatouille/domain/model/failure.dart';
+import 'package:flutter/foundation.dart';
+import 'package:ratatouille/core/domain/model/failure.dart';
 import 'package:ratatouille/features/users/domain/data_source/auth_local_data_source.dart';
 import 'package:ratatouille/features/users/domain/data_source/auth_remote_data_source.dart';
 import 'package:ratatouille/features/users/domain/model/auth/user.dart';
@@ -16,9 +17,10 @@ class UsersRepositoryImpl implements UsersRepository {
   });
 
   @override
-  Future<Either<Failure, User>> getOrCreateUser() async {
+  Future<Either<Failure, RatatouilleUser>> getOrCreateUser() async {
     try {
       final userModel = await remoteDataSource.getOrCreateUser();
+      debugPrint('userModel: $userModel');
       await localDataSource.saveUser(userModel);
       return Right(userModel.toDomain());
     } catch (e) {
@@ -67,7 +69,7 @@ class UsersRepositoryImpl implements UsersRepository {
   }
 
   @override
-  Future<Either<Failure, User>> updateProfile({String? name, String? bio}) async {
+  Future<Either<Failure, RatatouilleUser>> updateProfile({String? name, String? bio}) async {
     try {
       final userModel = await remoteDataSource.updateProfile(
         name: name,
@@ -81,7 +83,7 @@ class UsersRepositoryImpl implements UsersRepository {
   }
 
   @override
-  Future<Either<Failure, User>> uploadCoverPicture(List<int> imageBytes, String fileName) async {
+  Future<Either<Failure, RatatouilleUser>> uploadCoverPicture(List<int> imageBytes, String fileName) async {
     try {
       final userModel = await remoteDataSource.uploadCoverPicture(imageBytes, fileName);
       await localDataSource.saveUser(userModel);
@@ -92,7 +94,7 @@ class UsersRepositoryImpl implements UsersRepository {
   }
 
   @override
-  Future<Either<Failure, User>> uploadProfilePicture(List<int> imageBytes, String fileName) async {
+  Future<Either<Failure, RatatouilleUser>> uploadProfilePicture(List<int> imageBytes, String fileName) async {
     try {
       final userModel = await remoteDataSource.uploadProfilePicture(imageBytes, fileName);
       await localDataSource.saveUser(userModel);
@@ -103,7 +105,7 @@ class UsersRepositoryImpl implements UsersRepository {
   }
 
   @override
-  Future<Either<Failure, User>> getCachedUser() async {
+  Future<Either<Failure, RatatouilleUser>> getCachedUser() async {
     try {
       final userModel = await localDataSource.getUser();
 

@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:ratatouille/domain/model/failure.dart';
+import 'package:flutter/foundation.dart';
+import 'package:ratatouille/core/domain/model/failure.dart';
 import 'package:ratatouille/features/users/domain/model/auth/user.dart';
 import 'package:ratatouille/features/users/domain/repository/users_repository.dart';
 import 'package:ratatouille/features/users/domain/service/auth_service.dart';
@@ -31,13 +32,17 @@ class VerifyEmailUseCase {
     }
   }
 
-  Future<Either<Failure, User>> checkAndSyncEmailVerification() async {
+  Future<Either<Failure, RatatouilleUser>> checkAndSyncEmailVerification() async {
+    debugPrint('Checking and syncing email verification');
+
     try {
       final isVerified = await authService.isEmailVerified();
 
       if(!isVerified) {
         return Left(Failure('Email not yet verified'));
       }
+
+      debugPrint('Email verified');
 
       return await repository.getOrCreateUser();
     } catch (e) {

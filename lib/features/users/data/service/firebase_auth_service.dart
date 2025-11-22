@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ratatouille/features/users/domain/service/auth_service.dart';
 
@@ -84,7 +85,7 @@ class FirebaseAuthService implements AuthService {
         throw Exception("No user signed in");
       }
 
-      final idToken = await user.getIdToken();
+      final idToken = await user.getIdToken(true);
       return idToken!;
     } catch (e) {
       throw Exception("Failed to get ID token: $e");
@@ -100,6 +101,7 @@ class FirebaseAuthService implements AuthService {
       }
 
       await user.reload();
+      debugPrint("User: $user");
       return user.emailVerified;
     } catch (e) {
       throw Exception("Failed to check email verification status: $e");

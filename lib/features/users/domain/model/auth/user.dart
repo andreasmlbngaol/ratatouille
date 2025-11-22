@@ -1,4 +1,4 @@
-class User {
+class RatatouilleUser {
   final String id;
   final String name;
   final String email;
@@ -8,7 +8,7 @@ class User {
   final bool isEmailVerified;
   final DateTime createdAt;
 
-  const User({
+  const RatatouilleUser({
     required this.id,
     required this.name,
     required this.email,

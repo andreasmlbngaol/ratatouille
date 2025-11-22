@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:ratatouille/domain/model/failure.dart';
+import 'package:ratatouille/core/domain/model/failure.dart';
 import 'package:ratatouille/features/users/domain/model/auth/user.dart';
 import 'package:ratatouille/features/users/domain/repository/users_repository.dart';
 
@@ -8,7 +8,7 @@ class CompleteProfileSetupUseCase {
 
   CompleteProfileSetupUseCase(this.repository);
 
-  Future<Either<Failure, User>> updateName(String name) async {
+  Future<Either<Failure, RatatouilleUser>> updateName(String name) async {
     try {
       if (name.isEmpty) {
         return Left(Failure('Name cannot be empty'));
@@ -22,7 +22,7 @@ class CompleteProfileSetupUseCase {
     }
   }
 
-  Future<Either<Failure, User>> uploadProfilePicture(
+  Future<Either<Failure, RatatouilleUser>> uploadProfilePicture(
       List<int> imageBytes,
       String fileName
   ) async {

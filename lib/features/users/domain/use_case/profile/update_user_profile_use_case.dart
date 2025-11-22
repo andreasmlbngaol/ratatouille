@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:ratatouille/domain/model/failure.dart';
+import 'package:ratatouille/core/domain/model/failure.dart';
 import 'package:ratatouille/features/users/domain/model/auth/user.dart';
 import 'package:ratatouille/features/users/domain/model/profile/picture_type.dart';
 import 'package:ratatouille/features/users/domain/repository/users_repository.dart';
@@ -9,7 +9,7 @@ class UpdateUserProfileUseCase {
 
   UpdateUserProfileUseCase(this.repository);
 
-  Future<Either<Failure, User>> updateInfo({
+  Future<Either<Failure, RatatouilleUser>> updateInfo({
     String? name,
     String? bio
   }) async {
@@ -20,7 +20,7 @@ class UpdateUserProfileUseCase {
     return repository.updateProfile(name: name, bio: bio);
   }
 
-  Future<Either<Failure, User>> uploadPicture({
+  Future<Either<Failure, RatatouilleUser>> uploadPicture({
     required PictureType type,
     required List<int> imageBytes,
     required String fileName

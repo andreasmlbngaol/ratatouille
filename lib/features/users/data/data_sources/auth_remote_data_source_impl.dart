@@ -1,9 +1,11 @@
-import 'package:ratatouille/domain/network/api_client.dart';
-import 'package:ratatouille/domain/network/api_exception.dart';
-import 'package:ratatouille/domain/network/multipart_file_data.dart';
+import 'package:flutter/foundation.dart';
 import 'package:ratatouille/features/users/data/model/user_detail_model.dart';
 import 'package:ratatouille/features/users/data/model/user_model.dart';
 import 'package:ratatouille/features/users/domain/data_source/auth_remote_data_source.dart';
+
+import '../../../../core/domain/network/api_client.dart';
+import '../../../../core/domain/network/api_exception.dart';
+import '../../../../core/domain/network/multipart_file_data.dart';
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final ApiClient apiClient;
@@ -15,9 +17,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final response = await apiClient.get("/api/users/me");
       final data = response["data"] as Map<String, dynamic>;
+      debugPrint(data.toString());
       return UserModel.fromJson(data);
     } on ApiException catch (e) {
       throw Exception(e.message);
+    } catch (e) {
+      throw Exception("Something went wrong");
     }
   }
 
