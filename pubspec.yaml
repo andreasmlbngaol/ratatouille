@@ -36,6 +36,7 @@ dependencies:
   dartz: ^0.10.1
   flutter_bloc: ^9.1.1
   equatable: ^2.0.7
+  flutter_svg: ^2.2.3
 
 
 dev_dependencies:
@@ -52,3 +53,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/icons/

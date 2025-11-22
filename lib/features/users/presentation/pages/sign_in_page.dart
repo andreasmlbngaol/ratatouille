@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:ratatouille/core/presentation/app_routes.dart';
 import 'package:ratatouille/features/users/presentation/provider/auth_provider.dart';
 import 'package:ratatouille/features/users/presentation/widgets/ratatouille_subtitle.dart';
 import 'package:ratatouille/features/users/presentation/widgets/ratatouille_title.dart';
@@ -197,7 +198,7 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () => context.go('/sign_up'),
+                      onPressed: () => context.go(AppRoutes.signUp),
                       child: const Text(
                         "Belum punya akun? Buat akun di sini",
                         style: TextStyle(

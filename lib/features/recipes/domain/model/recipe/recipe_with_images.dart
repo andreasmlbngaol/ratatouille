@@ -1,6 +1,7 @@
-import 'package:ratatouille/features/recipes/domain/model/recipe_status.dart';
+import 'package:ratatouille/features/recipes/domain/model/image/ratatouille_image.dart';
+import 'package:ratatouille/features/recipes/domain/model/recipe/recipe_status.dart';
 
-class Recipe {
+class RecipeWithImages {
   final int id;
   final String authorId;
   final String name;
@@ -11,8 +12,9 @@ class Recipe {
   final RecipeStatus status;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final List<RatatouilleImage> images;
 
-  const Recipe({
+  const RecipeWithImages({
     required this.id,
     required this.authorId,
     required this.name,
@@ -22,7 +24,7 @@ class Recipe {
     required this.portion,
     required this.status,
     required this.createdAt,
-    required this.updatedAt
+    required this.updatedAt,
+    required this.images
   });
-
 }

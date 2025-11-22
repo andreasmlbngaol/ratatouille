@@ -1,0 +1,176 @@
+import 'package:dartz/dartz.dart';
+import 'package:ratatouille/core/domain/model/failure.dart';
+import 'package:ratatouille/features/recipes/domain/data_source/recipe_remote_data_source.dart';
+import 'package:ratatouille/features/recipes/domain/model/ingredient/ingredient_tag.dart';
+import 'package:ratatouille/features/recipes/domain/model/ingredient/ingredient_with_tag.dart';
+import 'package:ratatouille/features/recipes/domain/model/recipe/recipe_detail.dart';
+import 'package:ratatouille/features/recipes/domain/model/recipe/recipe_status.dart';
+import 'package:ratatouille/features/recipes/domain/model/recipe/recipe_with_images.dart';
+import 'package:ratatouille/features/recipes/domain/model/step/step_with_images.dart';
+import 'package:ratatouille/features/recipes/domain/repository/recipe_repository.dart';
+
+class RecipesRepositoryImpl implements RecipesRepository {
+  final RecipeRemoteDataSource remoteDataSource;
+
+  RecipesRepositoryImpl({
+    required this.remoteDataSource,
+  });
+
+  @override
+  Future<Either<Failure, RecipeDetail>> getRecipeDetail(int recipeId) async {
+    try {
+      final recipeDetailModel = await remoteDataSource.getRecipeDetail(
+          recipeId);
+      return Right(recipeDetailModel.toDomain());
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, RecipeWithImages>> getOrCreateDraftRecipe() async {
+    try {
+      final recipeModel = await remoteDataSource.getOrCreateDraftRecipe();
+      return Right(recipeModel.toDomain());
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, RecipeWithImages>> updateRecipeBaseInfo({
+    required int recipeId,
+    String? name,
+    String? description,
+    bool? isPublic,
+    int? estTimeInMinutes,
+    int? portion
+  }) async {
+    try {
+      final recipeModel = await remoteDataSource.updateRecipe(
+          recipeId: recipeId,
+          name: name,
+          description: description,
+          isPublic: isPublic,
+          estTimeInMinutes: estTimeInMinutes,
+          portion: portion
+      );
+      return Right(recipeModel.toDomain());
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, RecipeWithImages>> publishRecipe(int recipeId) async {
+    try {
+      final recipeModel = await remoteDataSource.updateRecipe(
+          recipeId: recipeId,
+          status: RecipeStatus.PUBLISHED
+      );
+      return Right(recipeModel.toDomain());
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, RecipeWithImages>> uploadRecipeImage({
+    required int recipeId,
+    required List<int> imageBytes,
+    required String fileName
+  }) async {
+    try {
+      final recipeModel = await remoteDataSource.uploadRecipeImage(
+          recipeId: recipeId,
+          imageBytes: imageBytes,
+          fileName: fileName
+      );
+      return Right(recipeModel.toDomain());
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, IngredientTag>> createIngredientTag(String name) async {
+    try {
+      final tagModel = await remoteDataSource.createIngredientTag(name);
+      return Right(tagModel.toDomain());
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<IngredientTag>>> searchIngredientTags(String query) async {
+    try {
+      final tagsModel = await remoteDataSource.searchIngredientTags(query);
+      return Right(tagsModel.map((e) => e.toDomain()).toList());
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<IngredientWithTag>>> addIngredient({
+    required int recipeId,
+    required int tagId,
+    double? amount,
+    String? unit,
+    String? alternative
+  }) async {
+    try {
+      final ingredientsModel = await remoteDataSource.addIngredient(
+          recipeId: recipeId,
+          tagId: tagId,
+          amount: amount,
+          unit: unit,
+          alternative: alternative
+      );
+      return Right(ingredientsModel.map((e) => e.toDomain()).toList());
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<StepWithImages>>> createEmptyStep(int recipeId, int stepNumber) async {
+    try {
+      final stepsModel = await remoteDataSource.createEmptyStep(recipeId, stepNumber);
+      return Right(stepsModel.map((e) => e.toDomain()).toList());
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<StepWithImages>>> updateStep(int recipeId, int stepId, String content) async {
+    try {
+      final stepsModel = await remoteDataSource.updateStep(recipeId, stepId, content);
+      return Right(stepsModel.map((e) => e.toDomain()).toList());
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<StepWithImages>>> uploadStepImage({
+    required int recipeId,
+    required int stepId,
+    required List<int> imageBytes,
+    required String fileName
+  }) async {
+    try {
+      final stepsModel = await remoteDataSource.uploadStepImage(
+          recipeId: recipeId,
+          stepId: stepId,
+          imageBytes: imageBytes,
+          fileName: fileName
+      );
+      return Right(stepsModel.map((e) => e.toDomain()).toList());
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+}

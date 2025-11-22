@@ -66,6 +66,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return UserModel.fromJson(data);
     } on ApiException catch (e) {
       throw Exception(e.message);
+    } catch (e) {
+      throw Exception("Something went wrong");
     }
   }
 

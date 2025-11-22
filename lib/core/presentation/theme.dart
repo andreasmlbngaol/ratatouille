@@ -11,6 +11,19 @@ final lightMaterialTheme = ThemeData(
   textTheme: GoogleFonts.robotoTextTheme().apply(
       bodyColor: Color(0xFF76342E),
       displayColor: const Color(0xFF76342E)
+  ).copyWith(
+    headlineLarge: GoogleFonts.playfairDisplay(
+      textStyle: TextStyle(color: Color(0xFF76342E)),
+    ),
+    headlineMedium: GoogleFonts.playfairDisplay(
+      textStyle: TextStyle(color: Color(0xFF76342E)),
+    ),
+    headlineSmall: GoogleFonts.playfairDisplay(
+      textStyle: TextStyle(color: Color(0xFF76342E)),
+    ),
+    titleLarge: GoogleFonts.playfairDisplay(
+      textStyle: TextStyle(color: Color(0xFF76342E)),
+    ),
   ),
   colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
   useMaterial3: true,

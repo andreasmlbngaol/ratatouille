@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ratatouille/core/presentation/app_routes.dart';
 
 class NotFoundPage extends StatelessWidget {
   final String? location;
@@ -50,7 +51,7 @@ class NotFoundPage extends StatelessWidget {
             ),
             const SizedBox(height: 40),
             ElevatedButton(
-              onPressed: () => context.go('/home'),
+              onPressed: () => context.go(AppRoutes.home),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF3F5242),
                 foregroundColor: const Color(0xFFFFFDDE),

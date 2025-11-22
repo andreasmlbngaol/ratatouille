@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ratatouille/core/presentation/app_routes.dart';
 import 'package:ratatouille/core/presentation/pages/not_found_page.dart';
+import 'package:ratatouille/features/recipes/presentation/pages/favorite_page.dart';
+import 'package:ratatouille/features/recipes/presentation/pages/home_page.dart';
+import 'package:ratatouille/features/recipes/presentation/pages/main_shell.dart';
+import 'package:ratatouille/features/recipes/presentation/pages/my_recipe_page.dart';
+import 'package:ratatouille/features/recipes/presentation/pages/profile_page.dart';
+import 'package:ratatouille/features/recipes/presentation/pages/search_recipe_page.dart';
+import 'package:ratatouille/features/recipes/presentation/pages/search_user_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/complete_setup_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/email_verification_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/sign_in_page.dart';
@@ -12,48 +19,34 @@ import 'package:ratatouille/features/users/presentation/provider/auth_provider.d
 final navigatorKey = GlobalKey<NavigatorState>();
 
 GoRouter createRouter(BuildContext context, AuthProvider authProvider) => GoRouter(
-  navigatorKey: navigatorKey,
+    navigatorKey: navigatorKey,
     initialLocation: AppRoutes.splash,
     refreshListenable: authProvider,
     redirect: (context, state) async {
-      // final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final isLoading = authProvider.isLoading;
       final user = authProvider.user;
       final location = state.matchedLocation;
 
-      debugPrint('🔄 Redirecting to $location');
+      if (isLoading) { return null; }
 
-      // Jika masih loading, stay at current page
-      if (isLoading) {
-        debugPrint('⏳ Still loading, stay at $location');
-        return null;
-      }
-
-      // Jika tidak authenticated
       if (user == null) {
         if (location == AppRoutes.signIn || location == AppRoutes.signUp) {
-          return null; // Stay at sign_in/sign_up
+          return null;
         }
-        debugPrint('🚫 Not authenticated, redirect ${AppRoutes.signIn}');
         return AppRoutes.signIn;
       }
 
-      // User sudah login
       if (!user.isEmailVerified) {
         if (location == AppRoutes.emailVerification) {
           return null;
         }
-        debugPrint('📧 Email not verified, redirect to ${AppRoutes.emailVerification}');
         return AppRoutes.emailVerification;
       }
-
-      debugPrint("User name: ${user.name}");
 
       if (user.name.isEmpty) {
         if (location == AppRoutes.completeSetup) {
           return null;
         }
-        debugPrint('👤 Name empty, redirect to ${AppRoutes.completeSetup}');
         return AppRoutes.completeSetup;
       }
 
@@ -62,7 +55,6 @@ GoRouter createRouter(BuildContext context, AuthProvider authProvider) => GoRout
           location == AppRoutes.emailVerification ||
           location == AppRoutes.completeSetup ||
           location == AppRoutes.splash) {
-        debugPrint('✅ User setup complete, redirect to ${AppRoutes.home}');
         return AppRoutes.home;
       }
 
@@ -92,7 +84,47 @@ GoRouter createRouter(BuildContext context, AuthProvider authProvider) => GoRout
       route(
         path: AppRoutes.completeSetup,
         child: (context, _) => CompleteSetupPage()
-      )
+      ),
+
+      ShellRoute(
+        navigatorKey: GlobalKey<NavigatorState>(),
+        builder: (context, state, child) => MainShell(child: child),
+        routes: [
+          route(
+            path: AppRoutes.home,
+            child: (context, _) => HomePage(),
+          ),
+          route(
+            path: AppRoutes.favorite,
+            child: (context, _) => FavoritePage(),
+          ),
+          route(
+            path: AppRoutes.myRecipe,
+            child: (context, _) => MyRecipePage(),
+          ),
+          route(
+            path: AppRoutes.profile,
+            child: (context, _) => ProfilePage(),
+          ),
+        ]
+      ),
+      route(
+        path: AppRoutes.searchRecipe,
+        child: (context, _) => SearchRecipePage(),
+      ),
+      route(
+        path: AppRoutes.searchUser,
+        child: (context, _) => SearchUserPage(),
+      ),
+      // Create recipe (outside shell = full screen)
+      // route(
+      //   path: AppRoutes.createRecipe,
+      //   child: (context, state) {
+      //     return CreateRecipePage(
+      //       recipeId: recipeId != null ? int.tryParse(recipeId) : null,
+      //     );
+      //   },
+      // ),
     ],
   errorBuilder: (context, state) => NotFoundPage(location: state.matchedLocation)
 );
