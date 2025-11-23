@@ -6,11 +6,12 @@ import 'package:ratatouille/features/recipes/presentation/pages/favorite_page.da
 import 'package:ratatouille/features/recipes/presentation/pages/home_page.dart';
 import 'package:ratatouille/features/recipes/presentation/pages/main_shell.dart';
 import 'package:ratatouille/features/recipes/presentation/pages/my_recipe_page.dart';
-import 'package:ratatouille/features/recipes/presentation/pages/profile_page.dart';
+import 'package:ratatouille/features/users/presentation/pages/profile_page.dart';
 import 'package:ratatouille/features/recipes/presentation/pages/search_recipe_page.dart';
 import 'package:ratatouille/features/recipes/presentation/pages/search_user_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/complete_setup_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/email_verification_page.dart';
+import 'package:ratatouille/features/users/presentation/pages/settings_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/sign_in_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/sign_up_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/splash_page.dart';
@@ -116,15 +117,10 @@ GoRouter createRouter(BuildContext context, AuthProvider authProvider) => GoRout
         path: AppRoutes.searchUser,
         child: (context, _) => SearchUserPage(),
       ),
-      // Create recipe (outside shell = full screen)
-      // route(
-      //   path: AppRoutes.createRecipe,
-      //   child: (context, state) {
-      //     return CreateRecipePage(
-      //       recipeId: recipeId != null ? int.tryParse(recipeId) : null,
-      //     );
-      //   },
-      // ),
+      route(
+        path: AppRoutes.settings,
+        child: (context, _) => SettingsPage()
+      )
     ],
   errorBuilder: (context, state) => NotFoundPage(location: state.matchedLocation)
 );

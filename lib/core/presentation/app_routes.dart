@@ -12,11 +12,12 @@ class AppRoutes {
   static const favorite = "/main/favorite";
   static const myRecipe = "/main/my-recipe";
   static const profile = "/main/profile";
+  static const settings = "/main/settings";
 
   // Search pages
   static const searchRecipe = '/search-recipe';
   static const searchUser = '/search-user';
 
-  static const recipeDetail = "main/recipe-detail/:id";
-  static const createRecipe = "main/create-recipe";
+  static const recipeDetail = "/main/recipe-detail/:id";
+  static const createRecipe = "/main/create-recipe";
 }
