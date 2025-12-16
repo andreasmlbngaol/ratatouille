@@ -41,180 +41,259 @@ class _SignInPageState extends State<SignInPage> {
           bodyColor: const Color(0xFF5E2A25),
           displayColor: const Color(0xFF5E2A25),
         ),
-        iconButtonTheme: IconButtonThemeData(
-          style: ButtonStyle(
-            foregroundColor: WidgetStateProperty.all(const Color(0xFF5E2A25)),
-          ),
-        ),
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            foregroundColor: const Color(0xFF5E2A25),
-          ),
-        ),
       ),
       child: Scaffold(
-        // ✅ Set background color ke kuning full screen
         backgroundColor: const Color(0xFFFFFDDE),
         body: Consumer<AuthProvider>(
           builder: (context, authProvider, _) {
-            return Center(
-              child: SingleChildScrollView(
-                // ✅ Hapus Container, gunakan padding langsung
-                padding: const EdgeInsets.symmetric(horizontal: 48),
-                child: Column(
-                  spacing: 16,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const RatatouilleTitle(),
-                    const RatatouilleSubtitle("Masuk akun"),
-                    TextField(
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                        labelStyle: const TextStyle(color: Color(0xFF5E2A25)),
-                        labelText: "Email",
-                        prefixIcon: const Icon(Icons.email),
-                        border: roundedBoldOutline(),
-                        enabledBorder: roundedBoldOutline(),
-                      ),
-                    ),
-                    TextField(
-                      controller: _passwordController,
-                      obscureText: !_passwordVisible,
-                      decoration: InputDecoration(
-                        labelStyle: const TextStyle(color: Color(0xFF5E2A25)),
-                        labelText: "Kata Sandi",
-                        prefixIcon: const Icon(Icons.password),
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _passwordVisible = !_passwordVisible;
-                            });
-                          },
-                          icon: Icon(
-                            _passwordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
+            return Stack(
+              children: [
+                /// 🔶 BACKGROUND TOP
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: Image.asset(
+                    'assets/images/bg_top.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+
+                /// 🔶 BACKGROUND BOTTOM
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Image.asset(
+                    'assets/images/bg_bottom.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+
+                /// 🍴 FOOD TOP LEFT
+                Positioned(
+                  top: 24,
+                  left: -5,
+                  child: Image.asset(
+                    'assets/images/top_left.png',
+                    width: 180,
+                  ),
+                ),
+
+                /// 🍴 FOOD TOP RIGHT
+                Positioned(
+                  top: 40,
+                  right: 10,
+                  child: Image.asset(
+                    'assets/images/top_right.png',
+                    width: 120,
+                  ),
+                ),
+
+                /// 🧾 CONTENT
+                Center(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 36),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: 80),
+
+                        const RatatouilleTitle(),
+
+                        const SizedBox(height: 6),
+
+                        const RatatouilleSubtitle("Masuk akun"),
+
+                        const SizedBox(height: 32),
+
+                        /// 📧 EMAIL
+                        TextField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            labelText: "Email",
+                            prefixIcon: const Icon(Icons.email),
+                            border: roundedBoldOutline(),
+                            enabledBorder: roundedBoldOutline(),
+                            focusedBorder: roundedBoldOutline(),
                           ),
                         ),
-                        border: roundedBoldOutline(),
-                        enabledBorder: roundedBoldOutline(),
-                      ),
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: authProvider.isLoading
-                            ? null
-                            : () async {
-                          final success = await authProvider.signInWithEmailAndPassword(
-                            _emailController.text,
-                            _passwordController.text,
-                          );
 
-                          if (!context.mounted) return;
+                        const SizedBox(height: 16),
 
-                          if (!success) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  authProvider.error ?? 'Sign in failed',
-                                ),
+                        /// 🔒 PASSWORD
+                        TextField(
+                          controller: _passwordController,
+                          obscureText: !_passwordVisible,
+                          decoration: InputDecoration(
+                            labelText: "Kata Sandi",
+                            prefixIcon: const Icon(Icons.lock),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _passwordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
                               ),
-                            );
-                          }
-                        },
-                        style: FilledButton.styleFrom(
-                          backgroundColor: const Color(0xFF3F5242),
-                          foregroundColor: const Color(0xFFFFFDDE),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                              onPressed: () {
+                                setState(() {
+                                  _passwordVisible = !_passwordVisible;
+                                });
+                              },
+                            ),
+                            border: roundedBoldOutline(),
+                            enabledBorder: roundedBoldOutline(),
+                            focusedBorder: roundedBoldOutline(),
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 4),
-                          minimumSize: const Size(0, 50),
                         ),
-                        child: authProvider.isLoading
-                            ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation(
-                              Color(0xFFFFFDDE),
+
+                        const SizedBox(height: 24),
+
+                        /// ✅ BUTTON LOGIN
+                        SizedBox(
+                          width: double.infinity,
+                          height: 52,
+                          child: ElevatedButton(
+                            onPressed: authProvider.isLoading
+                                ? null
+                                : () async {
+                              final success =
+                              await authProvider.signInWithEmailAndPassword(
+                                _emailController.text,
+                                _passwordController.text,
+                              );
+
+                              if (!context.mounted) return;
+
+                              if (!success) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      authProvider.error ??
+                                          'Sign in failed',
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF3F5242),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                            ),
+                            child: authProvider.isLoading
+                                ? const CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor:
+                              AlwaysStoppedAnimation(Color(0xFFFFFDDE)),
+                            )
+                                : const Text(
+                              "Masuk Akun",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
                             ),
                           ),
-                        )
-                            : const Text(
-                          "Masuk Akun",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton.icon(
-                        onPressed: authProvider.isLoading
-                            ? null
-                            : () async {
-                          final success = await authProvider.signInWithGoogle();
 
-                          if (!context.mounted) return;
+                        const SizedBox(height: 16),
 
-                          if (!success) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  authProvider.error ??
-                                      'Google sign in failed',
-                                ),
+                        /// 🔵 GOOGLE LOGIN
+                        SizedBox(
+                          width: double.infinity,
+                          height: 52,
+                          child: OutlinedButton.icon(
+                            onPressed: authProvider.isLoading
+                                ? null
+                                : () async {
+                              final success =
+                              await authProvider.signInWithGoogle();
+
+                              if (!context.mounted) return;
+
+                              if (!success) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      authProvider.error ??
+                                          'Google sign in failed',
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              side: const BorderSide(
+                                color: Color(0xFF5E2A25),
+                                width: 1.5,
                               ),
-                            );
-                          }
-                        },
-                        style: FilledButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: const Color(0xFF5E2A25),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          minimumSize: const Size(0, 50),
-                        ),
-                        icon: Image.asset(
-                          "assets/images/google_logo.png",
-                          width: 36,
-                          height: 36,
-                        ),
-                        label: const Text(
-                          "Masuk dengan Google",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                            ),
+                            icon: Image.asset(
+                              'assets/images/google_logo.png',
+                              width: 22,
+                            ),
+                            label: const Text(
+                              "Masuk dengan Google",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () => context.go(AppRoutes.signUp),
-                      child: const Text(
-                        "Belum punya akun? Buat akun di sini",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
-                          decorationThickness: 2,
+
+                        const SizedBox(height: 18),
+
+                        /// 📝 REGISTER
+                        TextButton(
+                          onPressed: () => context.go(AppRoutes.signUp),
+                          child: const Text(
+                            "Belum memiliki akun? Buat akun di sini.",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
                         ),
-                      ),
+
+                        const SizedBox(height: 80),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+
+
+                /// 🍴 FOOD BOTTOM LEFT
+                Positioned(
+                  bottom: 100, // ⬅ tepat di atas bg-bottom
+                  left: 20,
+                  child: Image.asset(
+                    'assets/images/food_pattern_bot.png',
+                    width: 140,
+                  ),
+                ),
+
+                /// 🍴 FOOD BOTTOM RIGHT
+                Positioned(
+                  bottom: 100,
+                  right: 0,
+                  child: Image.asset(
+                    'assets/images/food_pattern.png',
+                    width: 140,
+                  ),
+                ),
+
+              ],
             );
           },
         ),
       ),
     );
   }
+
 }
