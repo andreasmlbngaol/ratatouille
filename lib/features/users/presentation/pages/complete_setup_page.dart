@@ -110,178 +110,262 @@ class _CompleteSetupPageState extends State<CompleteSetupPage> {
       backgroundColor: const Color(0xFFFFFDDE),
       body: Consumer<AuthProvider>(
         builder: (context, authProvider, _) {
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 20),
-                  Text(
-                    'Atur Profil',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: const Color(0xFF5E2A25),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 32),
+          return Stack(
+            children: [
 
-                  // ===== Profile Picture Section =====
-                  Stack(
-                    alignment: Alignment.bottomRight,
-                    children: [
-                      Container(
-                        width: 150,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: const Color(0xFFE8845C),
-                            width: 3,
+              /// 🔶 BACKGROUND TOP
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Image.asset(
+                  'assets/images/bg_top.png',
+                  fit: BoxFit.cover,
+                ),
+              ),
+
+              /// 🔶 BACKGROUND BOTTOM
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Image.asset(
+                  'assets/images/bg_bottom.png',
+                  fit: BoxFit.cover,
+                ),
+              ),
+
+              /// 🍴 FOOD TOP LEFT
+              Positioned(
+                top: 24,
+                left: -5,
+                child: Image.asset(
+                  'assets/images/top_left.png',
+                  width: 180,
+                ),
+              ),
+
+              /// 🍴 FOOD TOP RIGHT
+              Positioned(
+                top: 40,
+                right: 10,
+                child: Image.asset(
+                  'assets/images/top_right.png',
+                  width: 120,
+                ),
+              ),
+
+
+
+              /// 🧾 CONTENT
+              Center(
+                child:SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32, vertical: 40),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 20),
+                        Text(
+                          'Atur Profil',
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .headlineSmall
+                              ?.copyWith(
+                            color: const Color(0xFF5E2A25),
+                            fontWeight: FontWeight.bold,
                           ),
-                          color: Colors.grey[200],
                         ),
-                        child: authProvider.user?.profilePictureUrl != null
-                            ? CachedNetworkImage(
-                          imageUrl: AppConstant.baseUrl + authProvider.user!.profilePictureUrl!,
-                          imageBuilder: (context, imageProvider) =>
-                              Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                    image: imageProvider,
+                        const SizedBox(height: 32),
+
+                        // ===== Profile Picture Section =====
+                        Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            Container(
+                              width: 150,
+                              height: 150,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: const Color(0xFFE8845C),
+                                  width: 3,
+                                ),
+                                color: Colors.grey[200],
+                              ),
+                              child: ClipOval(
+                                child: authProvider.user?.profilePictureUrl != null &&
+                                    authProvider.user!.profilePictureUrl!.isNotEmpty
+                                    ? CachedNetworkImage(
+                                  imageUrl: AppConstant.baseUrl +
+                                      authProvider.user!.profilePictureUrl!,
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) =>
+                                  const Center(child: CircularProgressIndicator()),
+                                  errorWidget: (context, url, error) => Image.asset(
+                                    'assets/images/default_profile.png',
                                     fit: BoxFit.cover,
                                   ),
+                                )
+                                    : Image.asset(
+                                  'assets/images/default_profile.png',
+                                  fit: BoxFit.cover,
                                 ),
                               ),
-                          placeholder: (context, url) =>
-                          const CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                          const Icon(Icons.person, size: 80),
-                        )
-                            : Icon(
-                          Icons.person,
-                          size: 80,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: _isUploadingImage ? null : _pickAndUploadImage,
-                        child: Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: const Color(0xFFE8845C),
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 3,
                             ),
-                          ),
-                          child: _isUploadingImage
-                              ? const SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation(
-                                Colors.white,
+
+                            GestureDetector(
+                              onTap: _isUploadingImage
+                                  ? null
+                                  : _pickAndUploadImage,
+                              child: Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: const Color(0xFFE8845C),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 3,
+                                  ),
+                                ),
+                                child: _isUploadingImage
+                                    ? const SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation(
+                                      Colors.white,
+                                    ),
+                                  ),
+                                )
+                                    : const Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.white,
+                                  size: 24,
+                                ),
                               ),
                             ),
-                          )
-                              : const Icon(
-                            Icons.camera_alt,
-                            color: Colors.white,
-                            size: 24,
+                          ],
+                        ),
+
+                        const SizedBox(height: 32),
+
+                        // ===== Name Section =====
+                        Text(
+                          'Nama',
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                            color: const Color(0xFF5E2A25),
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
+                        const SizedBox(height: 8),
+                        TextField(
+                          controller: _nameController,
+                          decoration: InputDecoration(
+                            hintText: 'Masukkan nama Anda',
+                            hintStyle: const TextStyle(color: Color(0xFFBBB5B0)),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF5E2A25),
+                                width: 2,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF5E2A25),
+                                width: 2,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF3F5242),
+                                width: 2,
+                              ),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                          ),
+                          style: const TextStyle(color: Color(0xFF5E2A25)),
+                        ),
+                        const SizedBox(height: 24),
 
-                  const SizedBox(height: 32),
-
-                  // ===== Name Section =====
-                  Text(
-                    'Nama',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: const Color(0xFF5E2A25),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      hintText: 'Masukkan nama Anda',
-                      hintStyle: const TextStyle(color: Color(0xFFBBB5B0)),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: Color(0xFF5E2A25),
-                          width: 2,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: Color(0xFF5E2A25),
-                          width: 2,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: Color(0xFF3F5242),
-                          width: 2,
-                        ),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                    ),
-                    style: const TextStyle(color: Color(0xFF5E2A25)),
-                  ),
-                  const SizedBox(height: 24),
-
-                  // ===== Submit Button =====
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: authProvider.isLoading ? null : _updateName,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF3F5242),
-                        foregroundColor: const Color(0xFFFFFDDE),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      child: authProvider.isLoading
-                          ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation(
-                            Color(0xFFFFFDDE),
+                        // ===== Submit Button =====
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: authProvider.isLoading
+                                ? null
+                                : _updateName,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF3F5242),
+                              foregroundColor: const Color(0xFFFFFDDE),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                            ),
+                            child: authProvider.isLoading
+                                ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation(
+                                  Color(0xFFFFFDDE),
+                                ),
+                              ),
+                            )
+                                : const Text(
+                              'Lanjutkan',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
-                      )
-                          : const Text(
-                        'Lanjutkan',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                        const SizedBox(height: 40),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 40),
-                ],
+                )
               ),
-            ),
+
+
+              /// 🍴 FOOD BOTTOM LEFT
+              Positioned(
+                bottom: 100, // ⬅ tepat di atas bg-bottom
+                left: 20,
+                child: Image.asset(
+                  'assets/images/food_pattern_bot.png',
+                  width: 140,
+                ),
+              ),
+
+              /// 🍴 FOOD BOTTOM RIGHT
+              Positioned(
+                bottom: 100,
+                right: 0,
+                child: Image.asset(
+                  'assets/images/food_pattern.png',
+                  width: 140,
+                ),
+              ),
+
+            ],
           );
         },
       ),
