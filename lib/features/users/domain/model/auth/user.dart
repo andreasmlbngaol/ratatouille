@@ -6,7 +6,9 @@ class RatatouilleUser {
   final String? coverPictureUrl;
   final String? bio;
   final bool isEmailVerified;
-  final DateTime createdAt;
+  final int createdAt;
+  final int updatedAt;
+
 
   const RatatouilleUser({
     required this.id,
@@ -16,7 +18,8 @@ class RatatouilleUser {
     required this.coverPictureUrl,
     required this.bio,
     required this.isEmailVerified,
-    required this.createdAt
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   bool get isNewUser => name.isEmpty;

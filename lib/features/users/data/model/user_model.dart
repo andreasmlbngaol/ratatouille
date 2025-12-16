@@ -29,7 +29,11 @@ class UserModel {
   final bool isEmailVerified;
 
   @HiveField(7)
-  final DateTime createdAt;
+  final int createdAt;
+
+  @HiveField(8)
+  final int updatedAt;
+
 
   const UserModel({
     required this.id,
@@ -40,6 +44,7 @@ class UserModel {
     this.bio,
     required this.isEmailVerified,
     required this.createdAt,
+    required this.updatedAt,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -58,6 +63,7 @@ class UserModel {
       bio: bio,
       isEmailVerified: isEmailVerified,
       createdAt: createdAt,
+      updatedAt: updatedAt
     );
   }
 
@@ -72,6 +78,7 @@ class UserModel {
       bio: user.bio,
       isEmailVerified: user.isEmailVerified,
       createdAt: user.createdAt,
+      updatedAt: user.updatedAt
     );
   }
 
