@@ -149,190 +149,259 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
       backgroundColor: const Color(0xFFFFFDDE),
       body: Consumer<AuthProvider>(
         builder: (context, authProvider, _) {
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: MediaQuery.of(context).size.height,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 40),
-
-                    // ===== Email Icon =====
-                    Container(
-                      width: 140,
-                      height: 140,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: const Color(0xFFE8845C).withValues(alpha: 0.1),
-                      ),
-                      child: const Icon(
-                        Icons.mail_outline,
-                        size: 70,
-                        color: Color(0xFFE8845C),
-                      ),
-                    ),
-
-                    const SizedBox(height: 32),
-
-                    // ===== Info Text =====
-                    Text(
-                      'Silakan cek email Anda.\nSetelah verifikasi, kembali ke aplikasi ini.',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: const Color(0xFF5E2A25),
-                        fontWeight: FontWeight.w500,
-                        height: 1.5,
-                      ),
-                    ),
-
-                    const SizedBox(height: 32),
-
-                    // ===== Open Email App Button =====
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: _openEmailApp,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFE8845C),
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                        ),
-                        icon: const Icon(Icons.mail, size: 20),
-                        label: const Text(
-                          'Buka Aplikasi Email',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // ===== Check Verification Button =====
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: _isChecking ? null : _checkEmailVerification,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF3F5242),
-                          foregroundColor: const Color(0xFFFFFDDE),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                        ),
-                        child: _isChecking
-                            ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation(
-                              Color(0xFFFFFDDE),
-                            ),
-                          ),
-                        )
-                            : const Text(
-                          'Cek Status Verifikasi',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // ===== Resend Email Button =====
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton(
-                        onPressed: _isResending ? null : _resendEmailVerification,
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: const Color(0xFFE8845C),
-                          side: const BorderSide(
-                            color: Color(0xFFE8845C),
-                            width: 2,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                        ),
-                        child: _isResending
-                            ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation(
-                              Color(0xFFE8845C),
-                            ),
-                          ),
-                        )
-                            : const Text(
-                          'Kirim Ulang',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton(
-                        onPressed: _signOut,
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: const Color(0xFF5E2A25),
-                          side: const BorderSide(
-                            color: Color(0xFF5E2A25),
-                            width: 2,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                        ),
-                        child: const Text(
-                          'Keluar',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 40),
-
-                    // ===== Additional Info =====
-                    Text(
-                      'Tidak menerima email verifikasi?\nCoba periksa folder spam atau minta kirim ulang!',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: const Color(0xFF5E2A25).withValues(alpha: 0.7),
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-                  ],
+          return Stack(
+            children: [
+              /// 🔶 BACKGROUND TOP
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Image.asset(
+                  'assets/images/bg_top.png',
+                  fit: BoxFit.cover,
                 ),
               ),
-            ),
+
+              /// 🔶 BACKGROUND BOTTOM
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Image.asset(
+                  'assets/images/bg_bottom.png',
+                  fit: BoxFit.cover,
+                ),
+              ),
+
+              /// 🍴 FOOD TOP LEFT
+              Positioned(
+                top: 24,
+                left: -5,
+                child: Image.asset(
+                  'assets/images/top_left.png',
+                  width: 180,
+                ),
+              ),
+
+              /// 🍴 FOOD TOP RIGHT
+              Positioned(
+                top: 40,
+                right: 10,
+                child: Image.asset(
+                  'assets/images/top_right.png',
+                  width: 120,
+                ),
+              ),
+
+              /// 🧾 CONTENT
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: MediaQuery.of(context).size.height,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 40),
+
+                        // ===== Email Icon =====
+                        Container(
+                          width: 140,
+                          height: 140,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: const Color(0xFFE8845C).withValues(alpha: 0.1),
+                          ),
+                          child: const Icon(
+                            Icons.mail_outline,
+                            size: 70,
+                            color: Color(0xFFE8845C),
+                          ),
+                        ),
+
+                        const SizedBox(height: 32),
+
+                        // ===== Info Text =====
+                        Text(
+                          'Silakan cek email Anda.\nSetelah verifikasi, kembali ke aplikasi ini.',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: const Color(0xFF5E2A25),
+                            fontWeight: FontWeight.w500,
+                            height: 1.5,
+                          ),
+                        ),
+
+                        const SizedBox(height: 32),
+
+                        // ===== Open Email App Button =====
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            onPressed: _openEmailApp,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFE8845C),
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                            ),
+                            icon: const Icon(Icons.mail, size: 20),
+                            label: const Text(
+                              'Buka Aplikasi Email',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // ===== Check Verification Button =====
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: _isChecking ? null : _checkEmailVerification,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF3F5242),
+                              foregroundColor: const Color(0xFFFFFDDE),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                            ),
+                            child: _isChecking
+                                ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation(
+                                  Color(0xFFFFFDDE),
+                                ),
+                              ),
+                            )
+                                : const Text(
+                              'Cek Status Verifikasi',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // ===== Resend Email Button =====
+                        SizedBox(
+                          width: double.infinity,
+                          child: OutlinedButton(
+                            onPressed: _isResending ? null : _resendEmailVerification,
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: const Color(0xFFE8845C),
+                              side: const BorderSide(
+                                color: Color(0xFFE8845C),
+                                width: 2,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                            ),
+                            child: _isResending
+                                ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation(
+                                  Color(0xFFE8845C),
+                                ),
+                              ),
+                            )
+                                : const Text(
+                              'Kirim Ulang',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          width: double.infinity,
+                          child: OutlinedButton(
+                            onPressed: _signOut,
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: const Color(0xFF5E2A25),
+                              side: const BorderSide(
+                                color: Color(0xFF5E2A25),
+                                width: 2,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                            ),
+                            child: const Text(
+                              'Keluar',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 40),
+
+                        // ===== Additional Info =====
+                        Text(
+                          'Tidak menerima email verifikasi?\nCoba periksa folder spam atau minta kirim ulang!',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: const Color(0xFF5E2A25).withValues(alpha: 0.7),
+                          ),
+                        ),
+
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+
+              /// 🍴 FOOD BOTTOM LEFT
+              Positioned(
+                bottom: 100, // ⬅ tepat di atas bg-bottom
+                left: 20,
+                child: Image.asset(
+                  'assets/images/food_pattern_bot.png',
+                  width: 140,
+                ),
+              ),
+
+              /// 🍴 FOOD BOTTOM RIGHT
+              Positioned(
+                bottom: 100,
+                right: 0,
+                child: Image.asset(
+                  'assets/images/food_pattern.png',
+                  width: 140,
+                ),
+              ),
+
+            ],
           );
         },
       ),
