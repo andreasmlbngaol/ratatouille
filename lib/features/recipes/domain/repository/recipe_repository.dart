@@ -30,6 +30,8 @@ abstract class RecipesRepository {
 
   Future<Either<Failure, List<IngredientTag>>> searchIngredientTags(String query);
 
+  Future<Either<Failure, List<IngredientWithTag>>> getIngredients(int recipeId);
+
   Future<Either<Failure, List<IngredientWithTag>>> addIngredient({
     required int recipeId,
     required int tagId,
@@ -37,6 +39,8 @@ abstract class RecipesRepository {
     String? unit,
     String? alternative
   });
+
+  Future<Either<Failure, List<StepWithImages>>> getSteps(int recipeId);
 
   Future<Either<Failure, List<StepWithImages>>> createEmptyStep(int recipeId, int stepNumber);
 

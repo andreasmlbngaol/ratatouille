@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:ratatouille/core/domain/model/failure.dart';
 import 'package:ratatouille/features/recipes/domain/data_source/recipe_remote_data_source.dart';
 import 'package:ratatouille/features/recipes/domain/model/ingredient/ingredient_tag.dart';
@@ -64,10 +65,12 @@ class RecipesRepositoryImpl implements RecipesRepository {
   @override
   Future<Either<Failure, RecipeWithImages>> publishRecipe(int recipeId) async {
     try {
+      debugPrint("recipes repository: publish recipe start");
       final recipeModel = await remoteDataSource.updateRecipe(
           recipeId: recipeId,
           status: RecipeStatus.PUBLISHED
       );
+      debugPrint("recipes repository: publish recipe end");
       return Right(recipeModel.toDomain());
     } catch (e) {
       return Left(Failure(e.toString()));
@@ -81,11 +84,13 @@ class RecipesRepositoryImpl implements RecipesRepository {
     required String fileName
   }) async {
     try {
+      debugPrint("recipes repository: upload recipe image start");
       final recipeModel = await remoteDataSource.uploadRecipeImage(
           recipeId: recipeId,
           imageBytes: imageBytes,
           fileName: fileName
       );
+      debugPrint("recipes repository: upload recipe image end");
       return Right(recipeModel.toDomain());
     } catch (e) {
       return Left(Failure(e.toString()));
@@ -113,6 +118,16 @@ class RecipesRepositoryImpl implements RecipesRepository {
   }
 
   @override
+  Future<Either<Failure, List<IngredientWithTag>>> getIngredients(int recipeId) async {
+    try {
+      final ingredientsModel = await remoteDataSource.getIngredients(recipeId);
+      return Right(ingredientsModel.map((e) => e.toDomain()).toList());
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, List<IngredientWithTag>>> addIngredient({
     required int recipeId,
     required int tagId,
@@ -129,6 +144,16 @@ class RecipesRepositoryImpl implements RecipesRepository {
           alternative: alternative
       );
       return Right(ingredientsModel.map((e) => e.toDomain()).toList());
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<StepWithImages>>> getSteps(int recipeId) async {
+    try {
+      final stepsModel = await remoteDataSource.getSteps(recipeId);
+      return Right(stepsModel.map((e) => e.toDomain()).toList());
     } catch (e) {
       return Left(Failure(e.toString()));
     }

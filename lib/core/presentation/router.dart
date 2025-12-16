@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ratatouille/core/presentation/app_routes.dart';
 import 'package:ratatouille/core/presentation/pages/not_found_page.dart';
+import 'package:ratatouille/features/recipes/presentation/pages/create_recipe/create_recipe_base_info_page.dart';
+import 'package:ratatouille/features/recipes/presentation/pages/create_recipe/create_recipe_ingredients_page.dart';
+import 'package:ratatouille/features/recipes/presentation/pages/create_recipe/create_recipe_preview_page.dart';
+import 'package:ratatouille/features/recipes/presentation/pages/create_recipe/create_recipe_steps_page.dart';
 import 'package:ratatouille/features/recipes/presentation/pages/favorite_page.dart';
 import 'package:ratatouille/features/recipes/presentation/pages/home_page.dart';
 import 'package:ratatouille/features/recipes/presentation/pages/main_shell.dart';
@@ -114,12 +118,33 @@ GoRouter createRouter(BuildContext context, AuthProvider authProvider) => GoRout
         child: (context, _) => SearchRecipePage(),
       ),
       route(
-        path: AppRoutes.searchUser,
+      path: AppRoutes.searchUser,
         child: (context, _) => SearchUserPage(),
       ),
       route(
         path: AppRoutes.settings,
         child: (context, _) => SettingsPage()
+      ),
+
+      // Create Recipe
+      route(
+        path: AppRoutes.createRecipeBaseInfo,
+        child: (context, _) => CreateRecipeBaseInfoPage()
+      ),
+
+      route(
+        path: AppRoutes.createRecipeIngredients,
+        child: (context, _) => CreateRecipeIngredientsPage()
+      ),
+
+      route(
+        path: AppRoutes.createRecipeSteps,
+        child: (context, _) => CreateRecipeStepsPage()
+      ),
+
+      route(
+        path: AppRoutes.createRecipePreview,
+        child: (context, _) => CreateRecipePreviewPage()
       )
     ],
   errorBuilder: (context, state) => NotFoundPage(location: state.matchedLocation)

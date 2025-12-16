@@ -11,8 +11,10 @@ import 'package:ratatouille/features/recipes/domain/use_case/detail/get_recipe_d
 import 'package:ratatouille/features/recipes/domain/use_case/draft/get_or_create_draft_recipe_use_case.dart';
 import 'package:ratatouille/features/recipes/domain/use_case/ingredient/add_ingredient_use_case.dart';
 import 'package:ratatouille/features/recipes/domain/use_case/ingredient/create_ingredient_tag_use_case.dart';
+import 'package:ratatouille/features/recipes/domain/use_case/ingredient/get_ingredients_use_case.dart';
 import 'package:ratatouille/features/recipes/domain/use_case/ingredient/search_ingredient_tags_use_case.dart';
 import 'package:ratatouille/features/recipes/domain/use_case/steps/create_empty_step_use_case.dart';
+import 'package:ratatouille/features/recipes/domain/use_case/steps/get_steps_use_case.dart';
 import 'package:ratatouille/features/recipes/domain/use_case/steps/update_step_use_case.dart';
 import 'package:ratatouille/features/recipes/domain/use_case/steps/upload_step_image_use_case.dart';
 
@@ -48,6 +50,10 @@ void setupRecipesModule() {
     GetOrCreateDraftRecipeUseCase(getIt())
   );
 
+  getIt.registerSingleton<GetIngredientsUseCase>(
+    GetIngredientsUseCase(getIt())
+  );
+
   getIt.registerSingleton<AddIngredientUseCase>(
     AddIngredientUseCase(getIt())
   );
@@ -58,6 +64,10 @@ void setupRecipesModule() {
 
   getIt.registerSingleton<SearchIngredientTagsUseCase>(
     SearchIngredientTagsUseCase(getIt())
+  );
+
+  getIt.registerSingleton<GetStepsUseCase>(
+    GetStepsUseCase(getIt())
   );
 
   getIt.registerSingleton<CreateEmptyStepUseCase>(

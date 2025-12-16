@@ -25,7 +25,6 @@ class DioApiClient implements ApiClient {
               final token = await tokenProvider.getIdToken();
               if (token != null) {
                 options.headers["Authorization"] = "Bearer $token";
-                debugPrint("Token: $token");
               }
               options.headers["Content-Type"] = "application/json";
               return handler.next(options);

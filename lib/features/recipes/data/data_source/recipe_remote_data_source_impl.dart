@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:ratatouille/core/domain/network/api_client.dart';
 import 'package:ratatouille/core/domain/network/api_exception.dart';
 import 'package:ratatouille/core/domain/network/multipart_file_data.dart';
@@ -59,7 +60,7 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
             "isPublic": isPublic,
             "estTimeInMinutes": estTimeInMinutes,
             "portion": portion,
-            "status": status
+            "status": status?.name
           }
       );
       final data = response["data"] as Map<String, dynamic>;
@@ -78,6 +79,7 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
     required String fileName
   }) async {
     try {
+      debugPrint("Uploading recipe image...");
       final response = await apiClient.multipartWithFiles(
           "/api/recipes/$recipeId/pictures",
           fields: {},
@@ -90,7 +92,9 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
             )
           ]
       );
+      debugPrint("Response: $response");
       final data = response["data"] as Map<String, dynamic>;
+      debugPrint("Data: $data");
       return RecipeWithImagesModel.fromJson(data);
     } on ApiException catch (e) {
       throw Exception(e.message);
@@ -103,7 +107,7 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
   Future<IngredientTagModel> createIngredientTag(String name) async {
     try {
       final response = await apiClient.post(
-        "/api/ingredient-tags",
+        "/api/recipes/ingredient-tags",
         body: {
           "name": name
         }
@@ -120,9 +124,23 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
   @override
   Future<List<IngredientTagModel>> searchIngredientTags(String query) async {
     try {
-      final response = await apiClient.get("/api/ingredient-tags?query=$query");
+      final response = await apiClient.get("/api/recipes/ingredient-tags?query=$query");
       final data = response["data"] as List<dynamic>;
       return data.map((e) => IngredientTagModel.fromJson(e)).toList();
+    } on ApiException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
+      throw Exception("Something went wrong");
+    }
+  }
+
+  @override
+  Future<List<IngredientWithTagModel>> getIngredients(int recipeId) async {
+    try {
+      final response = await apiClient.get(
+          "/api/recipes/$recipeId/ingredients");
+      final data = response["data"] as List<dynamic>;
+      return data.map((e) => IngredientWithTagModel.fromJson(e)).toList();
     } on ApiException catch (e) {
       throw Exception(e.message);
     } catch (e) {
@@ -155,6 +173,20 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
      } catch (e) {
        throw Exception("Something went wrong");
      }
+  }
+
+  @override
+  Future<List<StepWithImagesModel>> getSteps(int recipeId) async {
+    try {
+      final response = await apiClient.get(
+          "/api/recipes/$recipeId/steps");
+      final data = response["data"] as List<dynamic>;
+      return data.map((e) => StepWithImagesModel.fromJson(e)).toList();
+    } on ApiException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
+      throw Exception("Something went wrong");
+    }
   }
 
   @override

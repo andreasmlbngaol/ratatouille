@@ -30,6 +30,8 @@ abstract class RecipeRemoteDataSource {
 
   Future<List<IngredientTagModel>> searchIngredientTags(String query);
 
+  Future<List<IngredientWithTagModel>> getIngredients(int recipeId);
+
   Future<List<IngredientWithTagModel>> addIngredient({
     required int recipeId,
     required int tagId,
@@ -37,6 +39,8 @@ abstract class RecipeRemoteDataSource {
     String? unit,
     String? alternative
   });
+
+  Future<List<StepWithImagesModel>> getSteps(int recipeId);
 
   Future<List<StepWithImagesModel>> createEmptyStep(int recipeId, int stepNumber);
 

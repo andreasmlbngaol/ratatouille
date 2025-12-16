@@ -1,22 +1,22 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:ratatouille/core/domain/model/failure.dart';
-import 'package:ratatouille/features/recipes/domain/model/recipe/recipe_with_images.dart';
+import 'package:ratatouille/features/recipes/domain/model/ingredient/ingredient_with_tag.dart';
 import 'package:ratatouille/features/recipes/domain/repository/recipe_repository.dart';
 
-class PublishRecipeUseCase {
+class GetIngredientsUseCase {
   final RecipesRepository repository;
 
-  PublishRecipeUseCase(this.repository);
+  GetIngredientsUseCase(this.repository);
 
-  Future<Either<Failure, RecipeWithImages>> call(int recipeId) async {
+  Future<Either<Failure, List<IngredientWithTag>>> call({
+    required int recipeId
+  }) async {
     try {
       if (recipeId <= 0) {
         return Left(Failure("Invalid recipe ID"));
       }
-      debugPrint("Publishing recipe with ID: $recipeId");
 
-      return await repository.publishRecipe(recipeId);
+      return await repository.getIngredients(recipeId);
     } catch (e) {
       return Left(Failure(e.toString()));
     }

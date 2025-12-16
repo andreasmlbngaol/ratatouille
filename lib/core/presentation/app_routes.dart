@@ -19,5 +19,10 @@ class AppRoutes {
   static const searchUser = '/search-user';
 
   static const recipeDetail = "/main/recipe-detail/:id";
-  static const createRecipe = "/main/create-recipe";
+
+  static const createRecipe = "/create-recipe";
+  static const createRecipeBaseInfo = "/create-recipe/base-info";
+  static const createRecipeIngredients = "/create-recipe/ingredients";
+  static const createRecipeSteps = "/create-recipe/steps";
+  static const createRecipePreview = "/create-recipe/preview";
 }

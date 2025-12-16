@@ -125,7 +125,7 @@ class HomePage extends StatelessWidget {
                                 iconName: "add_recipe.svg",
                                 label: 'Buat Resep',
                                 onTap: () {
-                                  context.push(AppRoutes.createRecipe);
+                                  context.push(AppRoutes.createRecipeBaseInfo);
                                 },
                               ),
                               _ActionButtonRounded(

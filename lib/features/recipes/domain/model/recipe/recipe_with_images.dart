@@ -28,3 +28,33 @@ class RecipeWithImages {
     required this.images
   });
 }
+
+extension RecipeWithImagesCopy on RecipeWithImages {
+  RecipeWithImages copyWith({
+    int? id,
+    String? authorId,
+    String? name,
+    String? description,
+    bool? isPublic,
+    int? estTimeInMinutes,
+    int? portion,
+    RecipeStatus? status,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    List<RatatouilleImage>? images,
+  }) {
+    return RecipeWithImages(
+      id: id ?? this.id,
+      authorId: authorId ?? this.authorId,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      isPublic: isPublic ?? this.isPublic,
+      estTimeInMinutes: estTimeInMinutes ?? this.estTimeInMinutes,
+      portion: portion ?? this.portion,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      images: images ?? this.images,
+    );
+  }
+}

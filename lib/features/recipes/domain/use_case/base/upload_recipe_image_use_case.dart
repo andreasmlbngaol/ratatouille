@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:ratatouille/core/domain/model/failure.dart';
 import 'package:ratatouille/features/recipes/domain/model/recipe/recipe_with_images.dart';
 import 'package:ratatouille/features/recipes/domain/repository/recipe_repository.dart';
@@ -26,6 +27,7 @@ class UploadRecipeImageUseCase {
         return Left(Failure("File name can't be empty"));
       }
 
+      debugPrint("Uploading recipe image...");
       return await repository.uploadRecipeImage(
         recipeId: recipeId,
         imageBytes: imageBytes,
