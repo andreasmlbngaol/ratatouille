@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import '../../domain/network/api_client.dart';
 import '../../domain/network/api_exception.dart';
 import '../../domain/network/multipart_file_data.dart';

@@ -16,9 +16,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<UserModel> getOrCreateUser() async {
     try {
       final response = await apiClient.get("/api/users/me");
-      final data = response["data"] as Map<String, dynamic>;
-      debugPrint(data.toString());
-      return UserModel.fromJson(data);
+      debugPrint(response.toString());
+      return UserModel.fromJson(response);
     } on ApiException catch (e) {
       throw Exception(e.message);
     } catch (e) {
@@ -40,8 +39,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           "bio": bio
         }
       );
-      final data = response["data"] as Map<String, dynamic>;
-      return UserModel.fromJson(data);
+      return UserModel.fromJson(response);
     } on ApiException catch (e) {
       throw Exception(e.message);
     }
@@ -62,8 +60,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
             )
           ]
       );
-      final data = response["data"] as Map<String, dynamic>;
-      return UserModel.fromJson(data);
+      return UserModel.fromJson(response);
     } on ApiException catch (e) {
       throw Exception(e.message);
     } catch (e) {
@@ -86,8 +83,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
             )
           ]
       );
-      final data = response["data"] as Map<String, dynamic>;
-      return UserModel.fromJson(data);
+      return UserModel.fromJson(response);
     } on ApiException catch (e) {
       throw Exception(e.message);
     }
@@ -97,8 +93,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<UserDetailModel> getUserDetail(String userId) async {
     try {
       final response = await apiClient.get("/api/users/$userId");
-      final data = response["data"] as Map<String, dynamic>;
-      return UserDetailModel.fromJson(data);
+      return UserDetailModel.fromJson(response);
     } on ApiException catch (e) {
       throw Exception(e.message);
     }
@@ -111,8 +106,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         "/api/users/$userId",
         body: {},
       );
-      final data = response["data"] as Map<String, dynamic>;
-      return UserDetailModel.fromJson(data);
+      return UserDetailModel.fromJson(response);
     } on ApiException catch (e) {
       throw Exception(e.message);
     }
@@ -122,8 +116,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<UserDetailModel> unfollowUser(String userId) async {
     try {
       final response = await apiClient.delete("/api/users/$userId");
-      final data = response["data"] as Map<String, dynamic>;
-      return UserDetailModel.fromJson(data);
+      return UserDetailModel.fromJson(response);
     } on ApiException catch (e) {
       throw Exception(e.message);
     }
