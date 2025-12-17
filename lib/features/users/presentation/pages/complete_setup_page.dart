@@ -4,6 +4,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:ratatouille/core/data/constant/app_constant.dart';
 import 'package:ratatouille/features/users/presentation/provider/auth_provider.dart';
+import 'package:ratatouille/features/users/presentation/widgets/ratatouille_subtitle.dart';
+import 'package:ratatouille/features/users/presentation/widgets/ratatouille_title.dart';
+import 'package:ratatouille/features/users/presentation/widgets/rounded_bold_outline.dart';
 
 class CompleteSetupPage extends StatefulWidget {
   const CompleteSetupPage({super.key});
@@ -112,26 +115,23 @@ class _CompleteSetupPageState extends State<CompleteSetupPage> {
         builder: (context, authProvider, _) {
           return Stack(
             children: [
-
-              /// 🔶 BACKGROUND TOP
+              /// 🍴 FOOD TOP LEFT
               Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
+                top: 24,
+                left: -5,
                 child: Image.asset(
-                  'assets/images/bg_top.png',
-                  fit: BoxFit.cover,
+                  'assets/images/top_left.png',
+                  width: 180,
                 ),
               ),
 
-              /// 🔶 BACKGROUND BOTTOM
+              /// 🍴 FOOD TOP RIGHT
               Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
+                top: 40,
+                right: 10,
                 child: Image.asset(
-                  'assets/images/bg_bottom.png',
-                  fit: BoxFit.cover,
+                  'assets/images/top_right.png',
+                  width: 120,
                 ),
               ),
 
@@ -155,29 +155,22 @@ class _CompleteSetupPageState extends State<CompleteSetupPage> {
                 ),
               ),
 
-
-
               /// 🧾 CONTENT
               Center(
                 child:SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 32, vertical: 40),
+                    padding: const EdgeInsets.symmetric(horizontal: 36),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        const SizedBox(height: 20),
-                        Text(
-                          'Atur Profil',
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .headlineSmall
-                              ?.copyWith(
-                            color: const Color(0xFF5E2A25),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        const SizedBox(height: 2),
+
+                        const RatatouilleTitle(),
+
+                        const SizedBox(height: 6),
+
+                        const RatatouilleSubtitle("Atur Profil"),
+
                         const SizedBox(height: 32),
 
                         // ===== Profile Picture Section =====
@@ -185,8 +178,8 @@ class _CompleteSetupPageState extends State<CompleteSetupPage> {
                           alignment: Alignment.bottomRight,
                           children: [
                             Container(
-                              width: 150,
-                              height: 150,
+                              width: 170,
+                              height: 170,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
@@ -255,21 +248,11 @@ class _CompleteSetupPageState extends State<CompleteSetupPage> {
                         const SizedBox(height: 32),
 
                         // ===== Name Section =====
-                        Text(
-                          'Nama',
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(
-                            color: const Color(0xFF5E2A25),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
                         const SizedBox(height: 8),
                         TextField(
                           controller: _nameController,
                           decoration: InputDecoration(
+                            labelText: "Nama",
                             hintText: 'Masukkan nama Anda',
                             hintStyle: const TextStyle(color: Color(0xFFBBB5B0)),
                             border: OutlineInputBorder(
@@ -347,24 +330,85 @@ class _CompleteSetupPageState extends State<CompleteSetupPage> {
 
               /// 🍴 FOOD BOTTOM LEFT
               Positioned(
-                bottom: 100, // ⬅ tepat di atas bg-bottom
-                left: 20,
+                bottom: 50, // ⬅ tepat di atas bg-bottom
+                left: 10,
                 child: Image.asset(
                   'assets/images/food_pattern_bot.png',
-                  width: 140,
+                  width: 200,
                 ),
               ),
 
               /// 🍴 FOOD BOTTOM RIGHT
               Positioned(
-                bottom: 100,
-                right: 0,
+                bottom: 50,
+                right: -35,
                 child: Image.asset(
                   'assets/images/food_pattern.png',
-                  width: 140,
+                  width: 200,
                 ),
               ),
 
+              /// 🎨 GRADIENT OVERLAY BOTTOM
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  height: 250,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                        const Color(0xFFFF3D00).withOpacity(0.4),
+                        const Color(0xFFFFFDDE).withOpacity(0.0),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              /// 🎨 GRADIENT OVERLAY TOP
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  height: 250,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        const Color(0xFFFF3D00).withOpacity(0.4),
+                        const Color(0xFFFFFDDE).withOpacity(0.0),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              /// 🔶 BACKGROUND TOP
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Image.asset(
+                  'assets/images/bg_top.png',
+                  fit: BoxFit.cover,
+                ),
+              ),
+
+              /// 🔶 BACKGROUND BOTTOM
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Image.asset(
+                  'assets/images/bg_bottom.png',
+                  fit: BoxFit.cover,
+                ),
+              ),
             ],
           );
         },

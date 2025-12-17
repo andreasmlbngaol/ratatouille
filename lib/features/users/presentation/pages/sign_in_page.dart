@@ -48,25 +48,23 @@ class _SignInPageState extends State<SignInPage> {
           builder: (context, authProvider, _) {
             return Stack(
               children: [
-                /// 🔶 BACKGROUND TOP
+                /// 🍴 FOOD TOP LEFT
                 Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
+                  top: 24,
+                  left: -5,
                   child: Image.asset(
-                    'assets/images/bg_top.png',
-                    fit: BoxFit.cover,
+                    'assets/images/top_left.png',
+                    width: 180,
                   ),
                 ),
 
-                /// 🔶 BACKGROUND BOTTOM
+                /// 🍴 FOOD TOP RIGHT
                 Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
+                  top: 40,
+                  right: 10,
                   child: Image.asset(
-                    'assets/images/bg_bottom.png',
-                    fit: BoxFit.cover,
+                    'assets/images/top_right.png',
+                    width: 120,
                   ),
                 ),
 
@@ -190,6 +188,7 @@ class _SignInPageState extends State<SignInPage> {
                                 : const Text(
                               "Masuk Akun",
                               style: TextStyle(
+                                color: Color(0xFFFFFDDE),
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
                               ),
@@ -270,24 +269,85 @@ class _SignInPageState extends State<SignInPage> {
 
                 /// 🍴 FOOD BOTTOM LEFT
                 Positioned(
-                  bottom: 100, // ⬅ tepat di atas bg-bottom
-                  left: 20,
+                  bottom: 50, // ⬅ tepat di atas bg-bottom
+                  left: 10,
                   child: Image.asset(
                     'assets/images/food_pattern_bot.png',
-                    width: 140,
+                    width: 200,
                   ),
                 ),
 
                 /// 🍴 FOOD BOTTOM RIGHT
                 Positioned(
-                  bottom: 100,
-                  right: 0,
+                  bottom: 50,
+                  right: -35,
                   child: Image.asset(
                     'assets/images/food_pattern.png',
-                    width: 140,
+                    width: 200,
                   ),
                 ),
 
+                /// 🎨 GRADIENT OVERLAY BOTTOM
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    height: 250,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          const Color(0xFFFF3D00).withOpacity(0.4),
+                          const Color(0xFFFFFDDE).withOpacity(0.0),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                /// 🎨 GRADIENT OVERLAY TOP
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    height: 250,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          const Color(0xFFFF3D00).withOpacity(0.4),
+                          const Color(0xFFFFFDDE).withOpacity(0.0),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                /// 🔶 BACKGROUND TOP
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: Image.asset(
+                    'assets/images/bg_top.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+
+                /// 🔶 BACKGROUND BOTTOM
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Image.asset(
+                    'assets/images/bg_bottom.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ],
             );
           },

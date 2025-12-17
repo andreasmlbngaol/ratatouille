@@ -24,12 +24,12 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
   }
 
   void _startAutoCheck() {
-    Future.delayed(const Duration(seconds: 5), () {
-      if (mounted && !_isChecking) {
-        _checkEmailVerification(isManual: false);
-        _startAutoCheck();
-      }
-    });
+    // Future.delayed(const Duration(seconds: 5), () {
+    //   if (mounted && !_isChecking) {
+    //     _checkEmailVerification(isManual: false);
+    //     _startAutoCheck();
+    //   }
+    // });
   }
 
   Future<void> _openEmailApp() async {
@@ -151,28 +151,6 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
         builder: (context, authProvider, _) {
           return Stack(
             children: [
-              /// 🔶 BACKGROUND TOP
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: Image.asset(
-                  'assets/images/bg_top.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-
-              /// 🔶 BACKGROUND BOTTOM
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Image.asset(
-                  'assets/images/bg_bottom.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-
               /// 🍴 FOOD TOP LEFT
               Positioned(
                 top: 24,
@@ -209,16 +187,14 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
 
                         // ===== Email Icon =====
                         Container(
-                          width: 140,
-                          height: 140,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: const Color(0xFFE8845C).withValues(alpha: 0.1),
-                          ),
-                          child: const Icon(
-                            Icons.mail_outline,
-                            size: 70,
-                            color: Color(0xFFE8845C),
+                          width: 200,
+                          height: 125,
+                          child: const Center(
+                            child: Icon(
+                              Icons.mail_outline,
+                              size: 150,
+                              color: Color(0xFF76342E),
+                            ),
                           ),
                         ),
 
@@ -243,8 +219,12 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                           child: ElevatedButton.icon(
                             onPressed: _openEmailApp,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFE8845C),
+                              backgroundColor: const Color(0xFF3F5242),
                               foregroundColor: Colors.white,
+                              side: const BorderSide(
+                                color: Color(0xFFB39245),
+                                width: 2,
+                              ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -269,8 +249,12 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                           child: ElevatedButton(
                             onPressed: _isChecking ? null : _checkEmailVerification,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF3F5242),
-                              foregroundColor: const Color(0xFFFFFDDE),
+                              backgroundColor: const Color(0xFFFEF1BE),
+                              foregroundColor: const Color(0xFF5E2A25),
+                              side: const BorderSide(
+                                color: Color(0xFFB39245),
+                                width: 2,
+                              ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -342,9 +326,10 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                           child: OutlinedButton(
                             onPressed: _signOut,
                             style: OutlinedButton.styleFrom(
-                              foregroundColor: const Color(0xFF5E2A25),
+                              foregroundColor: const Color(0xFFFFFDDE),
+                              backgroundColor: const Color(0xFFBA1813),
                               side: const BorderSide(
-                                color: Color(0xFF5E2A25),
+                                color: Color(0xFFB39245),
                                 width: 2,
                               ),
                               shape: RoundedRectangleBorder(
@@ -369,7 +354,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                           'Tidak menerima email verifikasi?\nCoba periksa folder spam atau minta kirim ulang!',
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: const Color(0xFF5E2A25).withValues(alpha: 0.7),
+                            color: const Color(0xFF5E2A25).withOpacity(0.7),
                           ),
                         ),
 
@@ -383,21 +368,63 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
 
               /// 🍴 FOOD BOTTOM LEFT
               Positioned(
-                bottom: 100, // ⬅ tepat di atas bg-bottom
-                left: 20,
+                bottom: 50, // ⬅ tepat di atas bg-bottom
+                left: 10,
                 child: Image.asset(
                   'assets/images/food_pattern_bot.png',
-                  width: 140,
+                  width: 200,
                 ),
               ),
 
               /// 🍴 FOOD BOTTOM RIGHT
               Positioned(
-                bottom: 100,
-                right: 0,
+                bottom: 50,
+                right: -35,
                 child: Image.asset(
                   'assets/images/food_pattern.png',
-                  width: 140,
+                  width: 200,
+                ),
+              ),
+
+              /// 🎨 GRADIENT OVERLAY
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  height: 250,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                        const Color(0xFFFF3D00).withOpacity(0.4),
+                        const Color(0xFFFFFDDE).withOpacity(0.0),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              /// 🔶 BACKGROUND TOP
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Image.asset(
+                  'assets/images/bg_top.png',
+                  fit: BoxFit.cover,
+                ),
+              ),
+
+              /// 🔶 BACKGROUND BOTTOM
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Image.asset(
+                  'assets/images/bg_bottom.png',
+                  fit: BoxFit.cover,
                 ),
               ),
 
