@@ -1,9 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/data/constant/app_constant.dart';
+
 class RecipeCard extends StatelessWidget {
-  final String imageAsset;
+  final String? imageUrl ;
   final String title;
-  final String author;
+  final String? subtitle;
   final double rating; // contoh: 4.5
   final String date;
   final int totalReviews;
@@ -11,9 +14,9 @@ class RecipeCard extends StatelessWidget {
 
   const RecipeCard({
     super.key,
-    required this.imageAsset,
+    required this.imageUrl,
     required this.title,
-    required this.author,
+    required this.subtitle,
     required this.rating,
     required this.date,
     required this.totalReviews,
@@ -45,13 +48,22 @@ class RecipeCard extends StatelessWidget {
         child: Row(
           children: [
             /// 🖼 IMAGE
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
-                imageAsset,
-                width: 90,
-                height: 90,
-                fit: BoxFit.cover,
+            SizedBox(
+              width: 116,
+              height: 116,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: imageUrl == null
+                    ? Image.asset(
+                  "assets/images/default_cover_picture.png",
+                  fit: BoxFit.cover,
+                )
+                    : CachedNetworkImage(
+                  imageUrl: imageUrl!.startsWith("https")
+                      ? imageUrl!
+                      : "${AppConstant.baseUrl}$imageUrl",
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
 
@@ -68,22 +80,33 @@ class RecipeCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontFamily: 'PlayfairDisplay',
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF3F5242),
+                      shadows: [
+                        Shadow(
+                          offset: Offset(0, 1),
+                          blurRadius: 2,
+                          color: Colors.black26,
+                        ),
+                      ],
                     ),
                   ),
 
-                  const SizedBox(height: 4),
 
-                  /// AUTHOR
-                  Text(
-                    "oleh $author",
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Color(0xFF7A7A7A),
+                  const SizedBox(height: 6),
+
+                  /// subtitle
+                  if (subtitle != null)
+                    Text(
+                      subtitle!,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF7A7A7A),
+                      ),
                     ),
-                  ),
+
 
                   const SizedBox(height: 6),
 
@@ -94,7 +117,7 @@ class RecipeCard extends StatelessWidget {
                         index < rating.floor()
                             ? Icons.star
                             : Icons.star_border,
-                        size: 18,
+                        size: 24,
                         color: const Color(0xFFFFA726),
                       );
                     }),
@@ -108,7 +131,7 @@ class RecipeCard extends StatelessWidget {
                       Text(
                         date,
                         style: const TextStyle(
-                          fontSize: 11,
+                          fontSize: 12,
                           color: Color(0xFF9E9E9E),
                         ),
                       ),
@@ -116,7 +139,7 @@ class RecipeCard extends StatelessWidget {
                       Text(
                         "$totalReviews nilai",
                         style: const TextStyle(
-                          fontSize: 11,
+                          fontSize: 12,
                           color: Color(0xFF9E9E9E),
                         ),
                       ),

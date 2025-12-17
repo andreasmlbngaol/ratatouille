@@ -1,46 +1,145 @@
 import 'package:flutter/material.dart';
 
-class SearchUserPage extends StatelessWidget {
+class SearchUserPage extends StatefulWidget {
+  const SearchUserPage({super.key});
+
+  @override
+  State<SearchUserPage> createState() => _SearchUserPageState();
+}
+
+class _SearchUserPageState extends State<SearchUserPage> {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
 
-  SearchUserPage({super.key});
+  final List<String> results = [
+    "Messi Medan",
+    "Messi Jawa",
+    "Messi Batak",
+    "Messi Bali",
+    "Messi Sunda",
+    "Messi ",
+  ];
 
   @override
-  Widget build(BuildContext context) {
-    // Auto focus ketika page dibuka
+  void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _focusNode.requestFocus();
     });
-
-    return Scaffold(
-      appBar: AppBar(
-        title: TextField(
-          controller: _searchController,
-          focusNode: _focusNode,
-          decoration: InputDecoration(
-            hintText: 'Cari pengguna...',
-            border: InputBorder.none,
-            hintStyle: TextStyle(color: Colors.grey[400]),
-          ),
-          style: TextStyle(color: Colors.black),
-          onChanged: (query) {
-            // Implementasi search logic nanti
-            debugPrint('Search user: $query');
-          },
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
-      ),
-      body: Center(
-        child: Text('Search User Results akan muncul di sini'),
-      ),
-    );
   }
 
+  @override
   void dispose() {
     _searchController.dispose();
     _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFFFFDDE),
+      body: Stack(
+        children: [
+          /// 🍴 PATTERN BAWAH KIRI
+          Positioned(
+            bottom: 0,
+            left: 0,
+            child: Image.asset(
+              'assets/images/Resep_bottom_left.png',
+              width: 160,
+            ),
+          ),
+
+          /// 🍴 PATTERN BAWAH KANAN
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: Image.asset(
+              'assets/images/Resep_bottom_right.png',
+              width: 160,
+            ),
+          ),
+
+          Column(
+            children: [
+              /// 🔶 HEADER SEARCH
+              Container(
+                padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
+                decoration: const BoxDecoration(
+                  color: Color(0xFFFF6A2A),
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(24),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    /// BACK
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                      ),
+                    ),
+
+                    /// SEARCH FIELD
+                    Expanded(
+                      child: Container(
+                        height: 42,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        child: TextField(
+                          controller: _searchController,
+                          focusNode: _focusNode,
+                          decoration: InputDecoration(
+                            hintText: 'Muhammad Messi ',
+                            prefixIcon: const Icon(Icons.search),
+                            border: InputBorder.none,
+                            contentPadding:
+                            const EdgeInsets.symmetric(vertical: 10),
+                          ),
+                          onChanged: (value) {
+                            debugPrint(value);
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              /// 📄 SEARCH RESULT
+              Expanded(
+                child: ListView.separated(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  itemCount: results.length,
+                  separatorBuilder: (_, __) => const Divider(
+                    color: Color(0xFFD9A88C),
+                    height: 1,
+                  ),
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(
+                        results[index],
+                        style: const TextStyle(
+                          color: Color(0xFF5E2A25),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      onTap: () {
+                        debugPrint("Pilih ${results[index]}");
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

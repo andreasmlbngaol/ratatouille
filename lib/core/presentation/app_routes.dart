@@ -34,4 +34,7 @@ class AppRoutes {
   static const andreDetailPage = "/andre-detail";
   static const claraDetailPage = "/bintang-detail";
 
+  //search user result test
+  static const searchResultPage = "/search-result";
+
 }
