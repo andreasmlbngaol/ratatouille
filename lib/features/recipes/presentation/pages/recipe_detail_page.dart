@@ -280,7 +280,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
         padding: const EdgeInsets.all(12),
         margin: const EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
-          color: Colors.orange,
+            color: Color(0xFFF3551E),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
