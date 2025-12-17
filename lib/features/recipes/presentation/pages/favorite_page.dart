@@ -1,116 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:ratatouille/features/recipes/presentation/widgets/recipe_card.dart';
 
 class FavoritePage extends StatelessWidget {
   const FavoritePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
+    return Scaffold(
+      backgroundColor: const Color(0xFFFEF1BE),
+      body: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Resep Favorit',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+          // ===== HEADER ORANGE =====
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.fromLTRB(24, 30, 24, 20),
+            decoration: const BoxDecoration(
+              color: Color(0xFFFF6A2A),
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(15),
+              ),
+            ),
+            child: const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Favorit',
+                style: TextStyle(
+                  fontFamily: 'PlayfairDisplay',
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  shadows: [
+                    Shadow(
+                      offset: Offset(0, 1),
+                      blurRadius: 2,
+                      color: Colors.black26,
+                    ),
+                  ],
                 ),
-                SizedBox(height: 8),
-                Text(
-                  'Kumpulan resep favorit Anda',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
+
+
+          const SizedBox(height: 16),
+
+          // ===== LIST RESEP =====
           Expanded(
             child: ListView.builder(
-              itemCount: 5,
-              padding: EdgeInsets.symmetric(horizontal: 24),
+              itemCount: 3,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               itemBuilder: (context, index) {
-                return _RecipeCard(
-                  title: 'Resep Favorit ${index + 1}',
-                  description: 'Deskripsi singkat resep favorit',
-                  cookTime: '30 menit',
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: RecipeCard(
+                    imageUrl:
+                    "/uploads/images/3y9t1ASFHQR9HzUmhtB27lWWLDV2/recipe-4/1765958994764.webp",
+                    title: "Chef Renata",
+                    subtitle: "masakan terenak",
+                    rating: 4.8,
+                    date: "16 Desember 2025",
+                    totalReviews: 10,
+                  ),
                 );
               },
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RecipeCard extends StatelessWidget {
-  final String title;
-  final String description;
-  final String cookTime;
-
-  const _RecipeCard({
-    required this.title,
-    required this.description,
-    required this.cookTime,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 16),
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey[300]!),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(Icons.image, color: Colors.grey[600]),
-          ),
-          SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  description,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  '⏱️ $cookTime',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Icon(Icons.favorite_border, color: Color(0xFFFF6B35)),
         ],
       ),
     );

@@ -8,13 +8,12 @@ class MyRecipePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFEF1BE),
-      body: SafeArea(
-        child: Column(
+      body: Column(
           children: [
             // ===== HEADER ORANGE =====
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
+              padding: const EdgeInsets.fromLTRB(24, 30, 24, 20),
               decoration: const BoxDecoration(
                 color: Color(0xFFFF6A2A),
                 borderRadius: BorderRadius.vertical(
@@ -68,7 +67,6 @@ class MyRecipePage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }
