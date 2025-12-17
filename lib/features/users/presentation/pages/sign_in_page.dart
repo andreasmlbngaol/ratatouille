@@ -327,28 +327,41 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                 ),
 
-                /// 🔶 BACKGROUND TOP
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: Image.asset(
-                    'assets/images/bg_top.png',
-                    fit: BoxFit.cover,
-                  ),
-                ),
 
-                /// 🔶 BACKGROUND BOTTOM
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Image.asset(
-                    'assets/images/bg_bottom.png',
-                    fit: BoxFit.cover,
+            /// 🔶 BACKGROUND TOP
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                  height: 100,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFFF6A2A),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(0),
+                      bottomRight: Radius.circular(100),
                   ),
                 ),
-              ],
+              ),
+            ),
+
+            /// 🔶 BACKGROUND BOTTOM
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                height: 100,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFFF6A2A),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(100),
+                    topRight: Radius.circular(0),
+                  ),
+                ),
+              ),
+            )
+            ],
             );
           },
         ),

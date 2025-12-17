@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-
-import '../../../../core/presentation/app_routes.dart';
-import '../provider/search_recipe_provider.dart';
 
 class SearchRecipePage extends StatefulWidget {
   const SearchRecipePage({super.key});
@@ -15,6 +10,15 @@ class SearchRecipePage extends StatefulWidget {
 class _SearchRecipePageState extends State<SearchRecipePage> {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+
+  final List<String> results = [
+    "Bakso Mercon",
+    "Bakso merah",
+    "Bakso goreng",
+    "Bakso Ayam",
+    "Bakso kuah",
+    "Bakso",
+  ];
 
   @override
   void initState() {
@@ -37,6 +41,26 @@ class _SearchRecipePageState extends State<SearchRecipePage> {
       backgroundColor: const Color(0xFFFFFDDE),
       body: Stack(
         children: [
+          /// 🎨 GRADIENT OVERLAY BOTTOM
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: 250,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [
+                    const Color(0xFFFF3D00).withOpacity(0.4),
+                    const Color(0xFFFFFDDE).withOpacity(0.0),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
           /// 🍴 PATTERN BAWAH KIRI
           Positioned(
             bottom: 0,
@@ -72,7 +96,7 @@ class _SearchRecipePageState extends State<SearchRecipePage> {
                   children: [
                     /// BACK
                     IconButton(
-                      onPressed: () => context.pop(context),
+                      onPressed: () => Navigator.pop(context),
                       icon: const Icon(
                         Icons.arrow_back,
                         color: Colors.white,
@@ -84,33 +108,25 @@ class _SearchRecipePageState extends State<SearchRecipePage> {
                       child: Container(
                         height: 42,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: const Color(0xFFFFFDDE),
                           borderRadius: BorderRadius.circular(24),
+                          border: Border.all(
+                            color: const Color(0xFF5E2A25),
+                            width: 1,
+                          ),
                         ),
                         child: TextField(
                           controller: _searchController,
                           focusNode: _focusNode,
-                          decoration: InputDecoration(
-                            hintText: 'Cari resep...',
-                            suffixIcon: IconButton(
-                              icon: const Icon(Icons.search),
-                              onPressed: () {
-                                final query = _searchController.text.trim();
-                                if (query.length < 3) return;
-
-                                context.push(
-                                  AppRoutes.searchResultPage,
-                                );
-                              },
-                            ),
+                          decoration: const InputDecoration(
+                            hintText: 'Bakso',
+                            prefixIcon: Icon(Icons.search),
                             border: InputBorder.none,
                             contentPadding:
-                            const EdgeInsets.symmetric(vertical: 10),
+                                EdgeInsets.symmetric(vertical: 10),
                           ),
                           onChanged: (value) {
-                            context
-                                .read<SearchRecipeProvider>()
-                                .search(query: value);
+                            debugPrint(value);
                           },
                         ),
                       ),
@@ -121,50 +137,24 @@ class _SearchRecipePageState extends State<SearchRecipePage> {
 
               /// 📄 SEARCH RESULT
               Expanded(
-                child: Consumer<SearchRecipeProvider>(
-                  builder: (context, provider, _) {
-                    if (provider.isLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-
-                    if (provider.errorMessage != null) {
-                      return Center(
-                        child: Text(provider.errorMessage!),
-                      );
-                    }
-
-                    if (provider.results.isEmpty) {
-                      return const Center(
-                        child: Text('Tidak ada hasil'),
-                      );
-                    }
-
-                    return ListView.separated(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      itemCount: provider.results.length,
-                      separatorBuilder: (_, _) => const Divider(
-                        color: Color(0xFFD9A88C),
-                        height: 1,
+                child: ListView.separated(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  itemCount: results.length,
+                  separatorBuilder: (_, __) => const Divider(
+                    color: Color(0xFFD9A88C),
+                    height: 1,
+                  ),
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(
+                        results[index],
+                        style: const TextStyle(
+                          color: Color(0xFF5E2A25),
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                      itemBuilder: (_, index) {
-                        final recipe = provider.results[index];
-                        return ListTile(
-                          title: Text(
-                            recipe.recipe.name,
-                            style: const TextStyle(
-                              color: Color(0xFF5E2A25),
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          onTap: () {
-                            debugPrint('Pilih ${recipe.recipe.name}');
-                            context.push(
-                              "${AppRoutes.recipeDetail}/${recipe.recipe.id}"
-                            );
-                          },
-                        );
+                      onTap: () {
+                        debugPrint("Pilih ${results[index]}");
                       },
                     );
                   },

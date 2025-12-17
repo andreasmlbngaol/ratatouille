@@ -41,6 +41,26 @@ class _SearchUserPageState extends State<SearchUserPage> {
       backgroundColor: const Color(0xFFFFFDDE),
       body: Stack(
         children: [
+          /// 🎨 GRADIENT OVERLAY BOTTOM
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: 250,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [
+                    const Color(0xFFFF3D00).withOpacity(0.4),
+                    const Color(0xFFFFFDDE).withOpacity(0.0),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
           /// 🍴 PATTERN BAWAH KIRI
           Positioned(
             bottom: 0,
@@ -88,8 +108,12 @@ class _SearchUserPageState extends State<SearchUserPage> {
                       child: Container(
                         height: 42,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: const Color(0xFFFFFDDE),
                           borderRadius: BorderRadius.circular(24),
+                          border: Border.all(
+                            color: const Color(0xFF5E2A25),
+                            width: 1,
+                          ),
                         ),
                         child: TextField(
                           controller: _searchController,
@@ -114,7 +138,7 @@ class _SearchUserPageState extends State<SearchUserPage> {
               /// 📄 SEARCH RESULT
               Expanded(
                 child: ListView.separated(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 5),
                   itemCount: results.length,
                   separatorBuilder: (_, __) => const Divider(
                     color: Color(0xFFD9A88C),

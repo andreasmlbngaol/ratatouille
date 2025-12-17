@@ -386,7 +386,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                 ),
               ),
 
-              /// 🎨 GRADIENT OVERLAY
+              /// 🎨 GRADIENT OVERLAY BOTTOM
               Positioned(
                 bottom: 0,
                 left: 0,
@@ -406,14 +406,40 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                 ),
               ),
 
+              /// 🎨 GRADIENT OVERLAY TOP
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  height: 250,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        const Color(0xFFFF3D00).withOpacity(0.4),
+                        const Color(0xFFFFFDDE).withOpacity(0.0),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
               /// 🔶 BACKGROUND TOP
               Positioned(
                 top: 0,
                 left: 0,
                 right: 0,
-                child: Image.asset(
-                  'assets/images/bg_top.png',
-                  fit: BoxFit.cover,
+                child: Container(
+                  height: 100,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFFF6A2A),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(0),
+                      bottomRight: Radius.circular(100),
+                    ),
+                  ),
                 ),
               ),
 
@@ -422,12 +448,17 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                 bottom: 0,
                 left: 0,
                 right: 0,
-                child: Image.asset(
-                  'assets/images/bg_bottom.png',
-                  fit: BoxFit.cover,
+                child: Container(
+                  height: 100,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFFF6A2A),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(100),
+                      topRight: Radius.circular(0),
+                    ),
+                  ),
                 ),
-              ),
-
+              )
             ],
           );
         },

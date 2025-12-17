@@ -6,6 +6,8 @@ import 'package:ratatouille/features/users/presentation/widgets/ratatouille_subt
 import 'package:ratatouille/features/users/presentation/widgets/ratatouille_title.dart';
 import 'package:ratatouille/features/users/presentation/widgets/rounded_bold_outline.dart';
 
+import '../../../../core/presentation/app_routes.dart';
+
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
@@ -267,7 +269,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                         ),
                         TextButton(
-                          onPressed: () => context.go('/sign_in'),
+                          onPressed: () => context.go(AppRoutes.signIn),
                           child: const Text(
                             "Sudah punya akun? Masuk di sini",
                             style: TextStyle(
@@ -348,9 +350,15 @@ class _SignUpPageState extends State<SignUpPage> {
                   top: 0,
                   left: 0,
                   right: 0,
-                  child: Image.asset(
-                    'assets/images/bg_top.png',
-                    fit: BoxFit.cover,
+                  child: Container(
+                    height: 100,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFFF6A2A),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(0),
+                        bottomRight: Radius.circular(100),
+                      ),
+                    ),
                   ),
                 ),
 
@@ -359,11 +367,17 @@ class _SignUpPageState extends State<SignUpPage> {
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  child: Image.asset(
-                    'assets/images/bg_bottom.png',
-                    fit: BoxFit.cover,
+                  child: Container(
+                    height: 100,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFFF6A2A),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(100),
+                        topRight: Radius.circular(0),
+                      ),
+                    ),
                   ),
-                ),
+                )
               ],
             );
           },
