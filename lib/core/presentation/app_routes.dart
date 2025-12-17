@@ -37,4 +37,8 @@ class AppRoutes {
   //search user result test
   static const searchResultPage = "/search-result";
 
+
+  //filter kulkas
+  static const filterKulkas = "/filter-kulkas";
+
 }
