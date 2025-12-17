@@ -20,8 +20,10 @@ class RecipesRepositoryImpl implements RecipesRepository {
   @override
   Future<Either<Failure, RecipeDetail>> getRecipeDetail(int recipeId) async {
     try {
+      debugPrint("recipes repository: get recipe detail start");
       final recipeDetailModel = await remoteDataSource.getRecipeDetail(
           recipeId);
+      debugPrint("recipes repository: get recipe detail end");
       return Right(recipeDetailModel.toDomain());
     } catch (e) {
       return Left(Failure(e.toString()));
@@ -199,6 +201,24 @@ class RecipesRepositoryImpl implements RecipesRepository {
       );
       return Right(stepsModel.map((e) => e.toDomain()).toList());
     } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<RecipeDetail>>> search(String query, double? minRating, int? minEstTime, int? maxEstTime) async {
+    try {
+      debugPrint("recipes repository: search start");
+      final recipesModel = await remoteDataSource.search(
+        query: query,
+        minRating: minRating,
+        minEstTime: minEstTime,
+        maxEstTime: maxEstTime
+      );
+      debugPrint("recipes repository: search end");
+      return Right(recipesModel.map((e) => e.toDomain()).toList());
+    } catch (e) {
+      debugPrint("recipes repository: search failure");
       return Left(Failure(e.toString()));
     }
   }

@@ -56,4 +56,11 @@ abstract class RecipeRemoteDataSource {
     required List<int> imageBytes,
     required String fileName
   });
+
+  Future<List<RecipeDetailModel>> search({
+    required String query,
+    double? minRating,
+    int? minEstTime,
+    int? maxEstTime
+  });
 }

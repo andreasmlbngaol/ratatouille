@@ -15,11 +15,14 @@ import 'package:ratatouille/features/recipes/presentation/pages/search_recipe_pa
 import 'package:ratatouille/features/recipes/presentation/pages/search_user_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/complete_setup_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/email_verification_page.dart';
+import 'package:ratatouille/features/users/presentation/pages/search_result_user_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/settings_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/sign_in_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/sign_up_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/splash_page.dart';
 import 'package:ratatouille/features/users/presentation/provider/auth_provider.dart';
+
+import '../../features/recipes/presentation/pages/recipe_detail_page.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -113,12 +116,28 @@ GoRouter createRouter(BuildContext context, AuthProvider authProvider) => GoRout
           ),
         ]
       ),
+
       route(
         path: AppRoutes.searchRecipe,
         child: (context, _) => SearchRecipePage(),
       ),
+
       route(
-      path: AppRoutes.searchUser,
+        path: AppRoutes.searchResultPage,
+        child: (context, _) => SearchResultPage()
+      ),
+
+      route(
+        path: "${AppRoutes.recipeDetail}/:id",
+        child: (context, state) {
+          debugPrint(state.pathParameters['id']);
+          final id = int.parse(state.pathParameters['id']!);
+          return RecipeDetailPage(id: id);
+        },
+      ),
+
+      route(
+        path: AppRoutes.searchUser,
         child: (context, _) => SearchUserPage(),
       ),
       route(

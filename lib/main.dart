@@ -15,6 +15,8 @@ import 'package:ratatouille/features/recipes/domain/use_case/steps/create_empty_
 import 'package:ratatouille/features/recipes/domain/use_case/steps/update_step_use_case.dart';
 import 'package:ratatouille/features/recipes/domain/use_case/steps/upload_step_image_use_case.dart';
 import 'package:ratatouille/features/recipes/presentation/provider/create_recipe_provider.dart';
+import 'package:ratatouille/features/recipes/presentation/provider/recipe_detail_provider.dart';
+import 'package:ratatouille/features/recipes/presentation/provider/search_recipe_provider.dart';
 import 'package:ratatouille/features/users/data/model/user_model.dart';
 import 'package:ratatouille/firebase_options.dart';
 import 'package:ratatouille/core/presentation/router.dart';
@@ -87,6 +89,16 @@ class MyApp extends StatelessWidget {
               updateStepUseCase: getIt<UpdateStepUseCase>(),
               uploadStepImageUseCase: getIt<UploadStepImageUseCase>(),
               publishRecipeUseCase: getIt<PublishRecipeUseCase>(),
+            )
+          ),
+          ChangeNotifierProvider(
+            create: (_) => SearchRecipeProvider(
+              recipeUseCase: getIt(),
+            )
+          ),
+          ChangeNotifierProvider(
+            create: (_) => RecipeDetailProvider(
+              recipeUseCase: getIt(),
             )
           )
         ],

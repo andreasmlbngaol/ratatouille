@@ -54,4 +54,12 @@ abstract class RecipesRepository {
   });
 
   Future<Either<Failure, RecipeWithImages>> publishRecipe(int recipeId);
+
+  // Search Recipe
+  Future<Either<Failure, List<RecipeDetail>>> search(
+    String query,
+    double? minRating,
+    int? minEstTime,
+    int? maxEstTime
+  );
 }

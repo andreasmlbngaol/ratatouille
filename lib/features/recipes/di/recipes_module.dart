@@ -13,6 +13,7 @@ import 'package:ratatouille/features/recipes/domain/use_case/ingredient/add_ingr
 import 'package:ratatouille/features/recipes/domain/use_case/ingredient/create_ingredient_tag_use_case.dart';
 import 'package:ratatouille/features/recipes/domain/use_case/ingredient/get_ingredients_use_case.dart';
 import 'package:ratatouille/features/recipes/domain/use_case/ingredient/search_ingredient_tags_use_case.dart';
+import 'package:ratatouille/features/recipes/domain/use_case/recipe_use_case.dart';
 import 'package:ratatouille/features/recipes/domain/use_case/steps/create_empty_step_use_case.dart';
 import 'package:ratatouille/features/recipes/domain/use_case/steps/get_steps_use_case.dart';
 import 'package:ratatouille/features/recipes/domain/use_case/steps/update_step_use_case.dart';
@@ -80,5 +81,10 @@ void setupRecipesModule() {
 
   getIt.registerSingleton<UploadStepImageUseCase>(
     UploadStepImageUseCase(getIt())
+  );
+
+  // Search Recipes
+  getIt.registerSingleton(
+    RecipeUseCase(getIt())
   );
 }

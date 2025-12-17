@@ -1,239 +1,289 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:ratatouille/core/data/constant/app_constant.dart';
+
+import '../provider/recipe_detail_provider.dart';
 
 class RecipeDetailPage extends StatefulWidget {
-  const RecipeDetailPage({super.key});
+  final int id;
+
+  const RecipeDetailPage({
+    super.key,
+    required this.id,
+  });
 
   @override
   State<RecipeDetailPage> createState() => _RecipeDetailPageState();
 }
 
 class _RecipeDetailPageState extends State<RecipeDetailPage> {
-  int portion = 1;
+  late int portion = 1;
   bool showIngredients = true;
   bool showSteps = true;
 
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final provider = context.read<RecipeDetailProvider>();
+      await provider.fetch(widget.id);
+
+      if (provider.detail != null) {
+        setState(() {
+          portion = provider.detail!.recipe.portion;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<RecipeDetailProvider>();
+
+    if (provider.isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (provider.errorMessage != null) {
+      return Scaffold(
+        body: Center(child: Text(provider.errorMessage!)),
+      );
+    }
+
+    final detail = provider.detail;
+
+    if(detail == null) {
+      return Center(
+          child: CircularProgressIndicator()
+      );
+    }
+
+    final images = detail.recipe.images;
+    final description = detail.recipe.description;
+
     return Scaffold(
       backgroundColor: const Color(0xFFFFFDDE),
       body: Column(
-        children: [
-          /// 🖼 HEADER IMAGE
-          Stack(
-            children: [
-              Image.asset(
-                'assets/images/bakso_mercon_detail.png',
-                height: 260,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
-              Positioned(
-                top: 40,
-                left: 16,
-                child: IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.orange,
-                    size: 28,
+          children: [
+            /// 🖼 HEADER IMAGE
+            Stack(
+              children: [
+                images.isNotEmpty ?
+                CachedNetworkImage(
+                  imageUrl: "${AppConstant.baseUrl}${images.first.url}",
+                  height: 260,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                )
+                : Image.asset(
+                  'assets/images/default_cover_picture.png',
+                  height: 260,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+                Positioned(
+                  top: 40,
+                  left: 16,
+                  child: IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.orange,
+                      size: 28,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
 
-          /// 📄 CONTENT
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  /// TITLE
-                  const Text(
-                    "Bakso Mercon",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF5E2A25),
+            /// 📄 CONTENT
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    /// TITLE
+                    Text(
+                      detail.recipe.name,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF5E2A25),
+                      ),
                     ),
-                  ),
 
-                  const SizedBox(height: 6),
+                    const SizedBox(height: 6),
 
-                  /// AUTHOR
-                  Row(
-                    children: const [
-                      Icon(Icons.restaurant, size: 16, color: Colors.orange),
-                      SizedBox(width: 6),
-                      Text(
-                        "Clara Angelin",
-                        style: TextStyle(
-                          color: Color(0xFFB85C38),
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Spacer(),
-                      Text(
-                        "diperbarui 23 Oktober 2025",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  /// INFO CARD
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _infoCard("10", "Komentar", Icons.chat_bubble_outline),
-                      _infoCard("10", "Disimpan", Icons.bookmark_border),
-                      _infoCard("5.0", "10 nilai\nPenilaian", Icons.star),
-                    ],
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  /// DESCRIPTION
-                  const Text(
-                    "Bakso mercon adalah hidangan pedas menggugah selera yang "
-                        "terbuat dari daging sapi cincang lembut, dicampur bumbu khas Nusantara. "
-                        "Bola daging disajikan sambal cabai rawit melimpah yang meledak di mulut "
-                        "saat digigit. Kuahnya gurih pedas berpadu aroma bawang dan kaldu sapi.",
-                    style: TextStyle(
-                      color: Color(0xFF5E2A25),
-                      height: 1.5,
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  /// TIME & PORTION
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "Perkiraan waktu",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF5E2A25),
-                        ),
-                      ),
-                      const Text(
-                        "30 menit",
-                        style: TextStyle(
-                          color: Color(0xFF5E2A25),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "Porsi sajian",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF5E2A25),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          _portionButton(
-                            icon: Icons.remove,
-                            onTap: () {
-                              if (portion > 1) {
-                                setState(() => portion--);
-                              }
-                            },
+                    /// AUTHOR
+                    Row(
+                      children: [
+                        const Icon(Icons.restaurant, size: 16, color: Colors.orange),
+                        const SizedBox(width: 6),
+                        Text(
+                          detail.author.name,
+                          style: const TextStyle(
+                            color: Color(0xFFB85C38),
+                            fontWeight: FontWeight.w600,
                           ),
-                          Padding(
-                            padding:
-                            const EdgeInsets.symmetric(horizontal: 12),
-                            child: Text(
-                              portion.toString(),
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                        ),
+                        const Spacer(),
+                        Text(
+                          "diperbarui ${detail.recipe.updatedAt}",
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    /// INFO CARD
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _infoCard(detail.comments.length.toString(), "Komentar", Icons.chat_bubble_outline),
+                        _infoCard(detail.favoriteCount.toString(), detail.isFavorited != null ? "Disimpan" : "Simpan", Icons.bookmark_border),
+                        _infoCard(detail.rating.average.toStringAsFixed(1), "${detail.rating.count} nilai\nPenilaian", Icons.star),
+                      ],
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    /// DESCRIPTION
+                    Text(
+                      description ?? "Deskripsi belum tersedia",
+                      style: TextStyle(
+                        color: Color(0xFF5E2A25),
+                        height: 1.5,
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    /// TIME & PORTION
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Perkiraan waktu",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF5E2A25),
+                          ),
+                        ),
+                        Text(
+                          "${detail.recipe.estTimeInMinutes} menit",
+                          style: TextStyle(
+                            color: Color(0xFF5E2A25),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Porsi sajian",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF5E2A25),
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            _portionButton(
+                              icon: Icons.remove,
+                              onTap: () {
+                                if (portion > 1) {
+                                  setState(() => portion--);
+                                }
+                              },
+                            ),
+                            Padding(
+                              padding:
+                              const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text(
+                                portion.toString(),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                          ),
-                          _portionButton(
-                            icon: Icons.add,
-                            onTap: () {
-                              setState(() => portion++);
-                            },
-                          ),
-                        ],
+                            _portionButton(
+                              icon: Icons.add,
+                              onTap: () {
+                                setState(() => portion++);
+                              },
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    /// 🥕 INGREDIENTS
+                    _sectionHeader(
+                      title: "Bahan",
+                      expanded: showIngredients,
+                      onTap: () {
+                        setState(() {
+                          showIngredients = !showIngredients;
+                        });
+                      },
+                    ),
+
+                    if(showIngredients)
+                      ...detail.ingredients.map(
+                          (e) {
+                            final prtn = portion / detail.recipe.portion;
+                            final qty = e.amount != null ? e.amount! * prtn : null;
+
+                            return _ingredientItem(
+                                e.tag.name,
+                                qty,
+                                e.unit
+                            );
+                          }
+                      ),
+
+                    const SizedBox(height: 20),
+
+                    /// 👨‍🍳 STEPS
+                    _sectionHeader(
+                      title: "Langkah-langkah",
+                      expanded: showSteps,
+                      onTap: () {
+                        setState(() {
+                          showSteps = !showSteps;
+                        });
+                      },
+                    ),
+
+                    if (showSteps)
+                      ...detail.steps.map(
+                          (e) => _stepItem(
+                              e.content
+                          )
                       )
-                    ],
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  /// 🥕 INGREDIENTS
-                  _sectionHeader(
-                    title: "Bahan",
-                    expanded: showIngredients,
-                    onTap: () {
-                      setState(() {
-                        showIngredients = !showIngredients;
-                      });
-                    },
-                  ),
-
-                  if (showIngredients)
-                    _ingredientItem("Bakso Sapi", "10", "Butir"),
-                  if (showIngredients)
-                    _ingredientItem("Cabai merah besar", "3", "Buah"),
-                  if (showIngredients)
-                    _ingredientItem("Cabai setan", "1", "Buah"),
-                  if (showIngredients)
-                    _ingredientItem("Minyak Goreng", "2", "Sdm"),
-                  if (showIngredients)
-                    _ingredientItem("Air", "50", "mL"),
-                  if (showIngredients)
-                    _ingredientItem("Garam", "1/4", "Sdt"),
-                  if (showIngredients)
-                    _ingredientItem("Kecap Manis", "1", "Sdm"),
-
-                  const SizedBox(height: 20),
-
-                  /// 👨‍🍳 STEPS
-                  _sectionHeader(
-                    title: "Langkah-langkah",
-                    expanded: showSteps,
-                    onTap: () {
-                      setState(() {
-                        showSteps = !showSteps;
-                      });
-                    },
-                  ),
-
-                  if (showSteps)
-                    _stepItem(
-                        "Panaskan minyak, tumis cabai merah dan cabai setan hingga harum."),
-                  if (showSteps)
-                    _stepItem(
-                        "Masukkan bakso, aduk rata hingga bakso agak kecoklatan."),
-                  if (showSteps)
-                    _stepItem(
-                        "Tambahkan air, garam, dan kecap manis. Masak hingga air menyusut."),
-                  if (showSteps)
-                    _stepItem("Angkat dan sajikan hangat."),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
     );
   }
 
@@ -303,13 +353,19 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     );
   }
 
-  Widget _ingredientItem(String name, String qty, String unit) {
+  Widget _ingredientItem(String name, double? qty, String? unit) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
           Expanded(child: Text("• $name")),
-          Text("$qty $unit"),
+          qty == null || unit == null
+              ? const Text("Secukupnya")
+              : Text(
+            qty % 1 == 0
+                ? "${qty.toInt()} $unit"
+                : "${qty.toStringAsFixed(1)} $unit",
+          ),
         ],
       ),
     );

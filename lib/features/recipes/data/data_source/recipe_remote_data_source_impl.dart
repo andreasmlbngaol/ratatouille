@@ -16,13 +16,17 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
   RecipeRemoteDataSourceImpl({required this.apiClient});
 
   @override
-  Future<RecipeDetailModel> getRecipeDetail(int recipeId) async {
+  Future<RecipeDetailModel>getRecipeDetail(int recipeId) async {
     try {
+      debugPrint("recipe remote data source impl get recipe detail");
       final response = await apiClient.get("/api/recipes/$recipeId");
+      debugPrint("recipe remote data source impl get recipe detail: $response");
       return RecipeDetailModel.fromJson(response);
     } on ApiException catch (e) {
+      debugPrint("recipe remote data source impl get recipe detail api exception");
       throw Exception(e.message);
     } catch (e) {
+      debugPrint("recipe remote data source impl get recipe detail exception: $e");
       throw Exception("Something went wrong");
     }
   }
@@ -261,6 +265,55 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
     } on ApiException catch (e) {
       throw Exception(e.message);
     } catch (e) {
+      throw Exception("Something went wrong");
+    }
+  }
+
+  @override
+  Future<List<RecipeDetailModel>> search({
+    required String query,
+    double? minRating,
+    int? minEstTime,
+    int? maxEstTime,
+  }) async {
+    try {
+      debugPrint("Search recipes: $query");
+      final queryParams = <String, String>{
+        'query': query, // nanti di-encode otomatis
+      };
+
+      if (minRating != null) {
+        queryParams['minRating'] = minRating.toString();
+      }
+      if (minEstTime != null) {
+        queryParams['minEstTime'] = minEstTime.toString();
+      }
+      if (maxEstTime != null) {
+        queryParams['maxEstTime'] = maxEstTime.toString();
+      }
+
+      final uri = Uri(
+        path: '/recipes',
+        queryParameters: queryParams,
+      );
+
+      debugPrint("Search recipes: $uri");
+
+      final response = await apiClient.getList(
+        "/api${uri.toString()}",
+      );
+
+      debugPrint("Search recipes: $response");
+
+      return response
+          .take(5)
+          .map((e) => RecipeDetailModel.fromJson(e))
+          .toList();
+    } on ApiException catch (e) {
+      debugPrint("Search recipes: ${e.message}");
+      throw Exception(e.message);
+    } catch (_) {
+      debugPrint("Search recipes: Something went wrong");
       throw Exception("Something went wrong");
     }
   }

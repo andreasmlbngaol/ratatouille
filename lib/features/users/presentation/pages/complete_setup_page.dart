@@ -6,7 +6,6 @@ import 'package:ratatouille/core/data/constant/app_constant.dart';
 import 'package:ratatouille/features/users/presentation/provider/auth_provider.dart';
 import 'package:ratatouille/features/users/presentation/widgets/ratatouille_subtitle.dart';
 import 'package:ratatouille/features/users/presentation/widgets/ratatouille_title.dart';
-import 'package:ratatouille/features/users/presentation/widgets/rounded_bold_outline.dart';
 
 class CompleteSetupPage extends StatefulWidget {
   const CompleteSetupPage({super.key});
