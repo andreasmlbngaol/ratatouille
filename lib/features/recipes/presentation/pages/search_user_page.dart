@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../core/presentation/app_routes.dart';
+import '../provider/search_user_provider.dart';
 
 class SearchUserPage extends StatefulWidget {
   const SearchUserPage({super.key});
@@ -10,15 +15,6 @@ class SearchUserPage extends StatefulWidget {
 class _SearchUserPageState extends State<SearchUserPage> {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-
-  final List<String> results = [
-    "Messi Medan",
-    "Messi Jawa",
-    "Messi Batak",
-    "Messi Bali",
-    "Messi Sunda",
-    "Messi ",
-  ];
 
   @override
   void initState() {
@@ -32,6 +28,7 @@ class _SearchUserPageState extends State<SearchUserPage> {
   void dispose() {
     _searchController.dispose();
     _focusNode.dispose();
+    context.read<SearchUserProvider>().clear();
     super.dispose();
   }
 
@@ -41,26 +38,6 @@ class _SearchUserPageState extends State<SearchUserPage> {
       backgroundColor: const Color(0xFFFFFDDE),
       body: Stack(
         children: [
-          /// 🎨 GRADIENT OVERLAY BOTTOM
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              height: 250,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  colors: [
-                    const Color(0xFFFF3D00).withOpacity(0.4),
-                    const Color(0xFFFFFDDE).withOpacity(0.0),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
           /// 🍴 PATTERN BAWAH KIRI
           Positioned(
             bottom: 0,
@@ -96,7 +73,7 @@ class _SearchUserPageState extends State<SearchUserPage> {
                   children: [
                     /// BACK
                     IconButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => context.pop(context),
                       icon: const Icon(
                         Icons.arrow_back,
                         color: Colors.white,
@@ -108,25 +85,23 @@ class _SearchUserPageState extends State<SearchUserPage> {
                       child: Container(
                         height: 42,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFFFFDDE),
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(24),
-                          border: Border.all(
-                            color: const Color(0xFF5E2A25),
-                            width: 1,
-                          ),
                         ),
                         child: TextField(
                           controller: _searchController,
                           focusNode: _focusNode,
                           decoration: InputDecoration(
-                            hintText: 'Muhammad Messi ',
+                            hintText: 'Cari pengguna...',
                             prefixIcon: const Icon(Icons.search),
                             border: InputBorder.none,
                             contentPadding:
                             const EdgeInsets.symmetric(vertical: 10),
                           ),
                           onChanged: (value) {
-                            debugPrint(value);
+                            context
+                                .read<SearchUserProvider>()
+                                .search(query: value);
                           },
                         ),
                       ),
@@ -137,24 +112,50 @@ class _SearchUserPageState extends State<SearchUserPage> {
 
               /// 📄 SEARCH RESULT
               Expanded(
-                child: ListView.separated(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  itemCount: results.length,
-                  separatorBuilder: (_, __) => const Divider(
-                    color: Color(0xFFD9A88C),
-                    height: 1,
-                  ),
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(
-                        results[index],
-                        style: const TextStyle(
-                          color: Color(0xFF5E2A25),
-                          fontWeight: FontWeight.w500,
-                        ),
+                child: Consumer<SearchUserProvider>(
+                  builder: (context, provider, _) {
+                    if (provider.isLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    if (provider.errorMessage != null) {
+                      return Center(
+                        child: Text(provider.errorMessage!),
+                      );
+                    }
+
+                    if (provider.results.isEmpty) {
+                      return const Center(
+                        child: Text('Tidak ada hasil'),
+                      );
+                    }
+
+                    return ListView.separated(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      itemCount: provider.results.length,
+                      separatorBuilder: (_, _) => const Divider(
+                        color: Color(0xFFD9A88C),
+                        height: 1,
                       ),
-                      onTap: () {
-                        debugPrint("Pilih ${results[index]}");
+                      itemBuilder: (_, index) {
+                        final user = provider.results[index];
+                        return ListTile(
+                          title: Text(
+                            user.name,
+                            style: const TextStyle(
+                              color: Color(0xFF5E2A25),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          onTap: () {
+                            debugPrint('Pilih ${user.name}');
+                            // context.push(
+                            //     "${AppRoutes.userProfile}/${user.id}"
+                            // );
+                          },
+                        );
                       },
                     );
                   },

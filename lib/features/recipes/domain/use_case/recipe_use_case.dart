@@ -46,4 +46,25 @@ class RecipeUseCase {
   Future<Either<Failure, List<RecipeDetail>>> getMyRecipes() async {
     return await repository.getMyRecipes();
   }
+
+  Future<Either<Failure, List<RecipeDetail>>> fetchBookmarkedRecipes() async {
+    return await repository.fetchBookmarkedRecipes();
+  }
+
+  Future<Either<Failure, List<RecipeDetail>>> fridgeFilter({
+    required List<int> includedIngredients,
+    required List<int> excludedIngredients,
+    required double? minRating,
+    required int? minEstTime,
+    required int? maxEstTime,
+}) async {
+    return await repository.fridgeFilter(
+      includedIngredients: includedIngredients,
+      excludedIngredients: excludedIngredients,
+      minRating: minRating,
+      minEstTime: minEstTime,
+      maxEstTime: maxEstTime,
+    );
+  }
+
 }

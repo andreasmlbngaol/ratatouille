@@ -71,10 +71,11 @@ class DioApiClient implements ApiClient {
   }
 
   @override
-  Future<List<dynamic>> getList(String endpoint) async {
+  Future<List<dynamic>> getList(String endpoint, {dynamic body}) async {
     try {
       final response = await dio.get(
-          "$baseUrl$endpoint"
+          "$baseUrl$endpoint",
+          data: body
       );
       _checkResponse(response);
 

@@ -26,6 +26,7 @@ import 'package:ratatouille/features/users/domain/use_case/profile/complete_prof
 import 'package:ratatouille/features/users/domain/use_case/profile/update_user_profile_use_case.dart';
 import 'package:ratatouille/features/users/domain/use_case/social/manage_user_follow_use_case.dart';
 import 'package:ratatouille/features/users/domain/use_case/social/view_user_profile_use_case.dart';
+import 'package:ratatouille/features/users/domain/use_case/user_use_case.dart';
 
 void setupUsersModule() {
   // Auth and Firebase
@@ -131,4 +132,9 @@ void setupUsersModule() {
       ViewUserProfileUseCase(getIt<UsersRepository>())
   );
 
+  getIt.registerSingleton<UserUseCase>(
+      UserUseCase(
+          usersRepository: getIt(),
+      )
+  );
 }

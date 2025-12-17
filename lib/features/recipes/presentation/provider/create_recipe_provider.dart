@@ -250,7 +250,6 @@ class CreateRecipeProvider extends ChangeNotifier {
           searchResults = [];
         },
             (tags) {
-          // Cek: query masih relevan?
           if (currentIngredientQuery == query) {
             searchResults = tags;
           }

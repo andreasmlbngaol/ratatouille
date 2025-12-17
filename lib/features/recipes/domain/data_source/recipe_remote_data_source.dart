@@ -73,5 +73,12 @@ abstract class RecipeRemoteDataSource {
   Future<CommentWithImageModel> postComment(int recipeId, String content);
   Future<bool> submitRating(int recipeId, int rating);
   Future<List<RecipeDetailModel>> getMyRecipes();
-
+  Future<List<RecipeDetailModel>> fetchBookmarkedRecipes();
+  Future<List<RecipeDetailModel>> fridgeFilter({
+    required List<int> includedIngredients,
+    required List<int> excludedIngredients,
+    required double? minRating,
+    required int? minEstTime,
+    required int? maxEstTime
+  });
 }

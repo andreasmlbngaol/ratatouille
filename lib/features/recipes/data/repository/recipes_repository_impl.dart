@@ -305,4 +305,42 @@ class RecipesRepositoryImpl implements RecipesRepository {
 
     }
   }
+
+  @override
+  Future<Either<Failure, List<RecipeDetail>>> fetchBookmarkedRecipes() async {
+    try {
+      debugPrint("recipes repository: fetch bookmarked recipes start");
+      final recipesModel = await remoteDataSource.fetchBookmarkedRecipes();
+      debugPrint("recipes repository: fetch bookmarked recipes end");
+      return Right(recipesModel.map((e) => e.toDomain()).toList());
+    } catch (e) {
+      debugPrint("recipes repository: fetch bookmarked recipes failure");
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<RecipeDetail>>> fridgeFilter({
+    required List<int> includedIngredients,
+    required List<int> excludedIngredients,
+    required double? minRating,
+    required int? minEstTime,
+    required int? maxEstTime
+  }) async {
+    try {
+      debugPrint("recipes repository: fridge filter start");
+      final recipesModel = await remoteDataSource.fridgeFilter(
+        includedIngredients: includedIngredients,
+        excludedIngredients: excludedIngredients,
+        minRating: minRating,
+        minEstTime: minEstTime,
+        maxEstTime: maxEstTime
+      );
+      debugPrint("recipes repository: fridge filter end");
+      return Right(recipesModel.map((e) => e.toDomain()).toList());
+    } catch (e) {
+      debugPrint("recipes repository: fridge filter failure");
+      return Left(Failure(e.toString()));
+    }
+  }
 }

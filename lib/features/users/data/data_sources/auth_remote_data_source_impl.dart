@@ -121,6 +121,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw Exception(e.message);
     }
   }
-  
-  
+
+  @override
+  Future<List<UserModel>> search({required String query}) async {
+    try {
+      final response = await apiClient.getList("/api/users?query=$query");
+      return response.map((e) => UserModel.fromJson(e)).toList();
+    } on ApiException catch (e) {
+      throw Exception(e.message);
+    }
+  }
 }

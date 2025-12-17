@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ratatouille/core/di/service_locator.dart';
+import 'package:ratatouille/features/kulkas/presentation/provider/fridge_filter_provider.dart';
 import 'package:ratatouille/features/recipes/domain/use_case/base/publish_recipe_use_case.dart';
 import 'package:ratatouille/features/recipes/domain/use_case/base/update_recipe_base_info_use_case.dart';
 import 'package:ratatouille/features/recipes/domain/use_case/base/upload_recipe_image_use_case.dart';
@@ -24,6 +25,8 @@ import 'package:ratatouille/core/presentation/router.dart';
 import 'package:ratatouille/core/presentation/theme.dart';
 import 'package:provider/provider.dart';
 
+import 'features/recipes/presentation/provider/my_bookmark_provider.dart';
+import 'features/recipes/presentation/provider/search_user_provider.dart';
 import 'features/users/presentation/provider/auth_provider.dart';
 
 void main() async {
@@ -108,6 +111,22 @@ class MyApp extends StatelessWidget {
               recipeUseCase: getIt(),
             )
           ),
+          ChangeNotifierProvider(
+            create: (_) => MyBookmarkProvider(
+              recipeUseCase: getIt(),
+            )
+          ),
+          ChangeNotifierProvider(
+              create: (_) => SearchUserProvider(
+                userUseCase: getIt(),
+              )
+          ),
+          ChangeNotifierProvider(
+            create: (_) => FridgeFilterProvider(
+                searchIngredientTagsUseCase: getIt(),
+                recipeUseCase: getIt()
+            ),
+          )
         ],
         child: Consumer<AuthProvider>(
           builder: (context, authProvider, _) {

@@ -71,4 +71,12 @@ abstract class RecipesRepository {
   Future<Either<Failure, CommentWithImage>> postComment(int recipeId, String content);
   Future<Either<Failure, bool>> submitRating(int recipeId, int rating);
   Future<Either<Failure, List<RecipeDetail>>> getMyRecipes();
+  Future<Either<Failure, List<RecipeDetail>>> fetchBookmarkedRecipes();
+  Future<Either<Failure, List<RecipeDetail>>> fridgeFilter({
+    required List<int> includedIngredients,
+    required List<int> excludedIngredients,
+    required double? minRating,
+    required int? minEstTime,
+    required int? maxEstTime
+  });
 }

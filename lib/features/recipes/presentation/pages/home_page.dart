@@ -132,7 +132,7 @@ class HomePage extends StatelessWidget {
                                 iconName: "fridge.svg",
                                 label: 'Filter Kulkas',
                                 onTap: () {
-                                  // No action for now
+                                  context.push(AppRoutes.fridgeFilter);
                                 },
                               ),
                             ],

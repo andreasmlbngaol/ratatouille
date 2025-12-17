@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ratatouille/core/presentation/app_routes.dart';
 import 'package:ratatouille/core/presentation/pages/not_found_page.dart';
+import 'package:ratatouille/features/kulkas/presentation/pages/fridge_filter_page.dart';
 import 'package:ratatouille/features/recipes/presentation/pages/comment_recipe_page.dart';
 import 'package:ratatouille/features/recipes/presentation/pages/create_recipe/create_recipe_base_info_page.dart';
 import 'package:ratatouille/features/recipes/presentation/pages/create_recipe/create_recipe_ingredients_page.dart';
@@ -174,6 +175,11 @@ GoRouter createRouter(BuildContext context, AuthProvider authProvider) => GoRout
       route(
         path: AppRoutes.createRecipePreview,
         child: (context, _) => CreateRecipePreviewPage()
+      ),
+
+      route(
+        path: AppRoutes.fridgeFilter,
+        child: (context, _) => FridgeFilterPage()
       )
     ],
   errorBuilder: (context, state) => NotFoundPage(location: state.matchedLocation)

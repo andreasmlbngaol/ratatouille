@@ -113,16 +113,29 @@ class RecipeCard extends StatelessWidget {
                   /// ⭐ RATING
                   Row(
                     children: List.generate(5, (index) {
+                      final ratingValue = rating;
+                      final starIndex = index + 1;
+
+                      // Cek apakah star ini penuh, setengah, atau kosong
+                      late IconData iconData;
+                      if (starIndex <= ratingValue.floor()) {
+                        // Star penuh
+                        iconData = Icons.star;
+                      } else if (starIndex - 1 < ratingValue && ratingValue % 1 != 0) {
+                        // Star setengah (ada decimal)
+                        iconData = Icons.star_half;
+                      } else {
+                        // Star kosong
+                        iconData = Icons.star_border;
+                      }
+
                       return Icon(
-                        index < rating.floor()
-                            ? Icons.star
-                            : Icons.star_border,
+                        iconData,
                         size: 24,
                         color: const Color(0xFFFFA726),
                       );
                     }),
                   ),
-
                   const SizedBox(height: 6),
 
                   /// DATE & REVIEW

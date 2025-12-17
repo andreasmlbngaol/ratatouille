@@ -27,4 +27,8 @@ abstract class UsersRepository {
   Future<Either<Failure, UserDetail>> followUser(String userId);
   Future<Either<Failure, UserDetail>> unfollowUser(String userId);
   Future<Either<Failure, void>> signOut();
+
+  Future<Either<Failure, List<RatatouilleUser>>> search({
+    required String query,
+  });
 }

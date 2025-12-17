@@ -3,7 +3,7 @@ import 'multipart_file_data.dart';
 abstract class ApiClient {
   Future<Map<String, dynamic>> get(String endpoint);
 
-  Future<List<dynamic>> getList(String endpoint);
+  Future<List<dynamic>> getList(String endpoint, {dynamic body});
 
   Future<dynamic> getSingle(String endpoint);
 

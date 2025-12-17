@@ -413,4 +413,46 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
       throw Exception("Something went wrong");
     }
   }
+
+  @override
+  Future<List<RecipeDetailModel>> fetchBookmarkedRecipes() async {
+    try {
+      final response = await apiClient.getList(
+          "/api/recipes/favorites");
+      debugPrint("Bookmarked recipes: $response");
+      return response.map((e) => RecipeDetailModel.fromJson(e)).toList();
+    } on ApiException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
+      throw Exception("Something went wrong");
+    }
+  }
+
+  @override
+  Future<List<RecipeDetailModel>> fridgeFilter({
+    required List<int> includedIngredients,
+    required List<int> excludedIngredients,
+    required double? minRating,
+    required int? minEstTime,
+    required int? maxEstTime
+  }) async {
+    try {
+      final response = await apiClient.getList(
+          "/api/recipes/fridge-filter",
+        body: {
+            "includedIngredients": includedIngredients,
+            "excludedIngredients": excludedIngredients,
+            "minRating": minRating,
+            "minEstTime": minEstTime,
+            "maxEstTime": maxEstTime
+        }
+      );
+      debugPrint("Fridge filter: $response");
+      return response.map((e) => RecipeDetailModel.fromJson(e)).toList();
+    } on ApiException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
+      throw Exception("Something went wrong");
+    }
+  }
 }

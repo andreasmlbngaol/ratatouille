@@ -118,6 +118,16 @@ class UsersRepositoryImpl implements UsersRepository {
       return Left(Failure(e.toString()));
     }
   }
-  
-  
+
+  @override
+  Future<Either<Failure, List<RatatouilleUser>>> search({required String query}) async {
+    try {
+      debugPrint("users repository: search start");
+      final users = await remoteDataSource.search(query: query);
+      return Right(users.map((e) => e.toDomain()).toList());
+    } catch (e) {
+      debugPrint("users repository: search failure");
+      return Left(Failure(e.toString()));
+    }
+  }
 }

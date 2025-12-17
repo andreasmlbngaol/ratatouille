@@ -39,6 +39,6 @@ class AppRoutes {
 
 
   //filter kulkas
-  static const filterKulkas = "/filter-kulkas";
+  static const fridgeFilter = "/fridge-filter";
 
 }
