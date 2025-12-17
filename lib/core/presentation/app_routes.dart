@@ -25,4 +25,13 @@ class AppRoutes {
   static const createRecipeIngredients = "/create-recipe/ingredients";
   static const createRecipeSteps = "/create-recipe/steps";
   static const createRecipePreview = "/create-recipe/preview";
+
+
+  //comment page
+  static const commentPage = "/comment-page";
+  static const developerPage ="/developer";
+  static const detailDeveloperPage = "/developer-detail";
+  static const andreDetailPage = "/andre-detail";
+  static const claraDetailPage = "/bintang-detail";
+
 }
