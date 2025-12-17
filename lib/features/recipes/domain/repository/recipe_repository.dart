@@ -6,6 +6,8 @@ import 'package:ratatouille/features/recipes/domain/model/recipe/recipe_detail.d
 import 'package:ratatouille/features/recipes/domain/model/recipe/recipe_with_images.dart';
 import 'package:ratatouille/features/recipes/domain/model/step/step_with_images.dart';
 
+import '../model/comment/comment_with_image.dart';
+
 abstract class RecipesRepository {
   Future<Either<Failure, RecipeDetail>> getRecipeDetail(int recipeId);
 
@@ -62,4 +64,11 @@ abstract class RecipesRepository {
     int? minEstTime,
     int? maxEstTime
   );
+
+  Future<Either<Failure, bool>> saveRecipe(int recipeId);
+  Future<Either<Failure, bool>> removeSavedRecipe(int recipeId);
+  Future<Either<Failure, List<CommentWithImage>>> fetchComments(int recipeId);
+  Future<Either<Failure, CommentWithImage>> postComment(int recipeId, String content);
+  Future<Either<Failure, bool>> submitRating(int recipeId, int rating);
+  Future<Either<Failure, List<RecipeDetail>>> getMyRecipes();
 }

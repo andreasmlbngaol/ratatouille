@@ -312,56 +312,79 @@ class _CreateRecipeIngredientsPageState extends State<CreateRecipeIngredientsPag
                               borderRadius: BorderRadius.circular(12),
                               color: const Color(0xFFFFFDFA),
                             ),
-                            child: ListView.separated(
-                              shrinkWrap: true,
-                              padding: EdgeInsets.zero,   // ← ini yang hilangin padding bawah/atas
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: provider.searchResults.length + 1,
-                              separatorBuilder: (context, index) => const Divider(
-                                height: 0.5,
-                                thickness: 1,
-                                color: Color(0xFF3F5242),
-                              ),
-                              itemBuilder: (context, index) {
-                                if (index < provider.searchResults.length) {
-                                  final tag = provider.searchResults[index];
-                                  return ListTile(
-                                    minVerticalPadding: 4,
-                                    dense: true,
-                                    title: Text(
-                                      tag.name,
-                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        fontSize: 15,
-                                        color: Color(0xFF3F5242),
+                            child: Column(
+                              children: [
+                                // Search results
+                                ...provider.searchResults.asMap().entries.map((entry) {
+                                  final index = entry.key;
+                                  final tag = entry.value;
+                                  final isLast = index == provider.searchResults.length - 1;
+
+                                  return Column(
+                                    children: [
+                                      ListTile(
+                                        minVerticalPadding: 4,
+                                        dense: true,
+                                        title: Text(
+                                          tag.name,
+                                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                            fontSize: 15,
+                                            color: Color(0xFF3F5242),
+                                          ),
+                                        ),
+                                        onTap: () => provider.selectIngredientTag(tag),
+                                        contentPadding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                        ),
+                                      ),
+                                      if (!isLast)
+                                        const Divider(
+                                          height: 0.5,
+                                          thickness: 1,
+                                          color: Color(0xFF3F5242),
+                                        ),
+                                    ],
+                                  );
+                                }).toList(),
+
+                                // Divider before "Buat baru"
+                                if (provider.searchResults.isNotEmpty)
+                                  const Divider(
+                                    height: 0.5,
+                                    thickness: 1,
+                                    color: Color(0xFF3F5242),
+                                  ),
+
+                                // "Buat baru" item
+                                Material(
+                                  color: const Color(0xFFFFFDFA),
+                                  child: InkWell(
+                                    onTap: () {
+                                      debugPrint('Creating new ingredient: ${_searchController.text}');
+                                      provider.createNewIngredientTag(_searchController.text);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              '+ Buat bahan baru "${_searchController.text}"',
+                                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                fontSize: 15,
+                                                fontStyle: FontStyle.italic,
+                                                color: Color(0xFF76342E),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    onTap: () => provider.selectIngredientTag(tag),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                    ),
-                                  );
-                                } else {
-                                  // Buat baru
-                                  return ListTile(
-                                    title: Text(
-                                      '+ Buat bahan baru "${_searchController.text}"',
-                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        fontSize: 15,
-                                        fontStyle: FontStyle.italic,
-                                        color: Color(0xFF76342E),
-                                      ),
-                                    ),
-                                    onTap: () =>
-                                        provider.createNewIngredientTag(_searchController.text),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                    ),
-                                  );
-                                }
-                              },
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                      ],
+                          ),                      ],
                     )
                   else
                     Card(

@@ -10,23 +10,27 @@ import 'package:ratatouille/features/recipes/data/model/step/step_with_images_mo
 import 'package:ratatouille/features/recipes/domain/data_source/recipe_remote_data_source.dart';
 import 'package:ratatouille/features/recipes/domain/model/recipe/recipe_status.dart';
 
+import '../model/comment/comment_with_image_model.dart';
+
 class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
   final ApiClient apiClient;
 
   RecipeRemoteDataSourceImpl({required this.apiClient});
 
   @override
-  Future<RecipeDetailModel>getRecipeDetail(int recipeId) async {
+  Future<RecipeDetailModel> getRecipeDetail(int recipeId) async {
     try {
       debugPrint("recipe remote data source impl get recipe detail");
       final response = await apiClient.get("/api/recipes/$recipeId");
       debugPrint("recipe remote data source impl get recipe detail: $response");
       return RecipeDetailModel.fromJson(response);
     } on ApiException catch (e) {
-      debugPrint("recipe remote data source impl get recipe detail api exception");
+      debugPrint(
+          "recipe remote data source impl get recipe detail api exception");
       throw Exception(e.message);
     } catch (e) {
-      debugPrint("recipe remote data source impl get recipe detail exception: $e");
+      debugPrint(
+          "recipe remote data source impl get recipe detail exception: $e");
       throw Exception("Something went wrong");
     }
   }
@@ -38,10 +42,12 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
       final response = await apiClient.get("/api/recipes/drafts");
       return RecipeWithImagesModel.fromJson(response);
     } on ApiException catch (e) {
-      debugPrint("recipe remote data source impl get or create draft recipe api exception");
+      debugPrint(
+          "recipe remote data source impl get or create draft recipe api exception");
       throw Exception(e.message);
     } catch (e) {
-      debugPrint("recipe remote data source impl get or create draft recipe exception");
+      debugPrint(
+          "recipe remote data source impl get or create draft recipe exception");
       throw Exception("Something went wrong");
     }
   }
@@ -125,12 +131,14 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
   @override
   Future<IngredientTagModel> createIngredientTag(String name) async {
     try {
+      debugPrint("Creating ingredient tag...");
       final response = await apiClient.post(
-        "/api/recipes/ingredient-tags",
-        body: {
-          "name": name
-        }
+          "/api/recipes/ingredient-tags",
+          body: {
+            "name": name
+          }
       );
+      debugPrint("Ingredient tag created: $response");
       return IngredientTagModel.fromJson(response);
     } on ApiException catch (e) {
       throw Exception(e.message);
@@ -142,7 +150,8 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
   @override
   Future<List<IngredientTagModel>> searchIngredientTags(String query) async {
     try {
-      final response = await apiClient.getList("/api/recipes/ingredient-tags?query=$query");
+      final response = await apiClient.getList(
+          "/api/recipes/ingredient-tags?query=$query");
       return response.map((e) => IngredientTagModel.fromJson(e)).toList();
     } on ApiException catch (e) {
       throw Exception(e.message);
@@ -176,22 +185,22 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
     String? unit,
     String? alternative
   }) async {
-     try {
-       final response = await apiClient.postList(
-         "/api/recipes/$recipeId/ingredients",
-           body: {
-             "tagId": tagId,
-             "amount": amount,
-             "unit": unit,
-             "alternative": alternative
-           }
-       );
-       return response.map((e) => IngredientWithTagModel.fromJson(e)).toList();
-     } on ApiException catch (e) {
-       throw Exception(e.message);
-     } catch (e) {
-       throw Exception("Something went wrong");
-     }
+    try {
+      final response = await apiClient.postList(
+          "/api/recipes/$recipeId/ingredients",
+          body: {
+            "tagId": tagId,
+            "amount": amount,
+            "unit": unit,
+            "alternative": alternative
+          }
+      );
+      return response.map((e) => IngredientWithTagModel.fromJson(e)).toList();
+    } on ApiException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
+      throw Exception("Something went wrong");
+    }
   }
 
   @override
@@ -208,13 +217,14 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
   }
 
   @override
-  Future<List<StepWithImagesModel>> createEmptyStep(int recipeId, int stepNumber) async {
+  Future<List<StepWithImagesModel>> createEmptyStep(int recipeId,
+      int stepNumber) async {
     try {
       final response = await apiClient.postList(
-        "/api/recipes/$recipeId/steps",
-        body: {
-          "stepNumber": stepNumber
-        }
+          "/api/recipes/$recipeId/steps",
+          body: {
+            "stepNumber": stepNumber
+          }
       );
       return response.map((e) => StepWithImagesModel.fromJson(e)).toList();
     } on ApiException catch (e) {
@@ -225,7 +235,8 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
   }
 
   @override
-  Future<List<StepWithImagesModel>> updateStep(int recipeId, int stepId, String content) async {
+  Future<List<StepWithImagesModel>> updateStep(int recipeId, int stepId,
+      String content) async {
     try {
       final response = await apiClient.patchList(
           "/api/recipes/$recipeId/steps/$stepId",
@@ -314,6 +325,91 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
       throw Exception(e.message);
     } catch (_) {
       debugPrint("Search recipes: Something went wrong");
+      throw Exception("Something went wrong");
+    }
+  }
+
+  @override
+  Future<void> saveRecipe(int recipeId) async {
+    try {
+      await apiClient.postSingle("/api/recipes/$recipeId/favorites", body: null);
+    } on ApiException catch (e) {
+      throw Exception(e.message);
+    } catch (_) {
+      throw Exception("Something went wrong");
+    }
+  }
+
+  @override
+  Future<void> removeSavedRecipe(int recipeId) async {
+    try {
+      await apiClient.deleteSingle("/api/recipes/$recipeId/favorites");
+    } on ApiException catch (e) {
+      throw Exception(e.message);
+    } catch (_) {
+      throw Exception("Something went wrong");
+    }
+  }
+
+  @override
+  Future<List<CommentWithImageModel>> fetchComments(int recipeId) async {
+    try {
+      final response = await apiClient.getList(
+          "/api/recipes/$recipeId/comments");
+      return response.map((e) => CommentWithImageModel.fromJson(e)).toList();
+    } on ApiException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
+      throw Exception("Something went wrong");
+    }
+  }
+
+  @override
+  Future<CommentWithImageModel> postComment(int recipeId, String content) async {
+    try {
+      final response = await apiClient.multipartWithFiles(
+          "/api/recipes/$recipeId/comments",
+          fields: {
+            "content": content
+          },
+          files: []
+      );
+      return CommentWithImageModel.fromJson(response);
+    } on ApiException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
+      debugPrint("Error posting comment: $e");
+      throw Exception("Something went wrong");
+    }
+  }
+
+  @override
+  Future<bool> submitRating(int recipeId, int rating) async {
+    try {
+      await apiClient.postSingle(
+          "/api/recipes/$recipeId/ratings",
+          body: {
+            "value": rating
+          }
+      );
+      return true;
+    } on ApiException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
+      throw Exception("Something went wrong");
+    }
+  }
+
+  @override
+  Future<List<RecipeDetailModel>> getMyRecipes() async {
+    try {
+      final response = await apiClient.getList(
+          "/api/recipes/me");
+      debugPrint("My recipes: $response");
+      return response.map((e) => RecipeDetailModel.fromJson(e)).toList();
+    } on ApiException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
       throw Exception("Something went wrong");
     }
   }

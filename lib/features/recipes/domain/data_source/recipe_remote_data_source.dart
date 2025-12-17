@@ -5,6 +5,8 @@ import 'package:ratatouille/features/recipes/data/model/recipe/recipe_with_image
 import 'package:ratatouille/features/recipes/data/model/step/step_with_images_model.dart';
 import 'package:ratatouille/features/recipes/domain/model/recipe/recipe_status.dart';
 
+import '../../data/model/comment/comment_with_image_model.dart';
+
 abstract class RecipeRemoteDataSource {
   Future<RecipeDetailModel> getRecipeDetail(int recipeId);
 
@@ -63,4 +65,13 @@ abstract class RecipeRemoteDataSource {
     int? minEstTime,
     int? maxEstTime
   });
+
+  Future<void> saveRecipe(int recipeId);
+
+  Future<void> removeSavedRecipe(int recipeId);
+  Future<List<CommentWithImageModel>> fetchComments(int recipeId);
+  Future<CommentWithImageModel> postComment(int recipeId, String content);
+  Future<bool> submitRating(int recipeId, int rating);
+  Future<List<RecipeDetailModel>> getMyRecipes();
+
 }

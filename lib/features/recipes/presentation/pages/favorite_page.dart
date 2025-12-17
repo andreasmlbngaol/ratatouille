@@ -58,7 +58,7 @@ class FavoritePage extends StatelessWidget {
                     title: "Chef Renata",
                     subtitle: "masakan terenak",
                     rating: 4.8,
-                    date: "16 Desember 2025",
+                    date: 123,
                     totalReviews: 10,
                   ),
                 );

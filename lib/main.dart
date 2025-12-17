@@ -15,6 +15,7 @@ import 'package:ratatouille/features/recipes/domain/use_case/steps/create_empty_
 import 'package:ratatouille/features/recipes/domain/use_case/steps/update_step_use_case.dart';
 import 'package:ratatouille/features/recipes/domain/use_case/steps/upload_step_image_use_case.dart';
 import 'package:ratatouille/features/recipes/presentation/provider/create_recipe_provider.dart';
+import 'package:ratatouille/features/recipes/presentation/provider/my_recipe_provider.dart';
 import 'package:ratatouille/features/recipes/presentation/provider/recipe_detail_provider.dart';
 import 'package:ratatouille/features/recipes/presentation/provider/search_recipe_provider.dart';
 import 'package:ratatouille/features/users/data/model/user_model.dart';
@@ -99,8 +100,14 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(
             create: (_) => RecipeDetailProvider(
               recipeUseCase: getIt(),
+              authLocalDataSource: getIt(),
             )
-          )
+          ),
+          ChangeNotifierProvider(
+            create: (_) => MyRecipeProvider(
+              recipeUseCase: getIt(),
+            )
+          ),
         ],
         child: Consumer<AuthProvider>(
           builder: (context, authProvider, _) {

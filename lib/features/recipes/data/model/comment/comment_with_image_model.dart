@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ratatouille/features/recipes/data/model/image/ratatouille_image_model.dart';
+import 'package:ratatouille/features/users/data/model/user_model.dart';
 
 import '../../../domain/model/comment/comment_with_image.dart';
 
@@ -9,7 +10,7 @@ part 'comment_with_image_model.g.dart';
 class CommentWithImageModel {
   final int id;
   final int recipeId;
-  final String authorId;
+  final UserModel author;
   final String content;
   final int createdAt;
   final RatatouilleImageModel? image;
@@ -17,7 +18,7 @@ class CommentWithImageModel {
   const CommentWithImageModel({
     required this.id,
     required this.recipeId,
-    required this.authorId,
+    required this.author,
     required this.content,
     required this.createdAt,
     required this.image
@@ -32,7 +33,7 @@ class CommentWithImageModel {
     return CommentWithImage(
       id: id,
       recipeId: recipeId,
-      authorId: authorId,
+      author: author.toDomain(),
       content: content,
       createdAt: createdAt,
       image: image?.toDomain()
@@ -44,7 +45,7 @@ class CommentWithImageModel {
     return CommentWithImageModel(
       id: comment.id,
       recipeId: comment.recipeId,
-      authorId: comment.authorId,
+      author: UserModel.fromDomain(comment.author),
       content: comment.content,
       createdAt: comment.createdAt,
       image: image

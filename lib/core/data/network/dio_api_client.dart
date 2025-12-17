@@ -47,6 +47,17 @@ class DioApiClient implements ApiClient {
   }
 
   @override
+  Future deleteSingle(String endpoint) async {
+    try {
+      final response = await dio.delete("$baseUrl$endpoint");
+      _checkResponse(response);
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleDioException(e);
+    }
+  }
+
+  @override
   Future<Map<String, dynamic>> get(String endpoint) async {
     try {
       final response = await dio.get(
@@ -72,6 +83,20 @@ class DioApiClient implements ApiClient {
       }
 
       return response.data as List<dynamic>;
+    } on DioException catch (e) {
+      throw _handleDioException(e);
+    }
+  }
+
+  @override
+  Future<dynamic> getSingle(String endpoint) async {
+    try {
+      final response = await dio.get(
+          "$baseUrl$endpoint"
+      );
+      _checkResponse(response);
+
+      return response.data;
     } on DioException catch (e) {
       throw _handleDioException(e);
     }
@@ -156,10 +181,6 @@ class DioApiClient implements ApiClient {
     }
   }
 
-  // @override
-  // Future<Map<String, dynamic>> multipart(String endpoint, {required Map<String, dynamic> fields, required List<MultipartFile> files}) async {
-  // }
-
   @override
   Future<Map<String, dynamic>> patch(String endpoint, {required body}) async {
     try {
@@ -223,6 +244,24 @@ class DioApiClient implements ApiClient {
       return response.data as List;
     } on DioException catch (e) {
       throw _handleDioException(e);
+    } catch (e) {
+      throw Exception("Something went wrong");
+    }
+  }
+
+  @override
+  Future postSingle(String endpoint, {required body}) async {
+    try {
+      final response = await dio.post(
+          "$baseUrl$endpoint",
+          data: body
+      );
+      _checkResponse(response);
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleDioException(e);
+    } catch (e) {
+      throw Exception("Something went wrong");
     }
   }
 

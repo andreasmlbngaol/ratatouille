@@ -8,7 +8,7 @@ class RecipeCard extends StatelessWidget {
   final String title;
   final String? subtitle;
   final double rating; // contoh: 4.5
-  final String date;
+  final int date;
   final int totalReviews;
   final VoidCallback? onTap;
 
@@ -129,7 +129,7 @@ class RecipeCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        date,
+                        _formatReadableDate(date),
                         style: const TextStyle(
                           fontSize: 12,
                           color: Color(0xFF9E9E9E),
@@ -152,5 +152,58 @@ class RecipeCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _formatReadableDate(dynamic dateInput) {
+    try {
+      late DateTime dateTime;
+
+      // Handle berbagai format input
+      if (dateInput is String) {
+        dateTime = DateTime.parse(dateInput);
+      } else if (dateInput is DateTime) {
+        dateTime = dateInput;
+      } else if (dateInput is int) {
+        // Jika milliseconds
+        dateTime = DateTime.fromMillisecondsSinceEpoch(dateInput);
+      } else {
+        return 'Tanggal tidak valid';
+      }
+
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+      final yesterday = today.subtract(const Duration(days: 1));
+      final dateToCheck = DateTime(dateTime.year, dateTime.month, dateTime.day);
+
+      // Jika hari ini
+      if (dateToCheck == today) {
+        return 'Hari ini';
+      }
+
+      // Jika kemarin
+      if (dateToCheck == yesterday) {
+        return 'Kemarin';
+      }
+
+      // Jika kurang dari 7 hari yang lalu
+      final difference = today.difference(dateToCheck).inDays;
+      if (difference > 0 && difference < 7) {
+        return '$difference hari yang lalu';
+      }
+
+      // Format default: "15 Januari 2025"
+      const List<String> monthNames = [
+        'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+      ];
+
+      final day = dateTime.day;
+      final month = monthNames[dateTime.month - 1];
+      final year = dateTime.year;
+
+      return '$day $month $year';
+    } catch (e) {
+      return 'Tanggal tidak valid';
+    }
   }
 }

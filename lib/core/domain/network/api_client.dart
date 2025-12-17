@@ -5,9 +5,13 @@ abstract class ApiClient {
 
   Future<List<dynamic>> getList(String endpoint);
 
+  Future<dynamic> getSingle(String endpoint);
+
   Future<Map<String, dynamic>> post(String endpoint, {required dynamic body});
 
   Future<List<dynamic>> postList(String endpoint, {required dynamic body});
+
+  Future<dynamic> postSingle(String endpoint, {required dynamic body});
 
   Future<Map<String, dynamic>> put(String endpoint, {required dynamic body});
 
@@ -16,6 +20,9 @@ abstract class ApiClient {
   Future<List<dynamic>> patchList(String endpoint, {required dynamic body});
 
   Future<Map<String, dynamic>> delete(String endpoint);
+
+  // Future<Map<String, dynamic>> deleteList(String endpoint);
+  Future<dynamic> deleteSingle(String endpoint);
 
   Future<Map<String, dynamic>> multipartWithFiles(String endpoint, {
     required Map<String, dynamic> fields,

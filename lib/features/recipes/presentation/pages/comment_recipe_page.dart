@@ -1,40 +1,52 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:ratatouille/core/data/constant/app_constant.dart';
+import 'package:ratatouille/features/recipes/presentation/provider/recipe_detail_provider.dart';
+import '../../domain/model/comment/comment_with_image.dart';
 
-class CommentPage extends StatelessWidget {
-  CommentPage({super.key});
+class CommentPage extends StatefulWidget {
+  final int id;
 
-  final List<Map<String, dynamic>> comments = [
-    {
-      "name": "Haji Maguire",
-      "comment": "Mantap banget rasanya kaya michelin star chef",
-      "time": "18 mnt",
-      "likes": "4k",
-    },
-    {
-      "name": "Chef marinka",
-      "comment": "akhirnya nemu resep paling enak sedunia",
-      "time": "18 mnt",
-      "likes": "2k",
-    },
-    {
-      "name": "Muhammad Messi",
-      "comment": "wah lengkap resep nya dengan alternatif protein",
-      "time": "18 mnt",
-      "likes": "1k",
-    },
-    {
-      "name": "Abu Ronaldo",
-      "comment": "tanggapan chef juna aplikasi ratatouille biru",
-      "time": "18 mnt",
-      "likes": "12",
-    },
-    {
-      "name": "Habib Neymar",
-      "comment": "Tambuih ciek daa",
-      "time": "18 mnt",
-      "likes": "109",
-    },
-  ];
+  const CommentPage({
+    super.key,
+    required this.id,
+  });
+
+  @override
+  State<CommentPage> createState() => _CommentPageState();
+}
+
+class _CommentPageState extends State<CommentPage> {
+  final TextEditingController _commentController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      context.read<RecipeDetailProvider>().fetchComments(widget.id);
+    });
+  }
+
+  @override
+  void dispose() {
+    _commentController.dispose();
+    super.dispose();
+  }
+
+  void _submitComment() async {
+    if (_commentController.text.trim().isEmpty) return;
+
+    final provider = context.read<RecipeDetailProvider>();
+    await provider.postComment(widget.id, _commentController.text.trim());
+
+    _commentController.clear();
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Komentar berhasil dikirim')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,78 +84,44 @@ class CommentPage extends StatelessWidget {
 
           /// 💬 LIST KOMENTAR
           Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              itemCount: comments.length,
-              separatorBuilder: (_, __) => const Divider(
-                color: Color(0xFFD9A88C),
-                height: 24,
-              ),
-              itemBuilder: (context, index) {
-                final data = comments[index];
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    /// 👤 AVATAR
-                    CircleAvatar(
-                      radius: 22,
-                      backgroundImage: const AssetImage(
-                        'assets/images/default_avatar.png',
-                      ),
-                      backgroundColor: Colors.white,
+            child: Consumer<RecipeDetailProvider>(
+              builder: (context, provider, child) {
+                if (provider.isLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xFFFF6A2A),
                     ),
+                  );
+                }
 
-                    const SizedBox(width: 12),
+                if (provider.errorMessage != null) {
+                  return Center(
+                    child: Text(
+                      'Error: ${provider.errorMessage}',
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  );
+                }
 
-                    /// 💬 CONTENT
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            data["name"],
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFFB85C38),
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            data["comment"],
-                            style: const TextStyle(
-                              color: Color(0xFF5E2A25),
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Row(
-                            children: [
-                              Text(
-                                data["time"],
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xFF9E9E9E),
-                                ),
-                              ),
-                              const Spacer(),
-                              Icon(
-                                Icons.favorite_border,
-                                size: 18,
-                                color: Colors.red[300],
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                data["likes"],
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xFF9E9E9E),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    )
-                  ],
+                final comments = provider.comments;
+
+                if (comments.isEmpty) {
+                  return const Center(
+                    child: Text('Belum ada komentar'),
+                  );
+                }
+
+                return ListView.separated(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  itemCount: comments.length,
+                  separatorBuilder: (_, __) => const Divider(
+                    color: Color(0xFFD9A88C),
+                    height: 24,
+                  ),
+                  itemBuilder: (context, index) {
+                    final comment = comments[index];
+                    return _buildCommentItem(comment);
+                  },
                 );
               },
             ),
@@ -156,13 +134,13 @@ class CommentPage extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextField(
+                    controller: _commentController,
                     decoration: InputDecoration(
                       hintText: "Berikan komentar...",
-                      prefixIcon: const Icon(Icons.search),
+                      prefixIcon: const Icon(Icons.edit_note),
                       filled: true,
                       fillColor: Colors.transparent,
-                      contentPadding:
-                      const EdgeInsets.symmetric(vertical: 12),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 12),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
                         borderSide: const BorderSide(
@@ -173,16 +151,19 @@ class CommentPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 12),
-                Container(
-                  width: 42,
-                  height: 42,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF5E2A25),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(
-                    Icons.send,
-                    color: Colors.white,
+                GestureDetector(
+                  onTap: _submitComment,
+                  child: Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF5E2A25),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.send,
+                      color: Colors.white,
+                    ),
                   ),
                 )
               ],
@@ -191,5 +172,81 @@ class CommentPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildCommentItem(CommentWithImage comment) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        /// 👤 AVATAR
+        CircleAvatar(
+          child: ClipOval(
+            child: comment.author.profilePictureUrl != null
+            ? CachedNetworkImage(
+                imageUrl: "${AppConstant.baseUrl}/${comment.author.profilePictureUrl}",
+                fit: BoxFit.cover,
+              placeholder: (context, url) => const Center(
+                child: CircularProgressIndicator(),
+              )
+            )
+            : Image.asset(
+              'assets/images/default_profile_picture.png',
+              fit: BoxFit.cover,
+            ),
+          )
+        ),
+
+        const SizedBox(width: 12),
+
+        /// 💬 CONTENT
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                comment.author.name,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFB85C38),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                comment.content,
+                style: const TextStyle(
+                  color: Color(0xFF5E2A25),
+                ),
+              ),
+              const SizedBox(height: 6),
+              Row(
+                children: [
+                  Text(
+                    _formatTime(comment.createdAt),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF9E9E9E),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  String _formatTime(int timestamp) {
+    final dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inMinutes < 60) {
+      return '${difference.inMinutes} mnt';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} jam';
+    } else {
+      return '${difference.inDays} hari';
+    }
   }
 }

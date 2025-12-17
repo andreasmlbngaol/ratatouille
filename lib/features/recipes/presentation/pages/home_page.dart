@@ -65,7 +65,7 @@ class HomePage extends StatelessWidget {
                           Consumer<AuthProvider>(
                             builder: (context, authProvider, _) {
                               return Text(
-                                authProvider.user?.name ?? 'User',
+                                authProvider.user?.name.split(" ").first ?? 'User',
                                 style: Theme
                                     .of(context)
                                     .textTheme

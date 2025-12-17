@@ -282,14 +282,17 @@ class CreateRecipeProvider extends ChangeNotifier {
     errorMessage = null;
     notifyListeners();
 
+    debugPrint("Creating new tag: $name");
     final result = await createIngredientTagUseCase.call(name: name);
 
     result.fold(
           (failure) {
+            debugPrint("Failure: ${failure.message}");
         errorMessage = failure.message;
         isSearchingIngredient = false;
       },
           (tag) {
+            debugPrint("Created tag: ${tag.name}");
         selectedIngredientTag = tag;
         searchResults = [];
         currentIngredientQuery = '';

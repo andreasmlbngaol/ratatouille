@@ -24,12 +24,12 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
   }
 
   void _startAutoCheck() {
-    // Future.delayed(const Duration(seconds: 5), () {
-    //   if (mounted && !_isChecking) {
-    //     _checkEmailVerification(isManual: false);
-    //     _startAutoCheck();
-    //   }
-    // });
+    Future.delayed(const Duration(seconds: 5), () {
+      if (mounted && !_isChecking) {
+        _checkEmailVerification(isManual: false);
+        _startAutoCheck();
+      }
+    });
   }
 
   Future<void> _openEmailApp() async {

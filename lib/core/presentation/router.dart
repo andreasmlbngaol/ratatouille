@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ratatouille/core/presentation/app_routes.dart';
 import 'package:ratatouille/core/presentation/pages/not_found_page.dart';
+import 'package:ratatouille/features/recipes/presentation/pages/comment_recipe_page.dart';
 import 'package:ratatouille/features/recipes/presentation/pages/create_recipe/create_recipe_base_info_page.dart';
 import 'package:ratatouille/features/recipes/presentation/pages/create_recipe/create_recipe_ingredients_page.dart';
 import 'package:ratatouille/features/recipes/presentation/pages/create_recipe/create_recipe_preview_page.dart';
@@ -134,6 +135,15 @@ GoRouter createRouter(BuildContext context, AuthProvider authProvider) => GoRout
           final id = int.parse(state.pathParameters['id']!);
           return RecipeDetailPage(id: id);
         },
+      ),
+
+      route(
+        path: "${AppRoutes.commentPage}/:id",
+        child: (context, state) {
+          debugPrint(state.pathParameters['id']);
+          final id = int.parse(state.pathParameters['id']!);
+          return CommentPage(id: id);
+        }
       ),
 
       route(

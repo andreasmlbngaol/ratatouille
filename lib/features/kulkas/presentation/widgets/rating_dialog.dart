@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:ratatouille/features/recipes/presentation/provider/recipe_detail_provider.dart';
 
 class RatingDialog extends StatefulWidget {
-  const RatingDialog({super.key});
+  final int recipeId;
+
+  const RatingDialog({
+    super.key,
+    required this.recipeId,
+  });
 
   @override
   State<RatingDialog> createState() => _RatingDialogState();
@@ -9,6 +16,7 @@ class RatingDialog extends StatefulWidget {
 
 class _RatingDialogState extends State<RatingDialog> {
   int selectedRating = 0;
+  bool isSubmitting = false;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +47,9 @@ class _RatingDialogState extends State<RatingDialog> {
               children: List.generate(5, (index) {
                 return IconButton(
                   iconSize: 32,
-                  onPressed: () {
+                  onPressed: isSubmitting
+                      ? null
+                      : () {
                     setState(() {
                       selectedRating = index + 1;
                     });
@@ -83,10 +93,38 @@ class _RatingDialogState extends State<RatingDialog> {
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
-                    onPressed: () {
-                      Navigator.pop(context, selectedRating);
+                    onPressed: isSubmitting || selectedRating == 0
+                        ? null
+                        : () async {
+                      setState(() {
+                        isSubmitting = true;
+                      });
+
+                      await context
+                          .read<RecipeDetailProvider>()
+                          .submitRating(widget.recipeId, selectedRating);
+
+                      if (mounted) {
+                        Navigator.pop(context, selectedRating);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Penilaian Anda berhasil disimpan'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      }
                     },
-                    child: const Text('Simpan'),
+                    child: isSubmitting
+                        ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor:
+                        AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    )
+                        : const Text('Simpan'),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -99,7 +137,9 @@ class _RatingDialogState extends State<RatingDialog> {
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
-                    onPressed: () {
+                    onPressed: isSubmitting
+                        ? null
+                        : () {
                       Navigator.pop(context);
                     },
                     child: const Text('Batal'),

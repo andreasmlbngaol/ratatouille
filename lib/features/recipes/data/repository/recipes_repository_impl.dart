@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ratatouille/core/domain/model/failure.dart';
 import 'package:ratatouille/features/recipes/domain/data_source/recipe_remote_data_source.dart';
+import 'package:ratatouille/features/recipes/domain/model/comment/comment_with_image.dart';
 import 'package:ratatouille/features/recipes/domain/model/ingredient/ingredient_tag.dart';
 import 'package:ratatouille/features/recipes/domain/model/ingredient/ingredient_with_tag.dart';
 import 'package:ratatouille/features/recipes/domain/model/recipe/recipe_detail.dart';
@@ -104,9 +105,12 @@ class RecipesRepositoryImpl implements RecipesRepository {
   @override
   Future<Either<Failure, IngredientTag>> createIngredientTag(String name) async {
     try {
+      debugPrint("recipes repository: create ingredient tag start");
       final tagModel = await remoteDataSource.createIngredientTag(name);
+      debugPrint("recipes repository: create ingredient tag end");
       return Right(tagModel.toDomain());
     } catch (e) {
+      debugPrint("recipes repository: create ingredient tag failure");
       return Left(Failure(e.toString()));
     }
   }
@@ -220,6 +224,85 @@ class RecipesRepositoryImpl implements RecipesRepository {
     } catch (e) {
       debugPrint("recipes repository: search failure");
       return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> saveRecipe(int recipeId) async {
+    try {
+      debugPrint("recipes repository: save recipe start");
+      await remoteDataSource.saveRecipe(recipeId);
+      debugPrint("recipes repository: save recipe end");
+      return const Right(true);
+    } catch (e) {
+      debugPrint("recipes repository: save recipe failure");
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> removeSavedRecipe(int recipeId) async {
+    try {
+      debugPrint("recipes repository: remove saved recipe start");
+      await remoteDataSource.removeSavedRecipe(recipeId);
+      debugPrint("recipes repository: remove saved recipe end");
+      return const Right(true);
+    } catch (e) {
+      debugPrint("recipes repository: remove saved recipe failure");
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<CommentWithImage>>> fetchComments(int recipeId) async {
+    try {
+      debugPrint("recipes repository: fetch comments start");
+      final commentsModel = await remoteDataSource.fetchComments(recipeId);
+      debugPrint("recipes repository: fetch comments end");
+      return Right(commentsModel.map((e) => e.toDomain()).toList());
+    } catch (e) {
+      debugPrint("recipes repository: fetch comments failure");
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CommentWithImage>> postComment(int recipeId, String content) async {
+    try {
+      debugPrint("recipes repository: post comment start");
+      final commentsModel = await remoteDataSource.postComment(recipeId, content);
+      debugPrint("recipes repository: post comment end");
+      return Right(commentsModel.toDomain());
+    } catch (e) {
+      debugPrint("recipes repository: post comment failure: $e");
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> submitRating(int recipeId, int rating) async {
+    try {
+      debugPrint("recipes repository: submit rating start");
+      await remoteDataSource.submitRating(recipeId, rating);
+      debugPrint("recipes repository: submit rating end");
+      return const Right(true);
+    } catch (e) {
+      debugPrint("recipes repository: submit rating failure");
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<RecipeDetail>>> getMyRecipes() async {
+    try {
+      debugPrint("recipes repository: get my recipes start");
+      final recipesModel = await remoteDataSource.getMyRecipes();
+      debugPrint("recipes repository: get my recipes end");
+      return Right(recipesModel.map((e) => e.toDomain()).toList());
+    } catch (e) {
+      debugPrint("recipes repository: get my recipes failure");
+      return Left(Failure(e.toString()));
+
     }
   }
 }
