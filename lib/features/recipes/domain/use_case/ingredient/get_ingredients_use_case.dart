@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:ratatouille/core/domain/model/failure.dart';
 import 'package:ratatouille/features/recipes/domain/model/ingredient/ingredient_with_tag.dart';
 import 'package:ratatouille/features/recipes/domain/repository/recipe_repository.dart';
@@ -12,12 +13,14 @@ class GetIngredientsUseCase {
     required int recipeId
   }) async {
     try {
+      debugPrint("Get ingredient use case called with recipe ID: $recipeId");
       if (recipeId <= 0) {
         return Left(Failure("Invalid recipe ID"));
       }
 
       return await repository.getIngredients(recipeId);
     } catch (e) {
+      debugPrint("Error in GetIngredientsUseCase: $e");
       return Left(Failure(e.toString()));
     }
   }

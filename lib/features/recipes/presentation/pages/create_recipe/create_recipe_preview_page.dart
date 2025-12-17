@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:ratatouille/core/data/constant/app_constant.dart';
+import 'package:ratatouille/core/data/constant/app_constant.dart';
 import 'package:ratatouille/core/presentation/app_routes.dart';
 import 'package:ratatouille/features/recipes/presentation/provider/create_recipe_provider.dart';
 
@@ -113,7 +115,7 @@ class _CreateRecipePreviewPageState extends State<CreateRecipePreviewPage> {
               borderRadius: BorderRadius.circular(16),
               child: CachedNetworkImage(
                 imageUrl:
-                "https://ratatouille.sanalab.live${recipe.images.first.url}",
+                "${AppConstant.baseUrl}${recipe.images.first.url}",
                 width: double.infinity,
                 height: 250,
                 fit: BoxFit.cover,
@@ -308,7 +310,7 @@ class _CreateRecipePreviewPageState extends State<CreateRecipePreviewPage> {
                                 borderRadius: BorderRadius.circular(12),
                                 child: CachedNetworkImage(
                                   imageUrl:
-                                  "https://ratatouille.sanalab.live${img.url}",
+                                  "${AppConstant.baseUrl}${img.url}",
                                   width: 180,
                                   height: 180,
                                   fit: BoxFit.cover,

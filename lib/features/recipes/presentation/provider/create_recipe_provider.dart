@@ -83,20 +83,22 @@ class CreateRecipeProvider extends ChangeNotifier {
     errorMessage = null;
     notifyListeners();
 
+
     final result = await getOrCreateDraftRecipeUseCase.call();
 
     result.fold(
           (failure) {
-        errorMessage = failure.message;
-        isLoading = false;
-      },
+            debugPrint("Failure: ${failure.message}");
+            errorMessage = failure.message;
+            isLoading = false;
+          },
           (recipeData) {
             debugPrint("Recipe: ${recipeData.name}");
-        recipe = recipeData;
-        ingredients = [];
-        steps = [];
-        isLoading = false;
-      },
+            recipe = recipeData;
+            ingredients = [];
+            steps = [];
+            isLoading = false;
+          },
     );
 
     notifyListeners();
@@ -208,13 +210,15 @@ class CreateRecipeProvider extends ChangeNotifier {
     final result = await getIngredientsUseCase.call(recipeId: recipe!.id);
     result.fold(
           (failure) {
-        errorMessage = failure.message;
-        isLoading = false;
-      },
+            debugPrint("Failure: ${failure.message}");
+            errorMessage = failure.message;
+            isLoading = false;
+          },
           (ingredientsData) {
-        ingredients = ingredientsData;
-        isLoading = false;
-      },
+            debugPrint("Ingredients: ${ingredientsData.length}");
+            ingredients = ingredientsData;
+            isLoading = false;
+          },
     );
 
     notifyListeners();

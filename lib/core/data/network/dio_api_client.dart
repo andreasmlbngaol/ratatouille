@@ -60,6 +60,24 @@ class DioApiClient implements ApiClient {
   }
 
   @override
+  Future<List<dynamic>> getList(String endpoint) async {
+    try {
+      final response = await dio.get(
+          "$baseUrl$endpoint"
+      );
+      _checkResponse(response);
+
+      if (response.data is! List) {
+        throw Exception("Expected List but got ${response.data.runtimeType}");
+      }
+
+      return response.data as List<dynamic>;
+    } on DioException catch (e) {
+      throw _handleDioException(e);
+    }
+  }
+
+  @override
   Future<Map<String, dynamic>> multipartWithFiles(String endpoint,
       {
         required Map<String, dynamic> fields,
@@ -99,6 +117,45 @@ class DioApiClient implements ApiClient {
     }
   }
 
+  @override
+  Future<List> multipartWithFilesList(String endpoint, {
+    required Map<String, dynamic> fields, required List<MultipartFileData> files
+  }) async {
+    try {
+      final formData = FormData();
+
+      // Add fields
+      fields.forEach((key, value) {
+        formData.fields.add(MapEntry(key, value.toString()));
+      });
+
+      // Add files
+      for (final file in files) {
+        formData.files.add(
+          MapEntry(
+            file.fieldName,
+            MultipartFile.fromBytes(
+              file.bytes,
+              filename: file.fileName,
+              contentType: DioMediaType.parse(file.mimeType),
+            ),
+          ),
+        );
+      }
+
+      final response = await dio.post(
+        '$baseUrl$endpoint',
+        data: formData,
+      );
+
+      _checkResponse(response);
+
+      return response.data as List<dynamic>;
+    } on DioException catch (e) {
+      throw _handleDioException(e);
+    }
+  }
+
   // @override
   // Future<Map<String, dynamic>> multipart(String endpoint, {required Map<String, dynamic> fields, required List<MultipartFile> files}) async {
   // }
@@ -118,6 +175,25 @@ class DioApiClient implements ApiClient {
   }
 
   @override
+  Future<List> patchList(String endpoint, {required body}) async {
+    try {
+      final response = await dio.patch(
+          "$baseUrl$endpoint",
+          data: body
+      );
+      _checkResponse(response);
+
+      if(response.data is! List) {
+        throw Exception("Expected List but got ${response.data.runtimeType}");
+      }
+
+      return response.data as List;
+    } on DioException catch (e) {
+      throw _handleDioException(e);
+    }
+  }
+
+  @override
   Future<Map<String, dynamic>> post(String endpoint, {required body}) async {
     try {
       final response = await dio.post(
@@ -126,6 +202,25 @@ class DioApiClient implements ApiClient {
       );
       _checkResponse(response);
       return response.data as Map<String, dynamic>;
+    } on DioException catch (e) {
+      throw _handleDioException(e);
+    }
+  }
+
+  @override
+  Future<List> postList(String endpoint, {required body}) async {
+    try {
+      final response = await dio.post(
+          "$baseUrl$endpoint",
+          data: body
+      );
+      _checkResponse(response);
+
+      if (response.data is! List) {
+        throw Exception("Expected List but got ${response.data.runtimeType}");
+      }
+
+      return response.data as List;
     } on DioException catch (e) {
       throw _handleDioException(e);
     }

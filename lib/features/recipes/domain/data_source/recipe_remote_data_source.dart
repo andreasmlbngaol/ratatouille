@@ -17,7 +17,11 @@ abstract class RecipeRemoteDataSource {
     bool? isPublic,
     int? estTimeInMinutes,
     int? portion,
-    RecipeStatus? status
+  });
+
+  Future<RecipeWithImagesModel> updateRecipeStatus({
+    required int recipeId,
+    required RecipeStatus status
   });
 
   Future<RecipeWithImagesModel> uploadRecipeImage({

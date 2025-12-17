@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:ratatouille/core/data/constant/app_constant.dart';
 import 'package:ratatouille/core/presentation/app_routes.dart';
 import 'package:ratatouille/features/users/presentation/provider/auth_provider.dart';
 
@@ -55,7 +56,7 @@ class ProfilePage extends StatelessWidget {
                                       imageUrl: coverPictureUrl.startsWith(
                                           "https")
                                           ? coverPictureUrl
-                                          : "https://ratatouille.sanalab.live$coverPictureUrl}",
+                                          : "${AppConstant.baseUrl}$coverPictureUrl}",
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -106,7 +107,7 @@ class ProfilePage extends StatelessWidget {
                                         height: 100,
                                         fit: BoxFit.cover,
                                       ) : CachedNetworkImage(
-                                        imageUrl: profilePictureUrl.startsWith("https") ? profilePictureUrl : "https://ratatouille.sanalab.live$profilePictureUrl",
+                                        imageUrl: profilePictureUrl.startsWith("https") ? profilePictureUrl : "${AppConstant.baseUrl}$profilePictureUrl",
                                         width: 100,
                                         height: 100,
                                         fit: BoxFit.cover,

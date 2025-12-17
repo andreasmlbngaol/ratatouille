@@ -31,9 +31,11 @@ class RecipesRepositoryImpl implements RecipesRepository {
   @override
   Future<Either<Failure, RecipeWithImages>> getOrCreateDraftRecipe() async {
     try {
+      debugPrint("recipes repository: get or create draft recipe");
       final recipeModel = await remoteDataSource.getOrCreateDraftRecipe();
       return Right(recipeModel.toDomain());
     } catch (e) {
+      debugPrint("recipes repository failure");
       return Left(Failure(e.toString()));
     }
   }
@@ -66,7 +68,7 @@ class RecipesRepositoryImpl implements RecipesRepository {
   Future<Either<Failure, RecipeWithImages>> publishRecipe(int recipeId) async {
     try {
       debugPrint("recipes repository: publish recipe start");
-      final recipeModel = await remoteDataSource.updateRecipe(
+      final recipeModel = await remoteDataSource.updateRecipeStatus(
           recipeId: recipeId,
           status: RecipeStatus.PUBLISHED
       );
@@ -120,9 +122,11 @@ class RecipesRepositoryImpl implements RecipesRepository {
   @override
   Future<Either<Failure, List<IngredientWithTag>>> getIngredients(int recipeId) async {
     try {
+      debugPrint("recipes repository: get ingredients start");
       final ingredientsModel = await remoteDataSource.getIngredients(recipeId);
       return Right(ingredientsModel.map((e) => e.toDomain()).toList());
     } catch (e) {
+      debugPrint("recipes repository: get ingredients end");
       return Left(Failure(e.toString()));
     }
   }

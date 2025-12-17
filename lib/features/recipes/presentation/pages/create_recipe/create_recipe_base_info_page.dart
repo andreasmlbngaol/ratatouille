@@ -5,6 +5,7 @@ import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/mdi.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:ratatouille/core/data/constant/app_constant.dart';
 import 'package:ratatouille/core/presentation/app_routes.dart';
 import 'package:ratatouille/features/recipes/presentation/provider/create_recipe_provider.dart';
 import 'package:ratatouille/features/users/presentation/widgets/rounded_bold_outline.dart';
@@ -360,7 +361,7 @@ class _CreateRecipeBaseInfoPageState extends State<CreateRecipeBaseInfoPage> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(8),
                                       child: CachedNetworkImage(
-                                        imageUrl: "https://ratatouille.sanalab.live${image
+                                        imageUrl: "${AppConstant.baseUrl}${image
                                             .url}",
                                         width: 120,
                                         height: 120,

@@ -10,8 +10,8 @@ class RecipeWithImages {
   final int estTimeInMinutes;
   final int portion;
   final RecipeStatus status;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final int createdAt;
+  final int updatedAt;
   final List<RatatouilleImage> images;
 
   const RecipeWithImages({
@@ -39,8 +39,8 @@ extension RecipeWithImagesCopy on RecipeWithImages {
     int? estTimeInMinutes,
     int? portion,
     RecipeStatus? status,
-    DateTime? createdAt,
-    DateTime? updatedAt,
+    int? createdAt,
+    int? updatedAt,
     List<RatatouilleImage>? images,
   }) {
     return RecipeWithImages(

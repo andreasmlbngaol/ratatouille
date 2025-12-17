@@ -7,12 +7,10 @@ part 'ratatouille_image_model.g.dart';
 class RatatouilleImageModel {
   final int id;
   final String url;
-  final DateTime createdAt;
 
   const RatatouilleImageModel({
     required this.id,
     required this.url,
-    required this.createdAt
   });
 
   factory RatatouilleImageModel.fromJson(Map<String, dynamic> json) =>
@@ -24,7 +22,6 @@ class RatatouilleImageModel {
     return RatatouilleImage(
         id: id,
         url: url,
-        createdAt: createdAt
     );
   }
 
@@ -32,7 +29,6 @@ class RatatouilleImageModel {
     return RatatouilleImageModel(
         id: image.id,
         url: image.url,
-        createdAt: image.createdAt
     );
   }
 }

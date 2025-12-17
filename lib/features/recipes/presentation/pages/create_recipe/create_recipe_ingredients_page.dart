@@ -67,18 +67,6 @@ class _CreateRecipeIngredientsPageState extends State<CreateRecipeIngredientsPag
     return provider.selectedIngredientTag!.name;
   }
 
-  // OutlineInputBorder roundedBoldOutline({
-  //   Color borderColor = const Color(0xFF5E2A25)
-  // }) {
-  //   return OutlineInputBorder(
-  //     borderRadius: BorderRadius.circular(12),
-  //     borderSide: BorderSide(
-  //       color: borderColor,
-  //       width: 2,
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(

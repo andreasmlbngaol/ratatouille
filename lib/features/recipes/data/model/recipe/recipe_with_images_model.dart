@@ -15,8 +15,8 @@ class RecipeWithImagesModel {
   final int estTimeInMinutes;
   final int portion;
   final RecipeStatus status;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final int createdAt;
+  final int updatedAt;
   final List<RatatouilleImageModel> images;
 
   const RecipeWithImagesModel({
