@@ -12,17 +12,19 @@ import 'package:ratatouille/features/recipes/presentation/pages/favorite_page.da
 import 'package:ratatouille/features/recipes/presentation/pages/home_page.dart';
 import 'package:ratatouille/features/recipes/presentation/pages/main_shell.dart';
 import 'package:ratatouille/features/recipes/presentation/pages/my_recipe_page.dart';
+import 'package:ratatouille/features/users/presentation/pages/edit_profile_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/profile_page.dart';
 import 'package:ratatouille/features/recipes/presentation/pages/search_recipe_page.dart';
 import 'package:ratatouille/features/recipes/presentation/pages/search_user_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/complete_setup_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/email_verification_page.dart';
-import 'package:ratatouille/features/users/presentation/pages/search_result_user_page.dart';
+import 'package:ratatouille/features/kulkas/presentation/pages/result_fridge_filter.dart';
 import 'package:ratatouille/features/users/presentation/pages/settings_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/sign_in_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/sign_up_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/splash_page.dart';
 import 'package:ratatouille/features/users/presentation/provider/auth_provider.dart';
+import 'package:ratatouille/features/users/presentation/pages/other_profile_page.dart';
 
 import '../../features/recipes/presentation/pages/recipe_detail_page.dart';
 
@@ -125,11 +127,6 @@ GoRouter createRouter(BuildContext context, AuthProvider authProvider) => GoRout
       ),
 
       route(
-        path: AppRoutes.searchResultPage,
-        child: (context, _) => SearchResultPage()
-      ),
-
-      route(
         path: "${AppRoutes.recipeDetail}/:id",
         child: (context, state) {
           debugPrint(state.pathParameters['id']);
@@ -180,6 +177,22 @@ GoRouter createRouter(BuildContext context, AuthProvider authProvider) => GoRout
       route(
         path: AppRoutes.fridgeFilter,
         child: (context, _) => FridgeFilterPage()
+      ),
+
+      route(
+        path: AppRoutes.resultFilter,
+        child: (context, _) => ResultFridgeFilterPage(),
+      ),
+
+      // Profile
+      route(
+        path: AppRoutes.editProfile,
+        child: (context, _) => EditProfilePage(),
+      ),
+
+      route(
+        path: AppRoutes.otherProfile,
+        child: (context, _) => OtherProfilePage(),
       )
     ],
   errorBuilder: (context, state) => NotFoundPage(location: state.matchedLocation)

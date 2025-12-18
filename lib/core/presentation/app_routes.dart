@@ -34,11 +34,12 @@ class AppRoutes {
   static const andreDetailPage = "/andre-detail";
   static const claraDetailPage = "/bintang-detail";
 
-  //search user result test
-  static const searchResultPage = "/search-result";
-
-
   //filter kulkas
   static const fridgeFilter = "/fridge-filter";
+  static const resultFilter = "/search-result";
+
+  // profile
+  static const editProfile = "/edit-profile";
+  static const otherProfile = "/other-profile";
 
 }
