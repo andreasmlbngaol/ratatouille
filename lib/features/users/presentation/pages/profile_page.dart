@@ -20,7 +20,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ProfileProvider>().fetchUserDetail();
+      context.read<ProfileProvider>().fetchMyUserDetail();
     });
   }
 

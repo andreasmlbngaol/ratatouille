@@ -61,20 +61,20 @@ class UsersRepositoryImpl implements UsersRepository {
   }
 
   @override
-  Future<Either<Failure, UserDetail>> followUser(String userId) async {
+  Future<Either<Failure, bool>> followUser(String userId) async {
     try {
-      final userDetailModel = await remoteDataSource.followUser(userId);
-      return Right(userDetailModel.toDomain());
+      await remoteDataSource.followUser(userId);
+      return Right(true);
     } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
 
   @override
-  Future<Either<Failure, UserDetail>> unfollowUser(String userId) async {
+  Future<Either<Failure, bool>> unfollowUser(String userId) async {
     try {
-      final userDetailModel = await remoteDataSource.unfollowUser(userId);
-      return Right(userDetailModel.toDomain());
+      await remoteDataSource.unfollowUser(userId);
+      return Right(true);
     } catch (e) {
       return Left(Failure(e.toString()));
     }

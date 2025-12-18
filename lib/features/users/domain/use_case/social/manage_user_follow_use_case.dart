@@ -8,7 +8,7 @@ class ManageUserFollowUseCase {
 
   ManageUserFollowUseCase(this.repository);
 
-  Future<Either<Failure, UserDetail>> follow(String userId) async {
+  Future<Either<Failure, bool>> follow(String userId) async {
     if(userId.isEmpty) {
       return Left(Failure("Invalid user ID"));
     }
@@ -16,7 +16,7 @@ class ManageUserFollowUseCase {
     return await repository.followUser(userId);
   }
 
-  Future<Either<Failure, UserDetail>> unfollow(String userId) async {
+  Future<Either<Failure, bool>> unfollow(String userId) async {
     if(userId.isEmpty) {
       return Left(Failure("Invalid user ID"));
     }

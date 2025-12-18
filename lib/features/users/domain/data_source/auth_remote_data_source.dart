@@ -18,9 +18,9 @@ abstract class AuthRemoteDataSource {
   Future<UserDetailModel> getUserDetail(String userId);
   Future<UserDetailModel> getMyUserDetail();
 
-  Future<UserDetailModel> followUser(String userId);
+  Future<bool> followUser(String userId);
 
-  Future<UserDetailModel> unfollowUser(String userId);
+  Future<bool> unfollowUser(String userId);
 
   Future<List<UserModel>> search({
     required String query

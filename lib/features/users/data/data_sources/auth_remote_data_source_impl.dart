@@ -117,23 +117,23 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<UserDetailModel> followUser(String userId) async {
+  Future<bool> followUser(String userId) async {
     try {
-      final response = await apiClient.post(
+      final response = await apiClient.postSingle(
         "/api/users/$userId",
         body: {},
       );
-      return UserDetailModel.fromJson(response);
+      return response as bool;
     } on ApiException catch (e) {
       throw Exception(e.message);
     }
   }
 
   @override
-  Future<UserDetailModel> unfollowUser(String userId) async {
+  Future<bool> unfollowUser(String userId) async {
     try {
-      final response = await apiClient.delete("/api/users/$userId");
-      return UserDetailModel.fromJson(response);
+      final response = await apiClient.deleteSingle("/api/users/$userId");
+      return response as bool;
     } on ApiException catch (e) {
       throw Exception(e.message);
     }

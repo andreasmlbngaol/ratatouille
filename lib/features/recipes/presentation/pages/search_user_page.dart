@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
 import '../../../../core/presentation/app_routes.dart';
 import '../provider/search_user_provider.dart';
 
@@ -151,9 +150,9 @@ class _SearchUserPageState extends State<SearchUserPage> {
                           ),
                           onTap: () {
                             debugPrint('Pilih ${user.name}');
-                            // context.push(
-                            //     "${AppRoutes.userProfile}/${user.id}"
-                            // );
+                            context.push(
+                                "${AppRoutes.otherProfile}/${user.id}"
+                            );
                           },
                         );
                       },

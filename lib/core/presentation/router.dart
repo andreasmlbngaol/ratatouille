@@ -191,8 +191,12 @@ GoRouter createRouter(BuildContext context, AuthProvider authProvider) => GoRout
       ),
 
       route(
-        path: AppRoutes.otherProfile,
-        child: (context, _) => OtherProfilePage(),
+        path: "${AppRoutes.otherProfile}/:id",
+        child: (context, state) {
+          debugPrint(state.pathParameters['id']);
+          final id = state.pathParameters['id']!;
+          return OtherProfilePage(userId: id);
+        }
       )
     ],
   errorBuilder: (context, state) => NotFoundPage(location: state.matchedLocation)

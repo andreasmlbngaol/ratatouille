@@ -130,7 +130,8 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider(
             create: (_) => ProfileProvider(
-              usersRepository: getIt()
+              usersRepository: getIt(),
+              userUseCase: getIt(),
             )
           )
         ],
