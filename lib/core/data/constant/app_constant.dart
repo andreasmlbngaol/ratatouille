@@ -1,3 +1,3 @@
 class AppConstant {
-  static const String baseUrl = "https://ratatouille.sanalab.live";
+  static const String baseUrl = "https://ratatouille-new.sanalab.live";
 }
