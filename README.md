@@ -52,3 +52,4 @@ Antarmuka dan *User Flow* dirancang menggunakan **Figma**. Anda dapat melihat de
 
 ## 🗄️Backend
 Berikut adalah link repository Backend untuk aplikasi Ratatouille: Link Backend: [Link Backend](https://github.com/andreasmlbngaol/ratatouille-backend)
+SRS Link [Link SRS](https://drive.google.com/file/d/17hZZag_bpRb61NlA9aHj9jHFR_eRKd21/view?usp=sharing)
