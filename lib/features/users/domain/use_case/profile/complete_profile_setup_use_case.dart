@@ -22,6 +22,29 @@ class CompleteProfileSetupUseCase {
     }
   }
 
+  Future<Either<Failure, RatatouilleUser>> updateProfile({
+    required String name,
+    required String? bio,
+}) async {
+    try {
+      if (name.isEmpty) {
+        return Left(Failure('Name cannot be empty'));
+      }
+      if(name.length < 3) {
+        return Left(Failure('Name must be at least 3 characters long'));
+      }
+      if(bio != null && bio.isEmpty) {
+        return Left(Failure('Bio cannot be empty'));
+      }
+      if(bio != null && bio.length > 255) {
+        return Left(Failure('Bio must be less than 255 characters'));
+      }
+      return await repository.updateProfile(name: name, bio: bio);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
   Future<Either<Failure, RatatouilleUser>> uploadProfilePicture(
       List<int> imageBytes,
       String fileName
@@ -37,6 +60,26 @@ class CompleteProfileSetupUseCase {
       }
 
       return await repository.uploadProfilePicture(imageBytes, fileName);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  Future<Either<Failure, RatatouilleUser>> uploadCoverPicture(
+      List<int> imageBytes,
+      String fileName
+  ) async {
+    try {
+      if(imageBytes.isEmpty) {
+        return Left(Failure("Image cannot be empty"));
+      }
+
+      const maxSize = 5 * 1024 * 1024;
+      if(imageBytes.length > maxSize) {
+        return Left(Failure("Image must be less than 5MB"));
+      }
+
+      return await repository.uploadCoverPicture(imageBytes, fileName);
     } catch (e) {
       return Left(Failure(e.toString()));
     }

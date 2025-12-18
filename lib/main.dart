@@ -20,6 +20,7 @@ import 'package:ratatouille/features/recipes/presentation/provider/my_recipe_pro
 import 'package:ratatouille/features/recipes/presentation/provider/recipe_detail_provider.dart';
 import 'package:ratatouille/features/recipes/presentation/provider/search_recipe_provider.dart';
 import 'package:ratatouille/features/users/data/model/user_model.dart';
+import 'package:ratatouille/features/users/presentation/provider/edit_profile_provider.dart';
 import 'package:ratatouille/features/users/presentation/provider/profile_provider.dart';
 import 'package:ratatouille/firebase_options.dart';
 import 'package:ratatouille/core/presentation/router.dart';
@@ -132,6 +133,12 @@ class MyApp extends StatelessWidget {
             create: (_) => ProfileProvider(
               usersRepository: getIt(),
               userUseCase: getIt(),
+            )
+          ),
+          ChangeNotifierProvider(
+            create: (_) => EditProfileProvider(
+              profileUseCase: getIt(),
+              authenticateUseCase: getIt(),
             )
           )
         ],
