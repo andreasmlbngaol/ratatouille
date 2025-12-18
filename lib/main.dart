@@ -20,6 +20,7 @@ import 'package:ratatouille/features/recipes/presentation/provider/my_recipe_pro
 import 'package:ratatouille/features/recipes/presentation/provider/recipe_detail_provider.dart';
 import 'package:ratatouille/features/recipes/presentation/provider/search_recipe_provider.dart';
 import 'package:ratatouille/features/users/data/model/user_model.dart';
+import 'package:ratatouille/features/users/presentation/provider/profile_provider.dart';
 import 'package:ratatouille/firebase_options.dart';
 import 'package:ratatouille/core/presentation/router.dart';
 import 'package:ratatouille/core/presentation/theme.dart';
@@ -126,6 +127,11 @@ class MyApp extends StatelessWidget {
                 searchIngredientTagsUseCase: getIt(),
                 recipeUseCase: getIt()
             ),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => ProfileProvider(
+              usersRepository: getIt()
+            )
           )
         ],
         child: Consumer<AuthProvider>(

@@ -16,6 +16,7 @@ abstract class AuthRemoteDataSource {
       String fileName);
 
   Future<UserDetailModel> getUserDetail(String userId);
+  Future<UserDetailModel> getMyUserDetail();
 
   Future<UserDetailModel> followUser(String userId);
 

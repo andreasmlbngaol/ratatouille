@@ -24,6 +24,7 @@ abstract class UsersRepository {
   );
 
   Future<Either<Failure, UserDetail>> getUserDetail(String userId);
+  Future<Either<Failure, UserDetail>> getMyUserDetail();
   Future<Either<Failure, UserDetail>> followUser(String userId);
   Future<Either<Failure, UserDetail>> unfollowUser(String userId);
   Future<Either<Failure, void>> signOut();
@@ -31,4 +32,6 @@ abstract class UsersRepository {
   Future<Either<Failure, List<RatatouilleUser>>> search({
     required String query,
   });
+
+
 }

@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:ratatouille/features/recipes/data/model/recipe/recipe_detail_model.dart';
 import 'package:ratatouille/features/users/data/model/user_model.dart';
 import 'package:ratatouille/features/users/domain/model/social/user_detail.dart';
 
@@ -7,16 +8,20 @@ part 'user_detail_model.g.dart';
 @JsonSerializable()
 class UserDetailModel {
   final UserModel user;
+  final List<RecipeDetailModel> recipes;
   final bool isMe;
-  final bool isFollowing;
-  final int followerCount;
+  final bool? isFollowing;
+  final bool? isFollower;
+  final int followersCount;
   final int followingCount;
 
   const UserDetailModel({
     required this.user,
+    required this.recipes,
     required this.isMe,
     required this.isFollowing,
-    required this.followerCount,
+    required this.isFollower,
+    required this.followersCount,
     required this.followingCount,
   });
 
@@ -29,9 +34,11 @@ class UserDetailModel {
   UserDetail toDomain() {
     return UserDetail(
       user: user.toDomain(),
+      recipes: recipes.map((e) => e.toDomain()).toList(),
       isMe: isMe,
       isFollowing: isFollowing,
-      followerCount: followerCount,
+      isFollower: isFollower,
+      followersCount: followersCount,
       followingCount: followingCount,
     );
   }
@@ -40,9 +47,11 @@ class UserDetailModel {
   factory UserDetailModel.fromDomain(UserDetail userDetail) {
     return UserDetailModel(
       user: UserModel.fromDomain(userDetail.user),
+      recipes: userDetail.recipes.map((e) => RecipeDetailModel.fromDomain(e)).toList(),
       isMe: userDetail.isMe,
       isFollowing: userDetail.isFollowing,
-      followerCount: userDetail.followerCount,
+      isFollower: userDetail.isFollower,
+      followersCount: userDetail.followersCount,
       followingCount: userDetail.followingCount,
     );
   }

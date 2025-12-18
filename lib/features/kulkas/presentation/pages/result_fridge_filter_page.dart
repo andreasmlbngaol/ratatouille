@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:ratatouille/core/presentation/app_routes.dart';
-import 'package:ratatouille/features/recipes/presentation/provider/search_recipe_provider.dart';
 import 'package:ratatouille/features/recipes/presentation/widgets/recipe_card.dart';
+
+import '../provider/fridge_filter_provider.dart';
 
 class ResultFridgeFilterPage extends StatefulWidget {
   const ResultFridgeFilterPage({super.key});
 
   @override
-  State<ResultFridgeFilterPage> createState() => _SearchRecipePageState();
+  State<ResultFridgeFilterPage> createState() => _ResultFridgeFilterPageState();
 }
 
-class _SearchRecipePageState extends State<ResultFridgeFilterPage> {
+class _ResultFridgeFilterPageState extends State<ResultFridgeFilterPage> {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
 
@@ -101,39 +102,19 @@ class _SearchRecipePageState extends State<ResultFridgeFilterPage> {
 
                     /// SEARCH FIELD
                     Expanded(
-                      child: Container(
-                        height: 42,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFFFDDE),
-                          borderRadius: BorderRadius.circular(24),
-                          border: Border.all(
-                            color: const Color(0xFF5E2A25),
-                            width: 1,
-                          ),
-                        ),
-                        child: TextField(
-                          controller: _searchController,
-                          focusNode: _focusNode,
-                          decoration: const InputDecoration(
-                            hintText: 'Cari Resep...',
-                            prefixIcon: Icon(Icons.search),
-                            border: InputBorder.none,
-                            contentPadding:
-                            EdgeInsets.symmetric(vertical: 10),
-                          ),
-                          onChanged: (value) {
-                            context.read<SearchRecipeProvider>().search(query: value);
-                          },
-                        ),
-                      ),
+                      child: Text(
+                          'Filter Kulkas',
+                        style: Theme.of(context)
+                        .textTheme.titleLarge,
+                      )
                     ),
                   ],
                 ),
               ),
 
-              /// List of recipes
+              /// List of recipes from FridgeFilterProvider
               Expanded(
-                child: Consumer<SearchRecipeProvider>(
+                child: Consumer<FridgeFilterProvider>(
                   builder: (context, provider, _) {
                     if (provider.isLoading) {
                       return const Center(child: CircularProgressIndicator());

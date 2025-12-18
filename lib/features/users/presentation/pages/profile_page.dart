@@ -3,13 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:ratatouille/core/data/constant/app_constant.dart';
-import 'package:ratatouille/features/users/presentation/provider/auth_provider.dart';
+import 'package:ratatouille/features/users/presentation/provider/profile_provider.dart';
 import 'package:ratatouille/features/recipes/presentation/widgets/recipe_card.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ratatouille/core/presentation/app_routes.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ProfileProvider>().fetchUserDetail();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,27 +33,42 @@ class ProfilePage extends StatelessWidget {
     const Color brownText = Color(0xFF5E2A25);
 
     return Scaffold(
-      backgroundColor: creamColor, // Dasar warna Cream
+      backgroundColor: creamColor,
       body: SafeArea(
-        top: false, // Agar header oranye mentok ke atas (status bar)
-        child: Consumer<AuthProvider>(
-          builder: (context, authProvider, _) {
-            final user = authProvider.user;
-            final coverPictureUrl = user?.coverPictureUrl;
-            final profilePictureUrl = user?.profilePictureUrl;
+        top: false,
+        child: Consumer<ProfileProvider>(
+          builder: (context, profileProvider, _) {
+            if (profileProvider.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (profileProvider.errorMessage != null) {
+              return Center(
+                child: Text('Error: ${profileProvider.errorMessage}'),
+              );
+            }
+
+            final userDetail = profileProvider.detail;
+            if (userDetail == null) {
+              return const Center(child: Text('No user data'));
+            }
+
+            final user = userDetail.user;
+            final coverPictureUrl = user.coverPictureUrl;
+            final profilePictureUrl = user.profilePictureUrl;
 
             return SingleChildScrollView(
               child: Column(
                 children: [
                   // ================= HEADER & PROFILE PIC =================
                   Stack(
-                    alignment: Alignment.bottomLeft, // Ubah alignment ke kiri bawah
-                    clipBehavior: Clip.none, // Penting agar avatar bisa keluar dari batas container
+                    alignment: Alignment.bottomLeft,
+                    clipBehavior: Clip.none,
                     children: [
                       // 1. Cover Background Oranye
                       Container(
                         width: double.infinity,
-                        height: 220, // Tinggi header oranye
+                        height: 220,
                         decoration: const BoxDecoration(
                           color: orangeColor,
                           borderRadius: BorderRadius.only(
@@ -55,15 +83,20 @@ class ProfilePage extends StatelessWidget {
                           ),
                           child: coverPictureUrl != null
                               ? CachedNetworkImage(
-                                  imageUrl: coverPictureUrl.startsWith("https")
-                                      ? coverPictureUrl
-                                      : "${AppConstant.baseUrl}$coverPictureUrl",
-                                  fit: BoxFit.cover,
-                                )
-                              : Image.asset(
+                            imageUrl: coverPictureUrl.startsWith("https")
+                                ? coverPictureUrl
+                                : "${AppConstant.baseUrl}$coverPictureUrl",
+                            fit: BoxFit.cover,
+                            errorWidget: (context, url, error) =>
+                                Image.asset(
                                   "assets/images/default_cover_picture.png",
                                   fit: BoxFit.cover,
                                 ),
+                          )
+                              : Image.asset(
+                            "assets/images/default_cover_picture.png",
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
 
@@ -93,16 +126,16 @@ class ProfilePage extends StatelessWidget {
 
                       // 3. Foto Profil (Posisi menjorok ke bawah - Overlap)
                       Positioned(
-                        bottom: -60, // Menarik foto ke bawah batas header
-                        left: 20, // Posisikan di kiri dengan margin 20
+                        bottom: -60,
+                        left: 20,
                         child: Container(
-                          padding: const EdgeInsets.all(4), // Border putih tipis
+                          padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(
                             color: creamColor,
                             shape: BoxShape.circle,
                           ),
                           child: Container(
-                            padding: const EdgeInsets.all(3), // Border oranye
+                            padding: const EdgeInsets.all(3),
                             decoration: BoxDecoration(
                               color: orangeDarker,
                               shape: BoxShape.circle,
@@ -112,13 +145,13 @@ class ProfilePage extends StatelessWidget {
                               backgroundColor: Colors.grey[300],
                               backgroundImage: profilePictureUrl != null
                                   ? CachedNetworkImageProvider(
-                                      profilePictureUrl.startsWith("https")
-                                          ? profilePictureUrl
-                                          : "${AppConstant.baseUrl}$profilePictureUrl",
-                                    )
+                                profilePictureUrl.startsWith("https")
+                                    ? profilePictureUrl
+                                    : "${AppConstant.baseUrl}$profilePictureUrl",
+                              )
                                   : const AssetImage(
-                                          "assets/images/default_profile_picture.png")
-                                      as ImageProvider,
+                                  "assets/images/default_profile_picture.png")
+                              as ImageProvider,
                             ),
                           ),
                         ),
@@ -126,21 +159,20 @@ class ProfilePage extends StatelessWidget {
                     ],
                   ),
 
-                  // Spacer untuk kompensasi foto profil yang turun (-60 overlap + margin)
                   const SizedBox(height: 70),
 
                   // ================= INFO USER =================
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start, // Rata kiri
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Nama User
                         Text(
-                          user?.name ?? 'Chef Vinsmoke Sanji',
-                          textAlign: TextAlign.left, // Rata kiri
-                          style: TextStyle(
-                            fontFamily: 'Serif', // Sesuaikan font jika ada
+                          user.name,
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                            fontFamily: 'Serif',
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                             color: brownText,
@@ -149,8 +181,8 @@ class ProfilePage extends StatelessWidget {
                         const SizedBox(height: 6),
                         // Bio
                         Text(
-                          user?.bio ?? "Koki kesayangan Nami-Swan & Robin-Cwan",
-                          textAlign: TextAlign.left, // Rata kiri
+                          user.bio ?? "Belum ada bio.",
+                          textAlign: TextAlign.left,
                           style: TextStyle(
                             fontSize: 14,
                             color: brownText.withOpacity(0.8),
@@ -160,22 +192,34 @@ class ProfilePage extends StatelessWidget {
 
                         // Statistik (Pengikut / Mengikuti)
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.start, // Rata kiri
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            _buildStatItem("Pengikut", "100", brownText),
+                            _buildStatItem(
+                              "Pengikut",
+                              userDetail.followersCount.toString(),
+                              brownText,
+                            ),
                             const SizedBox(width: 40),
-                            _buildStatItem("Mengikuti", "1", brownText),
+                            _buildStatItem(
+                              "Mengikuti",
+                              userDetail.followingCount.toString(),
+                              brownText,
+                            ),
                           ],
                         ),
 
                         const SizedBox(height: 16),
 
-                        // Tombol Edit Profile
+                        // Tombol Edit Profile atau Follow
                         SizedBox(
                           width: double.infinity,
                           height: 45,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              if (userDetail.isMe == true) {
+                                context.push(AppRoutes.editProfile);
+                              }
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: orangeColor,
                               foregroundColor: Colors.white,
@@ -184,9 +228,9 @@ class ProfilePage extends StatelessWidget {
                               ),
                               elevation: 2,
                             ),
-                            child: const Text(
-                              "Edit Profile",
-                              style: TextStyle(
+                            child: Text(
+                              userDetail.isMe == true ? "Edit Profile" : "Follow",
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -205,7 +249,7 @@ class ProfilePage extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           "Resep",
                           style: TextStyle(
                             fontSize: 18,
@@ -214,8 +258,8 @@ class ProfilePage extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          "10",
-                          style: TextStyle(
+                          "${userDetail.recipes.length}",
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: brownText,
@@ -227,52 +271,80 @@ class ProfilePage extends StatelessWidget {
 
                   const SizedBox(height: 10),
 
-
                   // List Resep
-                  ListView.separated(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                    physics: const NeverScrollableScrollPhysics(), // Scroll ikut parent
-                    shrinkWrap: true,
-                    itemCount: 2,
-                    separatorBuilder: (c, i) => const SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: RecipeCard(
-                          imageUrl:
-                          "/uploads/images/3y9t1ASFHQR9HzUmhtB27lWWLDV2/recipe-4/1765958994764.webp",
-                          title: "Ronaldo Juna",
-                          subtitle: "izin",
-                          rating: 1.0,
-                          date: 123,
-                          totalReviews: 1,
-                        ),
-                      );
-                    },
-                  ),
-
-                  // Tombol Lihat Resep Lainnya
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    width: double.infinity,
-                    child: OutlinedButton(
-                      onPressed: () {},
-                      style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: orangeColor, width: 2),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30)),
-                          padding: const EdgeInsets.symmetric(vertical: 12)),
+                  if (userDetail.recipes.isNotEmpty)
+                    ListView.separated(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: userDetail.recipes.length > 2 ? 2 : userDetail.recipes.length,
+                      separatorBuilder: (c, i) => const SizedBox(height: 12),
+                      itemBuilder: (context, index) {
+                        final recipe = userDetail.recipes[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: RecipeCard(
+                            imageUrl: recipe.recipe.images.firstOrNull?.url,
+                            title: recipe.recipe.name,
+                            subtitle: recipe.recipe.isPublic ? "Publik" : "Privat",
+                            rating: recipe.rating.average,
+                            date: recipe.recipe.updatedAt,
+                            totalReviews: recipe.rating.count,
+                            onTap: () {
+                              context.push(
+                                "${AppRoutes.recipeDetail}/${recipe.recipe.id}",
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    )
+                  else
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
                       child: Text(
-                        "Lihat resep lainnya",
+                        "Belum ada resep",
                         style: TextStyle(
-                            color: orangeColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16),
+                          fontSize: 14,
+                          color: brownText.withOpacity(0.6),
+                        ),
                       ),
                     ),
-                  ),
 
-                  const SizedBox(height: 30), // Bottom padding
+                  // Tombol Lihat Resep Lainnya
+                  if (userDetail.recipes.length > 2)
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 10,
+                      ),
+                      width: double.infinity,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          context.push(AppRoutes.myRecipe);
+                        },
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(
+                            color: orangeColor,
+                            width: 2,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                        child: const Text(
+                          "Lihat resep lainnya",
+                          style: TextStyle(
+                            color: orangeColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                  const SizedBox(height: 30),
                 ],
               ),
             );
@@ -293,97 +365,6 @@ class ProfilePage extends StatelessWidget {
             text: count,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
-        ],
-      ),
-    );
-  }
-
-  // Widget Card Resep
-  Widget _buildRecipeCard(String title, String status, Color textColor) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.black12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.all(12),
-      child: Row(
-        children: [
-          // Gambar Resep (Kiri)
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Image.asset(
-              // Ganti NetworkImage jika ada URL
-              "assets/images/food_placeholder.png", // Pastikan ada placeholder
-              width: 80,
-              height: 80,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => Container(
-                  width: 80,
-                  height: 80,
-                  color: Colors.grey[300],
-                  child: Icon(Icons.food_bank)),
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Info Resep (Kanan)
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: textColor,
-                    fontFamily: 'Serif',
-                  ),
-                ),
-                Text(
-                  status,
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 12,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                // Bintang
-                Row(
-                  children: List.generate(
-                      5,
-                      (index) => const Icon(
-                            Icons.star_rounded,
-                            color: Colors.amber,
-                            size: 20,
-                          )),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "23 Oktober 2025",
-                      style: TextStyle(fontSize: 10, color: Colors.grey[500]),
-                    ),
-                    Text(
-                      "10 nilai",
-                      style: TextStyle(fontSize: 10, color: Colors.grey[500]),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          )
         ],
       ),
     );

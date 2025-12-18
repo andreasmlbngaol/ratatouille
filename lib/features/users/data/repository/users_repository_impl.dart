@@ -39,6 +39,18 @@ class UsersRepositoryImpl implements UsersRepository {
   }
 
   @override
+  Future<Either<Failure, UserDetail>> getMyUserDetail() async {
+    try {
+      debugPrint("users repository: getMyUserDetail start");
+      final userDetailModel = await remoteDataSource.getMyUserDetail();
+      debugPrint("users repository: $userDetailModel");
+      return Right(userDetailModel.toDomain());
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, void>> signOut() async {
     try {
       await localDataSource.clearUser();

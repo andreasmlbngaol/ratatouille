@@ -15,7 +15,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<UserModel> getOrCreateUser() async {
     try {
-      final response = await apiClient.get("/api/users/me");
+      final response = await apiClient.post(
+          "/api/users/me",
+          body: {}
+      );
       debugPrint(response.toString());
       return UserModel.fromJson(response);
     } on ApiException catch (e) {
@@ -94,6 +97,20 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final response = await apiClient.get("/api/users/$userId");
       return UserDetailModel.fromJson(response);
+    } on ApiException catch (e) {
+      throw Exception(e.message);
+    }
+  }
+
+  @override
+  Future<UserDetailModel> getMyUserDetail() async {
+    try {
+      debugPrint("auth remote data source: getMyUserDetail start");
+      final response = await apiClient.get("/api/users/me");
+      debugPrint("response: $response");
+      debugPrint("auth remote data source: getMyUserDetail success");
+      final result = UserDetailModel.fromJson(response);
+      return result;
     } on ApiException catch (e) {
       throw Exception(e.message);
     }

@@ -41,5 +41,5 @@ class AppRoutes {
   // profile
   static const editProfile = "/edit-profile";
   static const otherProfile = "/other-profile";
-
+  static const fridgeFilterResult = "/fridge-filter-result";
 }
