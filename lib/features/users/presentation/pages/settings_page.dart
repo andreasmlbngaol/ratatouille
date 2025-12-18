@@ -21,6 +21,25 @@ class SettingsPage extends StatelessWidget {
       backgroundColor: creamColor,
       body: Stack(
         children: [
+          /// 🎨 GRADIENT OVERLAY BOTTOM (Dipindahkan ke atas Pattern agar terlihat)
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: 250,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [
+                    const Color(0xFFFF3D00).withOpacity(0.4),
+                    const Color(0xFFFFFDDE).withOpacity(0.0),
+                  ],
+                ),
+              ),
+            ),
+          ),
           /// 🍴 PATTERN BAWAH KIRI (Sama seperti referensi)
           Positioned(
             bottom: 0,
@@ -105,8 +124,10 @@ class SettingsPage extends StatelessWidget {
                             SizedBox(
                               width: 24,
                               height: 24,
-                              // Ganti dengan SvgPicture.asset("assets/icons/google.svg") jika ada
-                              child: const Icon(Icons.g_mobiledata, color: Colors.blue, size: 30),
+                              child: Image.asset(
+                                'assets/images/google_logo.png',
+                                width: 22,
+                              ),
                             ),
                             const SizedBox(width: 12),
                             const Text(

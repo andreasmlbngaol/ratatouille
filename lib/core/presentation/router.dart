@@ -12,6 +12,8 @@ import 'package:ratatouille/features/recipes/presentation/pages/favorite_page.da
 import 'package:ratatouille/features/recipes/presentation/pages/home_page.dart';
 import 'package:ratatouille/features/recipes/presentation/pages/main_shell.dart';
 import 'package:ratatouille/features/recipes/presentation/pages/my_recipe_page.dart';
+import 'package:ratatouille/features/users/presentation/pages/andre_detail_page.dart';
+import 'package:ratatouille/features/users/presentation/pages/bintang_detail_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/edit_profile_page.dart';
 import 'package:ratatouille/features/users/presentation/pages/profile_page.dart';
 import 'package:ratatouille/features/recipes/presentation/pages/search_recipe_page.dart';
@@ -27,51 +29,53 @@ import 'package:ratatouille/features/users/presentation/pages/other_profile_page
 
 import '../../features/kulkas/presentation/pages/result_fridge_filter_page.dart';
 import '../../features/recipes/presentation/pages/recipe_detail_page.dart';
+import '../../features/users/presentation/pages/clara_detail_page.dart';
+import '../../features/users/presentation/pages/developer_page.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
 GoRouter createRouter(BuildContext context, AuthProvider authProvider) => GoRouter(
     navigatorKey: navigatorKey,
-    initialLocation: AppRoutes.splash,
+    initialLocation: AppRoutes.settings,
     refreshListenable: authProvider,
-    redirect: (context, state) async {
-      final isLoading = authProvider.isLoading;
-      final user = authProvider.user;
-      final location = state.matchedLocation;
-
-      if (isLoading) { return null; }
-
-      if (user == null) {
-        if (location == AppRoutes.signIn || location == AppRoutes.signUp) {
-          return null;
-        }
-        return AppRoutes.signIn;
-      }
-
-      if (!user.isEmailVerified) {
-        if (location == AppRoutes.emailVerification) {
-          return null;
-        }
-        return AppRoutes.emailVerification;
-      }
-
-      if (user.name.isEmpty) {
-        if (location == AppRoutes.completeSetup) {
-          return null;
-        }
-        return AppRoutes.completeSetup;
-      }
-
-      if (location == AppRoutes.signIn ||
-          location == AppRoutes.signUp ||
-          location == AppRoutes.emailVerification ||
-          location == AppRoutes.completeSetup ||
-          location == AppRoutes.splash) {
-        return AppRoutes.home;
-      }
-
-      return null;
-    },
+    // redirect: (context, state) async {
+    //   final isLoading = authProvider.isLoading;
+    //   final user = authProvider.user;
+    //   final location = state.matchedLocation;
+    //
+    //   if (isLoading) { return null; }
+    //
+    //   if (user == null) {
+    //     if (location == AppRoutes.signIn || location == AppRoutes.signUp) {
+    //       return null;
+    //     }
+    //     return AppRoutes.signIn;
+    //   }
+    //
+    //   if (!user.isEmailVerified) {
+    //     if (location == AppRoutes.emailVerification) {
+    //       return null;
+    //     }
+    //     return AppRoutes.emailVerification;
+    //   }
+    //
+    //   if (user.name.isEmpty) {
+    //     if (location == AppRoutes.completeSetup) {
+    //       return null;
+    //     }
+    //     return AppRoutes.completeSetup;
+    //   }
+    //
+    //   if (location == AppRoutes.signIn ||
+    //       location == AppRoutes.signUp ||
+    //       location == AppRoutes.emailVerification ||
+    //       location == AppRoutes.completeSetup ||
+    //       location == AppRoutes.splash) {
+    //     return AppRoutes.home;
+    //   }
+    //
+    //   return null;
+    // },
     routes: [
       route(
           path: AppRoutes.splash,
@@ -191,16 +195,42 @@ GoRouter createRouter(BuildContext context, AuthProvider authProvider) => GoRout
       ),
 
       route(
-        path: "${AppRoutes.otherProfile}/:id",
-        child: (context, state) {
-          debugPrint(state.pathParameters['id']);
-          final id = state.pathParameters['id']!;
-          return OtherProfilePage(userId: id);
-        }
+          path: "${AppRoutes.otherProfile}/:id",
+          child: (context, state) {
+            debugPrint(state.pathParameters['id']);
+            final id = state.pathParameters['id']!;
+            return OtherProfilePage(userId: id);
+          }
+      ),
+
+      route(
+        path: AppRoutes.developerPage,
+        child: (context, _) => DeveloperPage(),
+      ),
+
+      route(
+        path: AppRoutes.bintangDetailPage,
+        child: (context, _) => BintangDetailPage(),
+      ),
+
+      route(
+        path: AppRoutes.andreDetailPage,
+        child: (context, _) => AndreDetailPage(),
+      ),
+
+      route(
+        path: AppRoutes.claraDetailPage,
+        child: (context, _) => ClaraDetailPage(),
       )
     ],
   errorBuilder: (context, state) => NotFoundPage(location: state.matchedLocation)
 );
+
+class BintangDeveloperPage {
+}
+
+class DetailDeveloperPage {
+}
 
 GoRoute route({
   required String path,

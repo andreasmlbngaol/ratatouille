@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ratatouille/core/presentation/app_routes.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-class AndreDetailPage extends StatelessWidget {
-  const AndreDetailPage({super.key});
+// =============================
+// DETAIL DEVELOPER PAGE
+// =============================
+class BintangDetailPage extends StatelessWidget {
+  const BintangDetailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -127,73 +128,19 @@ class AndreDetailPage extends StatelessWidget {
                         ),
                         child: const CircleAvatar(
                           radius: 70,
-                          backgroundImage: AssetImage('assets/images/andre.png'),
+                          backgroundImage: AssetImage('assets/images/bintang.png'),
                           backgroundColor: Colors.grey,
                         ),
                       ),
-
-                      const SizedBox(height: 30),
-
-                      // Info Card
-                      Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: devCardColor,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: arrowBtnColor, width: 1.5),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            InfoRow(label: 'Nama', value: 'Andreas M Lbn Gaol', textColor: brownText),
-                            const SizedBox(height: 12),
-                            InfoRow(label: 'NIM', value: '221401067', textColor: brownText),
-                            const SizedBox(height: 12),
-                            InfoRow(label: 'KOM', value: 'B', textColor: brownText),
-                            const SizedBox(height: 12),
-                            InfoRow(
-                              label: 'Makanan Kesukaan',
-                              value: 'Makanan yang dibaguri',
-                              textColor: brownText,
-                            ),
-                          ],
-                        ),
-                      ),
-
                       const SizedBox(height: 20),
 
-                      // Description Card (Gambar Andre Ajaib)
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: devCardColor,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: arrowBtnColor, width: 1.5),
-                        ),
-                        child: Image.asset(
-                          'assets/images/andre_ajaib.png',
-                          fit: BoxFit.contain,
-                        ),
-                      ),
+                      _infoCard(),
+                      const SizedBox(height: 16),
+                      _quoteCard(),
+                      const SizedBox(height: 16),
+                      _socialCard(),
 
-                      const SizedBox(height: 40),
 
-                      // Social Media
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.mail, size: 30, color: brownText),
-                          const SizedBox(width: 20),
-                          Icon(Icons.camera_alt, size: 30, color: brownText),
-                          const SizedBox(width: 20),
-                          Icon(Icons.code, size: 30, color: brownText),
-                          const SizedBox(width: 20),
-                          Icon(Icons.work, size: 30, color: brownText),
-                        ],
-                      ),
-
-                      const SizedBox(height: 40),
                     ],
                   ),
                 ),
@@ -216,41 +163,110 @@ class AndreDetailPage extends StatelessWidget {
       ),
     );
   }
+
+  Widget _infoCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFF3C4), // Disesuaikan dengan devCardColor
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFFFFE082), width: 1.5), // Disesuaikan border
+      ),
+      child: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _InfoRow(label: 'Nama', value: 'Bintang Aulia'),
+          _InfoRow(label: 'NIM', value: '231401074'),
+          _InfoRow(label: 'Kom', value: 'B'),
+          _InfoRow(label: 'Makanan Kesukaan', value: 'Mie Tumis Ikan Teri'),
+        ],
+      ),
+    );
+  }
+
+  Widget _quoteCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFF3C4), // Disesuaikan
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFFFFE082), width: 1.5),
+      ),
+      child: const Column(
+        children: [
+          Text('"Adili Patrick Kluivert"', style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic)),
+          SizedBox(height: 8),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text('- Shin Tae Yong', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _socialCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFF3C4),
+        border: Border.all(color: const Color(0xFFFFE082), width: 1.5),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: const Column(
+        children: [
+          _SocialRow(icon: Icons.email, text: 'bintangaulia@students.usu.ac.id'),
+          _SocialRow(icon: Icons.camera_alt, text: '_bintang_aulia'),
+          _SocialRow(icon: Icons.code, text: 'BintangAull'),
+          _SocialRow(icon: Icons.work, text: 'Bintang Aulia'),
+        ],
+      ),
+    );
+  }
 }
 
-class InfoRow extends StatelessWidget {
+class _InfoRow extends StatelessWidget {
   final String label;
   final String value;
-  final Color textColor;
 
-  const InfoRow({
-    super.key,
-    required this.label,
-    required this.value,
-    this.textColor = const Color(0xFF5E2A25),
-  });
+  const _InfoRow({required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          width: 140,
-          child: Text(
-            label,
-            style: TextStyle(fontWeight: FontWeight.bold, color: textColor),
-          ),
-        ),
-        Text(':', style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Text(
-            value,
-            style: TextStyle(color: textColor),
-          ),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(width: 140, child: Text(label, style: const TextStyle(fontWeight: FontWeight.bold))),
+          const Text(": "),
+          Expanded(child: Text(value)),
+        ],
+      ),
+    );
+  }
+}
+
+class _SocialRow extends StatelessWidget {
+  final IconData icon;
+  final String text;
+
+  const _SocialRow({required this.icon, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        children: [
+          Icon(icon, size: 20, color: const Color(0xFF5E2A25)),
+          const SizedBox(width: 12),
+          Text(text, style: const TextStyle(color: Color(0xFF5E2A25))),
+        ],
+      ),
     );
   }
 }

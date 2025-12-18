@@ -37,6 +37,25 @@ class _SearchUserPageState extends State<SearchUserPage> {
       backgroundColor: const Color(0xFFFFFDDE),
       body: Stack(
         children: [
+          /// 🎨 GRADIENT OVERLAY BOTTOM
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: 250,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [
+                    const Color(0xFFFF3D00).withOpacity(0.4),
+                    const Color(0xFFFFFDDE).withOpacity(0.0),
+                  ],
+                ),
+              ),
+            ),
+          ),
           /// 🍴 PATTERN BAWAH KIRI
           Positioned(
             bottom: 0,
