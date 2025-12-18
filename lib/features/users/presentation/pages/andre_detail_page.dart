@@ -2,9 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ratatouille/core/presentation/app_routes.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AndreDetailPage extends StatelessWidget {
   const AndreDetailPage({super.key});
+
+  // Fungsi helper untuk membuka URL
+  Future<void> _launchUrl(String urlString) async {
+    final Uri url = Uri.parse(urlString);
+    try {
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url, mode: LaunchMode.externalApplication);
+      } else {
+        debugPrint('Could not launch $urlString');
+      }
+    } catch (e) {
+      debugPrint('Error launching URL: $e');
+    }
+  }
+
+  // Fungsi khusus untuk email
+  Future<void> _launchEmail(String email) async {
+    final Uri url = Uri(
+      scheme: 'mailto',
+      path: email,
+    );
+    try {
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url);
+      } else {
+        debugPrint('Could not launch email');
+      }
+    } catch (e) {
+      debugPrint('Error launching email: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -179,34 +211,54 @@ class AndreDetailPage extends StatelessWidget {
 
                       const SizedBox(height: 40),
 
-                      // Social Media
+                      // Social Media (Clickable)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.mail, size: 30, color: brownText),
-                          const SizedBox(width: 20),
-                          Icon(Icons.camera_alt, size: 30, color: brownText),
-                          const SizedBox(width: 20),
-                          Icon(Icons.code, size: 30, color: brownText),
-                          const SizedBox(width: 20),
-                          Icon(Icons.work, size: 30, color: brownText),
+                          // Email
+                          IconButton(
+                            onPressed: () => _launchEmail('goto:lgandre45@gmail.com'), // Ganti email sesuai data
+                            icon: Icon(Icons.mail, size: 30, color: brownText),
+                          ),
+                          const SizedBox(width: 10),
+                          
+                          // Instagram
+                          IconButton(
+                            onPressed: () => _launchUrl('https://instagram.com/andreasmlbngaol_'), // Ganti URL
+                            icon: Icon(Icons.camera_alt, size: 30, color: brownText),
+                          ),
+                          const SizedBox(width: 10),
+                          
+                          // GitHub / Code
+                          IconButton(
+                            onPressed: () => _launchUrl('https://www.linkedin.com/in/andreas-manatar-lumban-gaol-a11a641a8/'), // Ganti URL
+                            icon: Icon(Icons.code, size: 30, color: brownText),
+                          ),
+                          const SizedBox(width: 10),
+                          
+                          // LinkedIn / Work
+                          IconButton(
+                            onPressed: () => _launchUrl('https://linkedin.com/in/andreas-gaol'), // Ganti URL
+                            icon: Icon(Icons.work, size: 30, color: brownText),
+                          ),
                         ],
                       ),
 
                       const SizedBox(height: 40),
+
+                      /// FOOTER TEXT
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: Text(
+                          "Created by Suka Kotlin",
+                          style: TextStyle(
+                            color: brownText,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
                     ],
-                  ),
-                ),
-              ),
-              /// FOOTER TEXT
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: Text(
-                  "Created by Suka Kotlin",
-                  style: TextStyle(
-                    color: brownText,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
                   ),
                 ),
               ),
