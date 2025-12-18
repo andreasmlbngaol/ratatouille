@@ -36,46 +36,46 @@ final navigatorKey = GlobalKey<NavigatorState>();
 
 GoRouter createRouter(BuildContext context, AuthProvider authProvider) => GoRouter(
     navigatorKey: navigatorKey,
-    initialLocation: AppRoutes.settings,
+    initialLocation: AppRoutes.splash,
     refreshListenable: authProvider,
-    // redirect: (context, state) async {
-    //   final isLoading = authProvider.isLoading;
-    //   final user = authProvider.user;
-    //   final location = state.matchedLocation;
-    //
-    //   if (isLoading) { return null; }
-    //
-    //   if (user == null) {
-    //     if (location == AppRoutes.signIn || location == AppRoutes.signUp) {
-    //       return null;
-    //     }
-    //     return AppRoutes.signIn;
-    //   }
-    //
-    //   if (!user.isEmailVerified) {
-    //     if (location == AppRoutes.emailVerification) {
-    //       return null;
-    //     }
-    //     return AppRoutes.emailVerification;
-    //   }
-    //
-    //   if (user.name.isEmpty) {
-    //     if (location == AppRoutes.completeSetup) {
-    //       return null;
-    //     }
-    //     return AppRoutes.completeSetup;
-    //   }
-    //
-    //   if (location == AppRoutes.signIn ||
-    //       location == AppRoutes.signUp ||
-    //       location == AppRoutes.emailVerification ||
-    //       location == AppRoutes.completeSetup ||
-    //       location == AppRoutes.splash) {
-    //     return AppRoutes.home;
-    //   }
-    //
-    //   return null;
-    // },
+    redirect: (context, state) async {
+      final isLoading = authProvider.isLoading;
+      final user = authProvider.user;
+      final location = state.matchedLocation;
+
+      if (isLoading) { return null; }
+
+      if (user == null) {
+        if (location == AppRoutes.signIn || location == AppRoutes.signUp) {
+          return null;
+        }
+        return AppRoutes.signIn;
+      }
+
+      if (!user.isEmailVerified) {
+        if (location == AppRoutes.emailVerification) {
+          return null;
+        }
+        return AppRoutes.emailVerification;
+      }
+
+      if (user.name.isEmpty) {
+        if (location == AppRoutes.completeSetup) {
+          return null;
+        }
+        return AppRoutes.completeSetup;
+      }
+
+      if (location == AppRoutes.signIn ||
+          location == AppRoutes.signUp ||
+          location == AppRoutes.emailVerification ||
+          location == AppRoutes.completeSetup ||
+          location == AppRoutes.splash) {
+        return AppRoutes.home;
+      }
+
+      return null;
+    },
     routes: [
       route(
           path: AppRoutes.splash,
