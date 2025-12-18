@@ -50,8 +50,8 @@ class _ResultFridgeFilterPageState extends State<ResultFridgeFilterPage> {
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
                   colors: [
-                    const Color(0xFFFF3D00).withOpacity(0.4),
-                    const Color(0xFFFFFDDE).withOpacity(0.0),
+                    const Color(0xFFFF3D00).withValues(alpha: 0.4),
+                    const Color(0xFFFFFDDE).withValues(alpha: 0.0),
                   ],
                 ),
               ),
